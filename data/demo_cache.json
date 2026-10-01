@@ -5,7 +5,7 @@
     "gender": null,
     "occupation": "Farmer",
     "state": "Maharashtra",
-    "district": "नासिक",
+    "district": "Nashik",
     "pin_code": null,
     "annual_income_inr": 150000,
     "land_hectares": 0.607,
@@ -14,7 +14,7 @@
     "has_pucca_house": true,
     "has_lpg_connection": null,
     "education_level": null,
-    "language": "hi",
+    "language": "en",
     "pincode": null,
     "land_acres": 1.5,
     "social_category": null,
@@ -26,8 +26,8 @@
     "is_shg_member": false,
     "is_student": false,
     "special_conditions": [],
-    "raw_query": "नमस्ते, मैं रमेश हूँ, 40 साल का किसान, नासिक महाराष्ट्र से। मेरी सालाना आय 1.5 लाख है और 1.5 एकड़ जमीन है। पक्का मकान है।",
-    "preferred_language": "Hindi"
+    "raw_query": "Hello, I am Ramesh, a 40-year-old farmer from Nashik, Maharashtra. My annual income is 1.5 lakh INR and I own 1.5 acres of agricultural land with a pucca house.",
+    "preferred_language": "English"
   },
   "matches": [
     {
@@ -243,77 +243,150 @@
   ],
   "total_annual_benefit_inr": 306000,
   "csc_center": {
-    "simulated": true,
-    "center_id": "CSC_2001",
-    "center_name": "CSC Digital Seva Kendra - नासिक Central",
-    "district": "नासिक",
+    "center_id": "CSC_MH_NSK_01",
+    "center_name": "Digital Seva Kendra Dindori",
+    "district": "Nashik",
     "state": "Maharashtra",
-    "pin_code": "422001",
-    "address": "Near Tehsil Office, Main Market, Dist. नासिक, Maharashtra - 422001",
-    "vle_name": "Sanjay Patil (Village Level Entrepreneur)",
+    "pin_code": "422202",
+    "address": "Opposite Gram Panchayat Office, Dindori, Dist. Nashik, Maharashtra - 422202",
+    "vle_name": "Sanjay Patil",
     "contact_phone": "+91 98230 45678",
-    "distance_km": 2.4,
     "operating_hours": "09:00 AM - 06:00 PM (Mon-Sat)",
     "facilities": [
-      "Aadhaar Biometric e-KYC Device",
-      "Land Record (7/12 & Khatauni) Printout",
-      "Income & Caste Certificate Submissions",
-      "Ayushman PVC Card Delivery"
+      "Aadhaar Biometric e-KYC",
+      "7/12 Land Extract Print",
+      "PM-KISAN E-KYC",
+      "Ayushman PVC Card"
     ],
-    "message": "Nearest CSC center discovered successfully."
+    "distance_km": 2.4,
+    "simulated": true
   },
   "application_payloads": {
     "KCC_2026": {
-      "simulated": true,
-      "submission_id": "APP-KCC_2026-20261001-688730",
-      "acknowledgement_number": "ACK-6959-94",
       "scheme_id": "KCC_2026",
-      "status": "PRE_FILED",
-      "applicant_name": "Citizen Applicant",
-      "timestamp": "2026-10-01T08:29:15.589029+00:00",
-      "portal_endpoint": "https://api.gov.in/v2/welfare/KCC_2026/apply",
-      "message": "Pre-filed application payload generated for KCC_2026."
+      "scheme_name": "Kisan Credit Card (KCC) Scheme",
+      "portal_url": "https://agricoop.nic.in",
+      "applicant": {
+        "name": null,
+        "age": 40,
+        "gender": null,
+        "district": "Nashik",
+        "state": "Maharashtra",
+        "pin_code": null,
+        "occupation": "Farmer",
+        "annual_income_inr": 150000,
+        "land_hectares": 0.607
+      },
+      "required_documents": [
+        "Aadhaar Card and PAN Card",
+        "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
+        "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
+        "Passport Size Photographs"
+      ],
+      "documents_checklist": [
+        {
+          "document": "Aadhaar Card and PAN Card",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Passport Size Photographs",
+          "status": "TO_COLLECT"
+        }
+      ],
+      "submission_mode": "ONLINE_DIRECT_OR_CSC",
+      "status": "DRAFT_READY_FOR_SUBMISSION",
+      "simulated": true,
+      "submission_acknowledgement": {
+        "acknowledgement_id": "SIM-KCC-20261001-2498",
+        "message": "Simulated submission. No real application was filed.",
+        "simulated": true
+      }
     },
     "PM_KISAN_2026": {
-      "simulated": true,
-      "submission_id": "APP-PM_KISAN_202-20261001-359115",
-      "acknowledgement_number": "ACK-7193-72",
       "scheme_id": "PM_KISAN_2026",
-      "status": "PRE_FILED",
-      "applicant_name": "Citizen Applicant",
-      "timestamp": "2026-10-01T08:29:15.589180+00:00",
-      "portal_endpoint": "https://api.gov.in/v2/welfare/PM_KISAN_2026/apply",
-      "message": "Pre-filed application payload generated for PM_KISAN_2026."
+      "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
+      "portal_url": "https://pmkisan.gov.in",
+      "applicant": {
+        "name": null,
+        "age": 40,
+        "gender": null,
+        "district": "Nashik",
+        "state": "Maharashtra",
+        "pin_code": null,
+        "occupation": "Farmer",
+        "annual_income_inr": 150000,
+        "land_hectares": 0.607
+      },
+      "required_documents": [
+        "Aadhaar Card",
+        "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
+        "Bank Account Passbook (Aadhaar Seeded)",
+        "Active Mobile Number"
+      ],
+      "documents_checklist": [
+        {
+          "document": "Aadhaar Card",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Bank Account Passbook (Aadhaar Seeded)",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Active Mobile Number",
+          "status": "TO_COLLECT"
+        }
+      ],
+      "submission_mode": "ONLINE_DIRECT_OR_CSC",
+      "status": "DRAFT_READY_FOR_SUBMISSION",
+      "simulated": true,
+      "submission_acknowledgement": {
+        "acknowledgement_id": "SIM-PMKISAN-20261001-8990",
+        "message": "Simulated submission. No real application was filed.",
+        "simulated": true
+      }
     }
   },
-  "pdf_path": "C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_135915.pdf",
+  "pdf_path": "C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_140934.pdf",
   "events": [
     {
       "kind": "thought",
       "title": "Profile Extraction",
-      "detail": "Understanding citizen profile (hi)...",
-      "timestamp": "13:59:06",
+      "detail": "Understanding citizen profile (en)...",
+      "timestamp": "14:09:28",
       "step": "Profile Extraction",
       "status": "IN_PROGRESS",
-      "message": "Understanding citizen profile (hi)...",
+      "message": "Understanding citizen profile (en)...",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
       "title": "Profile Extracted",
-      "detail": "Parsed Profile: Farmer, 40 yrs, Income: ₹150,000, Land: 0.607 ha, District: नासिक",
-      "timestamp": "13:59:09",
+      "detail": "Parsed Profile: Farmer, 40 yrs, Income: ₹150,000, Land: 0.607 ha, District: Nashik",
+      "timestamp": "14:09:31",
       "step": "Profile Extracted",
       "status": "COMPLETED",
-      "message": "Parsed Profile: Farmer, 40 yrs, Income: ₹150,000, Land: 0.607 ha, District: नासिक",
+      "message": "Parsed Profile: Farmer, 40 yrs, Income: ₹150,000, Land: 0.607 ha, District: Nashik",
       "data": {
         "name": null,
         "age": 40,
         "gender": null,
         "occupation": "Farmer",
         "state": "Maharashtra",
-        "district": "नासिक",
+        "district": "Nashik",
         "pin_code": null,
         "annual_income_inr": 150000,
         "land_hectares": 0.607,
@@ -322,7 +395,7 @@
         "has_pucca_house": true,
         "has_lpg_connection": null,
         "education_level": null,
-        "language": "hi",
+        "language": "en",
         "pincode": null,
         "land_acres": 1.5,
         "social_category": null,
@@ -334,8 +407,8 @@
         "is_shg_member": false,
         "is_student": false,
         "special_conditions": [],
-        "raw_query": "नमस्ते, मैं रमेश हूँ, 40 साल का किसान, नासिक महाराष्ट्र से। मेरी सालाना आय 1.5 लाख है और 1.5 एकड़ जमीन है। पक्का मकान है।",
-        "preferred_language": "Hindi"
+        "raw_query": "Hello, I am Ramesh, a 40-year-old farmer from Nashik, Maharashtra. My annual income is 1.5 lakh INR and I own 1.5 acres of agricultural land with a pucca house.",
+        "preferred_language": "English"
       },
       "simulated": false
     },
@@ -343,7 +416,7 @@
       "kind": "thought",
       "title": "Pipeline Adaptation",
       "detail": "Switching to deterministic pipeline",
-      "timestamp": "13:59:10",
+      "timestamp": "14:09:33",
       "step": "Pipeline Adaptation",
       "status": "IN_PROGRESS",
       "message": "Switching to deterministic pipeline",
@@ -354,7 +427,7 @@
       "kind": "thought",
       "title": "Evaluating Eligibility",
       "detail": "Evaluating profile against statutory welfare rules in database.",
-      "timestamp": "13:59:10",
+      "timestamp": "14:09:33",
       "step": "Evaluating Eligibility",
       "status": "IN_PROGRESS",
       "message": "Evaluating profile against statutory welfare rules in database.",
@@ -365,7 +438,7 @@
       "kind": "tool_call",
       "title": "evaluate_eligibility",
       "detail": "Evaluating profile criteria for Farmer.",
-      "timestamp": "13:59:10",
+      "timestamp": "14:09:33",
       "step": "evaluate_eligibility",
       "status": "IN_PROGRESS",
       "message": "Evaluating profile criteria for Farmer.",
@@ -376,7 +449,7 @@
       "kind": "tool_result",
       "title": "evaluate_eligibility",
       "detail": "Evaluated 6 schemes. Qualified for 2: Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "evaluate_eligibility",
       "status": "IN_PROGRESS",
       "message": "Evaluated 6 schemes. Qualified for 2: Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi",
@@ -600,7 +673,7 @@
       "kind": "thought",
       "title": "Calculating Benefits",
       "detail": "Aggregating total annual financial assistance from eligible schemes.",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "Calculating Benefits",
       "status": "IN_PROGRESS",
       "message": "Aggregating total annual financial assistance from eligible schemes.",
@@ -611,7 +684,7 @@
       "kind": "tool_call",
       "title": "calc_benefits",
       "detail": "Calculating total benefit for 6 matches.",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "calc_benefits",
       "status": "IN_PROGRESS",
       "message": "Calculating total benefit for 6 matches.",
@@ -622,7 +695,7 @@
       "kind": "tool_result",
       "title": "calc_benefits",
       "detail": "Total annual benefit unlocked: ₹306,000",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "calc_benefits",
       "status": "IN_PROGRESS",
       "message": "Total annual benefit unlocked: ₹306,000",
@@ -634,52 +707,51 @@
     {
       "kind": "thought",
       "title": "Locating Nearest CSC",
-      "detail": "Locating nearest Digital Seva Kendra for district 'नासिक'.",
-      "timestamp": "13:59:15",
+      "detail": "Locating nearest Digital Seva Kendra for district 'Nashik'.",
+      "timestamp": "14:09:34",
       "step": "Locating Nearest CSC",
       "status": "IN_PROGRESS",
-      "message": "Locating nearest Digital Seva Kendra for district 'नासिक'.",
+      "message": "Locating nearest Digital Seva Kendra for district 'Nashik'.",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_call",
       "title": "find_csc",
-      "detail": "Searching district='नासिक', pin='None'",
-      "timestamp": "13:59:15",
+      "detail": "Searching district='Nashik', pin='None'",
+      "timestamp": "14:09:34",
       "step": "find_csc",
       "status": "IN_PROGRESS",
-      "message": "Searching district='नासिक', pin='None'",
+      "message": "Searching district='Nashik', pin='None'",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
       "title": "find_csc",
-      "detail": "Nearest Center: CSC Digital Seva Kendra - नासिक Central (2.4 km)",
-      "timestamp": "13:59:15",
+      "detail": "Nearest Center: Digital Seva Kendra Dindori (2.4 km)",
+      "timestamp": "14:09:34",
       "step": "find_csc",
       "status": "IN_PROGRESS",
-      "message": "Nearest Center: CSC Digital Seva Kendra - नासिक Central (2.4 km)",
+      "message": "Nearest Center: Digital Seva Kendra Dindori (2.4 km)",
       "data": {
-        "simulated": true,
-        "center_id": "CSC_2001",
-        "center_name": "CSC Digital Seva Kendra - नासिक Central",
-        "district": "नासिक",
+        "center_id": "CSC_MH_NSK_01",
+        "center_name": "Digital Seva Kendra Dindori",
+        "district": "Nashik",
         "state": "Maharashtra",
-        "pin_code": "422001",
-        "address": "Near Tehsil Office, Main Market, Dist. नासिक, Maharashtra - 422001",
-        "vle_name": "Sanjay Patil (Village Level Entrepreneur)",
+        "pin_code": "422202",
+        "address": "Opposite Gram Panchayat Office, Dindori, Dist. Nashik, Maharashtra - 422202",
+        "vle_name": "Sanjay Patil",
         "contact_phone": "+91 98230 45678",
-        "distance_km": 2.4,
         "operating_hours": "09:00 AM - 06:00 PM (Mon-Sat)",
         "facilities": [
-          "Aadhaar Biometric e-KYC Device",
-          "Land Record (7/12 & Khatauni) Printout",
-          "Income & Caste Certificate Submissions",
-          "Ayushman PVC Card Delivery"
+          "Aadhaar Biometric e-KYC",
+          "7/12 Land Extract Print",
+          "PM-KISAN E-KYC",
+          "Ayushman PVC Card"
         ],
-        "message": "Nearest CSC center discovered successfully."
+        "distance_km": 2.4,
+        "simulated": true
       },
       "simulated": true
     },
@@ -687,7 +759,7 @@
       "kind": "thought",
       "title": "Building Application",
       "detail": "Preparing pre-filled portal submission payload for Kisan Credit Card (KCC) Scheme.",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "Building Application",
       "status": "IN_PROGRESS",
       "message": "Preparing pre-filled portal submission payload for Kisan Credit Card (KCC) Scheme.",
@@ -698,7 +770,7 @@
       "kind": "tool_call",
       "title": "build_application_payload",
       "detail": "Building application for KCC_2026",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "build_application_payload",
       "status": "IN_PROGRESS",
       "message": "Building application for KCC_2026",
@@ -708,21 +780,53 @@
     {
       "kind": "tool_result",
       "title": "build_application_payload",
-      "detail": "Pre-filed application ready: ID APP-KCC_2026-20261001-688730",
-      "timestamp": "13:59:15",
+      "detail": "Pre-filed application ready: ID KCC_2026",
+      "timestamp": "14:09:34",
       "step": "build_application_payload",
       "status": "IN_PROGRESS",
-      "message": "Pre-filed application ready: ID APP-KCC_2026-20261001-688730",
+      "message": "Pre-filed application ready: ID KCC_2026",
       "data": {
-        "simulated": true,
-        "submission_id": "APP-KCC_2026-20261001-688730",
-        "acknowledgement_number": "ACK-6959-94",
         "scheme_id": "KCC_2026",
-        "status": "PRE_FILED",
-        "applicant_name": "Citizen Applicant",
-        "timestamp": "2026-10-01T08:29:15.589029+00:00",
-        "portal_endpoint": "https://api.gov.in/v2/welfare/KCC_2026/apply",
-        "message": "Pre-filed application payload generated for KCC_2026."
+        "scheme_name": "Kisan Credit Card (KCC) Scheme",
+        "portal_url": "https://agricoop.nic.in",
+        "applicant": {
+          "name": null,
+          "age": 40,
+          "gender": null,
+          "district": "Nashik",
+          "state": "Maharashtra",
+          "pin_code": null,
+          "occupation": "Farmer",
+          "annual_income_inr": 150000,
+          "land_hectares": 0.607
+        },
+        "required_documents": [
+          "Aadhaar Card and PAN Card",
+          "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
+          "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
+          "Passport Size Photographs"
+        ],
+        "documents_checklist": [
+          {
+            "document": "Aadhaar Card and PAN Card",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Passport Size Photographs",
+            "status": "TO_COLLECT"
+          }
+        ],
+        "submission_mode": "ONLINE_DIRECT_OR_CSC",
+        "status": "DRAFT_READY_FOR_SUBMISSION",
+        "simulated": true
       },
       "simulated": true
     },
@@ -730,7 +834,7 @@
       "kind": "thought",
       "title": "Building Application",
       "detail": "Preparing pre-filled portal submission payload for Pradhan Mantri Kisan Samman Nidhi.",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "Building Application",
       "status": "IN_PROGRESS",
       "message": "Preparing pre-filled portal submission payload for Pradhan Mantri Kisan Samman Nidhi.",
@@ -741,7 +845,7 @@
       "kind": "tool_call",
       "title": "build_application_payload",
       "detail": "Building application for PM_KISAN_2026",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "build_application_payload",
       "status": "IN_PROGRESS",
       "message": "Building application for PM_KISAN_2026",
@@ -751,21 +855,127 @@
     {
       "kind": "tool_result",
       "title": "build_application_payload",
-      "detail": "Pre-filed application ready: ID APP-PM_KISAN_202-20261001-359115",
-      "timestamp": "13:59:15",
+      "detail": "Pre-filed application ready: ID PM_KISAN_2026",
+      "timestamp": "14:09:34",
       "step": "build_application_payload",
       "status": "IN_PROGRESS",
-      "message": "Pre-filed application ready: ID APP-PM_KISAN_202-20261001-359115",
+      "message": "Pre-filed application ready: ID PM_KISAN_2026",
       "data": {
-        "simulated": true,
-        "submission_id": "APP-PM_KISAN_202-20261001-359115",
-        "acknowledgement_number": "ACK-7193-72",
         "scheme_id": "PM_KISAN_2026",
-        "status": "PRE_FILED",
-        "applicant_name": "Citizen Applicant",
-        "timestamp": "2026-10-01T08:29:15.589180+00:00",
-        "portal_endpoint": "https://api.gov.in/v2/welfare/PM_KISAN_2026/apply",
-        "message": "Pre-filed application payload generated for PM_KISAN_2026."
+        "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
+        "portal_url": "https://pmkisan.gov.in",
+        "applicant": {
+          "name": null,
+          "age": 40,
+          "gender": null,
+          "district": "Nashik",
+          "state": "Maharashtra",
+          "pin_code": null,
+          "occupation": "Farmer",
+          "annual_income_inr": 150000,
+          "land_hectares": 0.607
+        },
+        "required_documents": [
+          "Aadhaar Card",
+          "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
+          "Bank Account Passbook (Aadhaar Seeded)",
+          "Active Mobile Number"
+        ],
+        "documents_checklist": [
+          {
+            "document": "Aadhaar Card",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Bank Account Passbook (Aadhaar Seeded)",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Active Mobile Number",
+            "status": "TO_COLLECT"
+          }
+        ],
+        "submission_mode": "ONLINE_DIRECT_OR_CSC",
+        "status": "DRAFT_READY_FOR_SUBMISSION",
+        "simulated": true
+      },
+      "simulated": true
+    },
+    {
+      "kind": "thought",
+      "title": "Submitting Application",
+      "detail": "Auto-submitting pre-filed application for Kisan Credit Card (KCC) Scheme to government portal API.",
+      "timestamp": "14:09:34",
+      "step": "Submitting Application",
+      "status": "IN_PROGRESS",
+      "message": "Auto-submitting pre-filed application for Kisan Credit Card (KCC) Scheme to government portal API.",
+      "data": null,
+      "simulated": false
+    },
+    {
+      "kind": "tool_call",
+      "title": "mock_portal_submit",
+      "detail": "Submitting payload for KCC_2026",
+      "timestamp": "14:09:34",
+      "step": "mock_portal_submit",
+      "status": "IN_PROGRESS",
+      "message": "Submitting payload for KCC_2026",
+      "data": null,
+      "simulated": false
+    },
+    {
+      "kind": "tool_result",
+      "title": "mock_portal_submit",
+      "detail": "Submitted [Simulated] Ack ID: SIM-KCC-20261001-2498",
+      "timestamp": "14:09:34",
+      "step": "mock_portal_submit",
+      "status": "IN_PROGRESS",
+      "message": "Submitted [Simulated] Ack ID: SIM-KCC-20261001-2498",
+      "data": {
+        "acknowledgement_id": "SIM-KCC-20261001-2498",
+        "message": "Simulated submission. No real application was filed.",
+        "simulated": true
+      },
+      "simulated": true
+    },
+    {
+      "kind": "thought",
+      "title": "Submitting Application",
+      "detail": "Auto-submitting pre-filed application for Pradhan Mantri Kisan Samman Nidhi to government portal API.",
+      "timestamp": "14:09:34",
+      "step": "Submitting Application",
+      "status": "IN_PROGRESS",
+      "message": "Auto-submitting pre-filed application for Pradhan Mantri Kisan Samman Nidhi to government portal API.",
+      "data": null,
+      "simulated": false
+    },
+    {
+      "kind": "tool_call",
+      "title": "mock_portal_submit",
+      "detail": "Submitting payload for PM_KISAN_2026",
+      "timestamp": "14:09:34",
+      "step": "mock_portal_submit",
+      "status": "IN_PROGRESS",
+      "message": "Submitting payload for PM_KISAN_2026",
+      "data": null,
+      "simulated": false
+    },
+    {
+      "kind": "tool_result",
+      "title": "mock_portal_submit",
+      "detail": "Submitted [Simulated] Ack ID: SIM-PMKISAN-20261001-8990",
+      "timestamp": "14:09:34",
+      "step": "mock_portal_submit",
+      "status": "IN_PROGRESS",
+      "message": "Submitted [Simulated] Ack ID: SIM-PMKISAN-20261001-8990",
+      "data": {
+        "acknowledgement_id": "SIM-PMKISAN-20261001-8990",
+        "message": "Simulated submission. No real application was filed.",
+        "simulated": true
       },
       "simulated": true
     },
@@ -773,7 +983,7 @@
       "kind": "thought",
       "title": "Generating Action Pack",
       "detail": "Compiling matched schemes, required documents, and CSC contact into PDF.",
-      "timestamp": "13:59:15",
+      "timestamp": "14:09:34",
       "step": "Generating Action Pack",
       "status": "IN_PROGRESS",
       "message": "Compiling matched schemes, required documents, and CSC contact into PDF.",
@@ -783,48 +993,48 @@
     {
       "kind": "tool_call",
       "title": "make_pdf",
-      "detail": "Creating citizen Action Pack in language 'hi'",
-      "timestamp": "13:59:15",
+      "detail": "Creating citizen Action Pack in language 'en'",
+      "timestamp": "14:09:34",
       "step": "make_pdf",
       "status": "IN_PROGRESS",
-      "message": "Creating citizen Action Pack in language 'hi'",
+      "message": "Creating citizen Action Pack in language 'en'",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
       "title": "make_pdf",
-      "detail": "Action Pack PDF ready at: C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_135915.pdf",
-      "timestamp": "13:59:15",
+      "detail": "Action Pack PDF ready at: C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_140934.pdf",
+      "timestamp": "14:09:34",
       "step": "make_pdf",
       "status": "IN_PROGRESS",
-      "message": "Action Pack PDF ready at: C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_135915.pdf",
+      "message": "Action Pack PDF ready at: C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_140934.pdf",
       "data": {
-        "pdf_path": "C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_135915.pdf"
+        "pdf_path": "C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_140934.pdf"
       },
       "simulated": false
     },
     {
       "kind": "final",
       "title": "Discovery Complete",
-      "detail": "नमस्ते! आपकी जानकारी के अनुसार आप Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹306,000 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
-      "timestamp": "13:59:17",
+      "detail": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
+      "timestamp": "14:09:36",
       "step": "Discovery Complete",
       "status": "COMPLETED",
-      "message": "नमस्ते! आपकी जानकारी के अनुसार आप Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹306,000 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
+      "message": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
       "data": null,
       "simulated": false
     }
   ],
   "used_fallback": true,
-  "explanation": "नमस्ते! आपकी जानकारी के अनुसार आप Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹306,000 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
+  "explanation": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
   "user_profile": {
     "name": null,
     "age": 40,
     "gender": null,
     "occupation": "Farmer",
     "state": "Maharashtra",
-    "district": "नासिक",
+    "district": "Nashik",
     "pin_code": null,
     "annual_income_inr": 150000,
     "land_hectares": 0.607,
@@ -833,7 +1043,7 @@
     "has_pucca_house": true,
     "has_lpg_connection": null,
     "education_level": null,
-    "language": "hi",
+    "language": "en",
     "pincode": null,
     "land_acres": 1.5,
     "social_category": null,
@@ -845,34 +1055,37 @@
     "is_shg_member": false,
     "is_student": false,
     "special_conditions": [],
-    "raw_query": "नमस्ते, मैं रमेश हूँ, 40 साल का किसान, नासिक महाराष्ट्र से। मेरी सालाना आय 1.5 लाख है और 1.5 एकड़ जमीन है। पक्का मकान है।",
-    "preferred_language": "Hindi"
+    "raw_query": "Hello, I am Ramesh, a 40-year-old farmer from Nashik, Maharashtra. My annual income is 1.5 lakh INR and I own 1.5 acres of agricultural land with a pucca house.",
+    "preferred_language": "English"
   },
   "eligible_schemes": [],
   "review_schemes": [],
   "ineligible_schemes": [],
   "total_potential_benefit_inr": 306000,
-  "summary_text": "नमस्ते! आपकी जानकारी के अनुसार आप Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹306,000 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
-  "vernacular_summary": "नमस्ते! आपकी जानकारी के अनुसार आप Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹306,000 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
+  "summary_text": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
+  "vernacular_summary": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
   "csc_recommendation": {
-    "simulated": true,
-    "center_id": "CSC_2001",
-    "center_name": "CSC Digital Seva Kendra - नासिक Central",
-    "district": "नासिक",
+    "center_id": "CSC_MH_NSK_01",
+    "center_name": "Digital Seva Kendra Dindori",
+    "district": "Nashik",
     "state": "Maharashtra",
-    "pin_code": "422001",
-    "address": "Near Tehsil Office, Main Market, Dist. नासिक, Maharashtra - 422001",
-    "vle_name": "Sanjay Patil (Village Level Entrepreneur)",
+    "pin_code": "422202",
+    "address": "Opposite Gram Panchayat Office, Dindori, Dist. Nashik, Maharashtra - 422202",
+    "vle_name": "Sanjay Patil",
     "contact_phone": "+91 98230 45678",
-    "distance_km": 2.4,
     "operating_hours": "09:00 AM - 06:00 PM (Mon-Sat)",
     "facilities": [
-      "Aadhaar Biometric e-KYC Device",
-      "Land Record (7/12 & Khatauni) Printout",
-      "Income & Caste Certificate Submissions",
-      "Ayushman PVC Card Delivery"
+      "Aadhaar Biometric e-KYC",
+      "7/12 Land Extract Print",
+      "PM-KISAN E-KYC",
+      "Ayushman PVC Card"
     ],
-    "message": "Nearest CSC center discovered successfully."
+    "distance_km": 2.4,
+    "simulated": true
   },
-  "mock_submission": null
+  "mock_submission": {
+    "acknowledgement_id": "SIM-PMKISAN-20261001-8990",
+    "message": "Simulated submission. No real application was filed.",
+    "simulated": true
+  }
 }
