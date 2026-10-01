@@ -42,7 +42,7 @@ def test_orchestrator_emits_telemetry_events():
     assert all(e.simulated is True for e in csc_events), "CSC events must carry simulated=True"
 
     # 3. Response consistency
-    assert response.user_profile.occupation == "farmer"
+    assert response.user_profile.occupation == "Farmer"
     assert response.user_profile.land_acres == 2.5
     assert response.user_profile.land_hectares == round(2.5 * 0.4047, 4)
     assert response.total_potential_benefit_inr > 0
