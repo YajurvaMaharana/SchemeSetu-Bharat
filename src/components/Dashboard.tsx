@@ -280,24 +280,24 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <h3 className="text-xl font-black text-[#002d61] dark:text-slate-100 flex items-center gap-2">
               <Award className="w-5 h-5 text-[#F28C28]" />
               <span>Top Government Schemes</span>
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-600 dark:text-slate-400">
               Explore government money and support programs for you and your family
             </p>
           </div>
 
           {searchFilter && (
             <span className="text-xs text-slate-500 dark:text-slate-400">
-              Showing matches for: <strong className="text-slate-900 dark:text-slate-100">"{searchFilter}"</strong>
+              Showing matches for: <strong className="text-[#002d61] dark:text-slate-100">"{searchFilter}"</strong>
             </span>
           )}
         </div>
 
         {filteredSchemes.length === 0 ? (
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-8 text-center text-slate-500 dark:text-slate-400 text-sm">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 text-center text-slate-500 dark:text-slate-400 text-sm">
             No schemes found matching "{searchFilter}". Try searching by "Kisan", "Health", "Scholarship", or "Housing".
           </div>
         ) : (
@@ -309,11 +309,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   if (onSelectScheme) onSelectScheme(scheme);
                   onGetStarted();
                 }}
-                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-[#1E7B34] dark:hover:border-emerald-500 hover:shadow-md rounded-2xl p-4 transition-all duration-200 cursor-pointer flex flex-col justify-between group"
+                className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-emerald-600 dark:hover:border-emerald-500 hover:shadow-md rounded-3xl p-4 transition-all duration-200 cursor-pointer flex flex-col justify-between group shadow-xs"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-700/60 border border-slate-100 dark:border-slate-700 group-hover:scale-105 transition-transform">
+                    <div className="p-2 rounded-2xl bg-slate-50 dark:bg-slate-700/60 border border-slate-100 dark:border-slate-700 group-hover:scale-105 transition-transform">
                       {SCHEME_ICONS[scheme.id] || <Layers className="w-5 h-5 text-slate-600 dark:text-slate-300" />}
                     </div>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
@@ -321,20 +321,20 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     </span>
                   </div>
 
-                  <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 line-clamp-2 leading-snug group-hover:text-[#1E7B34] dark:group-hover:text-emerald-400 transition-colors">
+                  <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 line-clamp-2 leading-snug group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
                     {scheme.name}
                   </h4>
 
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                     {scheme.benefit_description}
                   </p>
                 </div>
 
                 <div className="pt-3 border-t border-slate-100 dark:border-slate-700 mt-3 flex items-center justify-between text-xs">
-                  <span className="font-extrabold text-[#1E7B34] dark:text-emerald-400">
+                  <span className="font-extrabold text-emerald-700 dark:text-emerald-400">
                     ₹ {scheme.benefit_amount_inr.toLocaleString('en-IN')}
                   </span>
-                  <span className="text-[11px] text-slate-400 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-100 flex items-center gap-1 font-semibold">
+                  <span className="text-[11px] text-slate-400 dark:text-slate-400 group-hover:text-[#002d61] dark:group-hover:text-slate-100 flex items-center gap-1 font-semibold">
                     <span>Apply</span>
                     <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                   </span>

@@ -64,7 +64,6 @@ export const App: React.FC = () => {
     return 'hi';
   });
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const [demoPacing, setDemoPacing] = useState<boolean>(true);
   const [useCachedDemo, setUseCachedDemo] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -126,14 +125,10 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Sync Dark Mode to documentElement
+  // Enforce permanent dark mode
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
+    document.documentElement.classList.add('dark');
+  }, []);
 
   const navigateTo = (route: string) => {
     window.location.hash = route;
@@ -468,7 +463,16 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-[#F8FAFC] text-[#374151]'} flex flex-col font-sans transition-colors duration-200`}>
+    <div className="min-h-screen dark bg-slate-900 text-slate-100 flex flex-col font-sans transition-colors duration-200 relative">
+      {/* Subtle Page Background Texture (Faint grid overlay at 3% opacity) */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.03] z-0"
+        style={{
+          backgroundImage:
+            'radial-gradient(#64748b 1px, transparent 1px), linear-gradient(to right, #94a3b8 1px, transparent 1px), linear-gradient(to bottom, #94a3b8 1px, transparent 1px)',
+          backgroundSize: '32px 32px, 64px 64px, 64px 64px',
+        }}
+      />
       {/* Toast Notification Banner */}
       {toastMessage && (
         <div className="fixed top-20 right-4 sm:right-6 z-50 flex items-center gap-2.5 px-4 py-3 bg-[#1B2A6B] text-white text-xs font-bold rounded-2xl shadow-xl border border-white/20 animate-fadeIn">
@@ -495,8 +499,6 @@ export const App: React.FC = () => {
         onSearchChange={setSearchQuery}
         selectedLanguage={selectedLanguage}
         onLanguageChange={handleLanguageChange}
-        isDarkMode={isDarkMode}
-        onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
         onSignInClick={() => navigateTo('#/signin')}
         authState={authState}
         onSignOut={handleSignOut}
