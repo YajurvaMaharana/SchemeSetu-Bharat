@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { AuthState } from '../types/auth';
 import { SupportedLanguage, TRANSLATIONS } from '../data/translations';
-import { isSimulatedMode } from '../digilocker';
 
 interface HeaderProps {
   onReset?: () => void;
@@ -30,6 +29,7 @@ interface HeaderProps {
   onSignOut: () => void;
   onOpenProfile: () => void;
   onOpenDocuments: () => void;
+  onOpenProactive?: () => void;
   isAuthRoute?: boolean;
 }
 
@@ -46,6 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSignOut,
   onOpenProfile,
   onOpenDocuments,
+  onOpenProactive,
   isAuthRoute = false,
 }) => {
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
@@ -63,10 +64,9 @@ export const Header: React.FC<HeaderProps> = ({
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
-  const user = authState.status === 'signedIn' && authState.user ? authState.user : null;
-  const isSignedIn = Boolean(user);
-  const userInitials = user
-    ? user.name
+  const isSignedIn = authState.status === 'signedIn' && authState.user;
+  const userInitials = isSignedIn
+    ? authState.user.name
         .split(' ')
         .map((n) => n[0])
         .join('')
@@ -142,8 +142,28 @@ export const Header: React.FC<HeaderProps> = ({
               <Search className="w-4 h-4 text-[#F28C28] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
+            {/* Proactive Life-Event Radar Trigger */}
+            {onOpenProactive && (
+              <button
+                type="button"
+                onClick={onOpenProactive}
+                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-amber-50 via-emerald-50 to-amber-50 hover:from-amber-100 hover:to-emerald-100 border border-amber-300 rounded-full text-xs font-bold text-[#1B2A6B] shadow-2xs transition cursor-pointer relative group"
+                title="Proactive Life-Event Welfare Radar"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F28C28]"></span>
+                </span>
+                <span className="text-[#F28C28]">⚡</span>
+                <span className="hidden sm:inline font-black">Proactive Radar</span>
+                <span className="bg-[#1E7B34] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                  Live Alert
+                </span>
+              </button>
+            )}
+
             {/* User Profile Dropdown OR Sign in Button */}
-            {user ? (
+            {isSignedIn ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
@@ -154,7 +174,7 @@ export const Header: React.FC<HeaderProps> = ({
                     {userInitials}
                   </div>
                   <span className="hidden sm:inline text-xs font-bold text-[#1B2A6B] max-w-[120px] truncate">
-                    {user.name}
+                    {authState.user.name}
                   </span>
                   <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </button>
@@ -163,22 +183,12 @@ export const Header: React.FC<HeaderProps> = ({
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-50 animate-fadeIn text-xs">
                     <div className="px-4 py-2.5 border-b border-slate-100">
-                      <div className="font-bold text-[#1B2A6B] truncate">{user.name}</div>
+                      <div className="font-bold text-[#1B2A6B] truncate">{authState.user.name}</div>
                       <div className="text-[11px] text-slate-500 font-mono">
-                        {user.mobile ? `+91 ${user.mobile}` : 'DigiLocker Citizen'}
+                        {authState.user.mobile ? `+91 ${authState.user.mobile}` : 'DigiLocker Citizen'}
                       </div>
-                      <span className={`mt-1 inline-block text-[9px] font-bold px-1.5 py-0.5 rounded border ${
-                        user.authMethod === 'digilocker'
-                          ? isSimulatedMode()
-                            ? 'bg-amber-50 text-amber-900 border-amber-200'
-                            : 'bg-emerald-50 text-[#1E7B34] border-emerald-200'
-                          : 'bg-blue-50 text-blue-700 border-blue-200'
-                      }`}>
-                        {user.authMethod === 'digilocker'
-                          ? isSimulatedMode()
-                            ? 'Simulated'
-                            : 'Connected to DigiLocker'
-                          : 'OTP Verified'}
+                      <span className="mt-1 inline-block text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-[#1E7B34] border border-emerald-200">
+                        {authState.user.authMethod === 'digilocker' ? 'DigiLocker Verified' : 'OTP Verified'}
                       </span>
                     </div>
 
@@ -207,9 +217,9 @@ export const Header: React.FC<HeaderProps> = ({
                           <FileText className="w-4 h-4 text-slate-500" />
                           <span>{t.myDocuments}</span>
                         </div>
-                        {user.documents && user.documents.length > 0 && (
+                        {authState.user.documents && authState.user.documents.length > 0 && (
                           <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.2 rounded-full font-bold">
-                            {user.documents.length}
+                            {authState.user.documents.length}
                           </span>
                         )}
                       </button>

@@ -24,6 +24,7 @@ interface DashboardProps {
   onGetStarted: () => void;
   onSelectScheme?: (scheme: Scheme) => void;
   searchFilter: string;
+  onOpenProactive?: () => void;
 }
 
 const CAROUSEL_SLIDES = [
@@ -74,6 +75,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   onGetStarted,
   onSelectScheme,
   searchFilter,
+  onOpenProactive,
 }) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -153,6 +155,43 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <section className="space-y-8 pt-2">
+      {/* 0. Proactive Life-Event Welfare Radar Alert Bar */}
+      {onOpenProactive && (
+        <div className="bg-gradient-to-r from-amber-500/10 via-emerald-500/10 to-[#1B2A6B]/10 border-2 border-[#F28C28]/40 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 animate-fadeIn">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#F28C28] to-[#1E7B34] text-white flex items-center justify-center font-bold text-lg shadow-xs shrink-0">
+              ⚡
+            </div>
+            <div className="space-y-0.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200">
+                  Critical Weather Alert
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-[#1E7B34] border border-emerald-300">
+                  Pre-Search Assistance
+                </span>
+                <span className="text-xs text-slate-500">• IMD Nashik Hailstorm Warning</span>
+              </div>
+              <h3 className="font-extrabold text-[#1B2A6B] text-sm sm:text-base">
+                Proactive Life-Event Detection: WhatsApp Welfare Kit Prepared
+              </h3>
+              <p className="text-xs text-slate-600 line-clamp-1">
+                Before you even searched, SchemeSetu analyzed recent weather &amp; Aadhaar updates and generated a proactive WhatsApp action message offering PMFBY &amp; KCC assistance.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onOpenProactive}
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs rounded-xl shadow-xs transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0 self-start md:self-auto"
+          >
+            <span>Preview WhatsApp Alert</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* 1. Hero Row */}
       <div className="bg-gradient-to-br from-white via-slate-50/80 to-[#1B2A6B]/5 border border-slate-200/90 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-8">
         <div className="max-w-2xl space-y-4">

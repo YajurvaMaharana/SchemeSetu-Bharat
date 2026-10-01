@@ -14,6 +14,7 @@ import { DocumentVaultModal } from './components/DocumentVaultModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { CitizenProfileSetupPage } from './components/CitizenProfileSetupPage';
 import { SchemeApplicationModal } from './components/SchemeApplicationModal';
+import { ProactiveWhatsAppModal } from './components/ProactiveWhatsAppModal';
 import { AgentEvent, AgentResponse, UserProfile, Scheme } from './types/agent';
 import { AuthState, AuthUser } from './types/auth';
 import { SupportedLanguage, TRANSLATIONS } from './data/translations';
@@ -88,6 +89,7 @@ export const App: React.FC = () => {
   // Toast Notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedSchemeForApplication, setSelectedSchemeForApplication] = useState<Scheme | null>(null);
+  const [isProactiveModalOpen, setIsProactiveModalOpen] = useState<boolean>(false);
 
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
 
@@ -468,6 +470,7 @@ export const App: React.FC = () => {
         onSignOut={handleSignOut}
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onOpenDocuments={() => setIsDocumentsModalOpen(true)}
+        onOpenProactive={() => setIsProactiveModalOpen(true)}
         isAuthRoute={currentRoute === '#/signin' || currentRoute === '#/signup' || currentRoute === '#/profile-setup'}
       />
 
@@ -567,6 +570,7 @@ export const App: React.FC = () => {
             onGetStarted={scrollToCitizenInput}
             onSelectScheme={handleSelectSchemeFromDashboard}
             searchFilter={searchQuery}
+            onOpenProactive={() => setIsProactiveModalOpen(true)}
           />
 
           {/* Demo Controls Bar */}
@@ -693,6 +697,33 @@ export const App: React.FC = () => {
           authUser={authState.user}
         />
       )}
+
+      {/* Proactive Life Event WhatsApp Simulator Modal */}
+      <ProactiveWhatsAppModal
+        isOpen={isProactiveModalOpen}
+        onClose={() => setIsProactiveModalOpen(false)}
+        userProfile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
+        language={selectedLanguage}
+        onApplyScheme={(schemeId) => {
+          setIsProactiveModalOpen(false);
+          const matched = agentResult?.eligible_schemes?.find((s) => s.scheme_id === schemeId);
+          if (matched) {
+            setSelectedSchemeForApplication(matched);
+          } else {
+            showToast(`Pre-filling application for ${schemeId.toUpperCase()}...`);
+            scrollToCitizenInput();
+          }
+        }}
+        onLocateCsc={() => {
+          setIsProactiveModalOpen(false);
+          const cscEl = document.getElementById('csc-card-section');
+          if (cscEl) {
+            cscEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            scrollToCitizenInput();
+          }
+        }}
+      />
     </div>
   );
 };
