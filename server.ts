@@ -34,14 +34,28 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Gemini Client
-const apiKey = process.env.GEMINI_API_KEY || '';
 const modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-let genAI: GoogleGenAI | null = null;
-if (apiKey) {
+let isGeminiKeyDisabled = false;
+
+function getGeminiClient(): GoogleGenAI | null {
+  if (isGeminiKeyDisabled || process.env.USE_STUB === '1') {
+    return null;
+  }
+  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
+  if (!apiKey || apiKey.length < 8 || apiKey === 'YOUR_API_KEY' || apiKey.startsWith('your_')) {
+    return null;
+  }
   try {
-    genAI = new GoogleGenAI({ apiKey });
-  } catch (err) {
-    console.warn('[Gemini] Failed to init SDK client, using heuristic fallback:', err);
+    return new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+      },
+    });
+  } catch {
+    return null;
   }
 }
 
@@ -50,7 +64,8 @@ async function callGemini(
   systemInstruction?: string,
   jsonMode: boolean = false
 ): Promise<string | null> {
-  if (!genAI || !apiKey || process.env.USE_STUB === '1') {
+  const client = getGeminiClient();
+  if (!client) {
     return null;
   }
   try {
@@ -62,14 +77,18 @@ async function callGemini(
       config.responseMimeType = 'application/json';
     }
 
-    const response = await genAI.models.generateContent({
+    const response = await client.models.generateContent({
       model: modelName,
       contents: prompt,
       config,
     });
     return response.text || null;
-  } catch (error) {
-    console.warn('[Gemini Call Warning] Falling back to deterministic heuristics:', error);
+  } catch (error: any) {
+    const errMsg = error?.message || String(error);
+    if (errMsg.includes('API key not valid') || errMsg.includes('API_KEY_INVALID') || error?.status === 400 || error?.code === 400) {
+      // Disable further failed calls and switch seamlessly to deterministic fallback
+      isGeminiKeyDisabled = true;
+    }
     return null;
   }
 }
@@ -337,7 +356,7 @@ app.post('/api/agent/run', async (req: Request, res: Response) => {
       vernacular_summary: summaryText,
       csc_recommendation: cscInfo,
       events,
-      used_fallback: !genAI,
+      used_fallback: isGeminiKeyDisabled || !getGeminiClient(),
     };
 
     return res.json(responsePayload);
