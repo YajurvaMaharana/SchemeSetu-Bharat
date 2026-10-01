@@ -3,8 +3,8 @@ export type SupportedLanguage = 'hi' | 'mr' | 'en';
 export const TRANSLATIONS = {
   en: {
     // Header & Navigation
-    appName: 'SchemeSetu',
-    appCountry: 'Bharat',
+    appName: 'YojanaSathi',
+    appCountry: 'AI',
     tagline: 'Apni Yojana, Apna Haq',
     signIn: 'Sign in',
     signOut: 'Sign out',
@@ -18,13 +18,13 @@ export const TRANSLATIONS = {
 
     // Trust Points
     welcomeBack: 'Welcome back, Citizen',
-    welcomeSubtitle: 'Discover, verify, and apply for government welfare schemes transparently.',
-    trust1Title: 'Eligibility by Verified Rules',
-    trust1Desc: '100% deterministic evaluation directly against statutory gazettes.',
+    welcomeSubtitle: 'A simple AI helper to find government schemes and money you qualify for.',
+    trust1Title: 'Accurate & Verified',
+    trust1Desc: 'Checked directly against official government rules so you get what you qualify for.',
     trust2Title: 'Your Data Stays With You',
     trust2Desc: 'Citizen data is encrypted and never shared without explicit consent.',
     trust3Title: 'Hindi, Marathi & English',
-    trust3Desc: 'Vernacular interface with real-time audio guidance for all citizens.',
+    trust3Desc: 'Simple voice and text help in your own language.',
 
     // Sign In
     signInTitle: 'Sign in to SchemeSetu',

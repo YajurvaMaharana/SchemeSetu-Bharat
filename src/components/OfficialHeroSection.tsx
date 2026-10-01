@@ -1,199 +1,188 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
   Sparkles,
   Zap,
-  Building2,
-  Landmark,
-  Languages,
-  Check,
-  FileCheck2,
-  Award,
+  Search,
+  Mic,
+  Users,
+  Coins,
+  HeartPulse,
+  Home,
+  GraduationCap,
+  Briefcase,
 } from 'lucide-react';
 
 interface OfficialHeroSectionProps {
   onGetStarted: () => void;
   onOpenProactive?: () => void;
+  onOpenVoiceCopilot?: () => void;
+  onOpenFamilyDashboard?: () => void;
+  onCategoryClick?: (category: string) => void;
 }
+
+const QUICK_CATEGORIES = [
+  { label: 'All Schemes', icon: '✨', key: 'all' },
+  { label: 'Farmers', icon: '🌾', key: 'farmer' },
+  { label: 'Women & SHG', icon: '👩‍🌾', key: 'women' },
+  { label: 'Students', icon: '🎓', key: 'student' },
+  { label: 'Health & Medical', icon: '🏥', key: 'health' },
+  { label: 'Housing Grants', icon: '🏠', key: 'housing' },
+  { label: 'Small Business', icon: '💼', key: 'business' },
+];
 
 export const OfficialHeroSection: React.FC<OfficialHeroSectionProps> = ({
   onGetStarted,
   onOpenProactive,
+  onOpenVoiceCopilot,
+  onOpenFamilyDashboard,
+  onCategoryClick,
 }) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+  const handleCategorySelect = (catKey: string) => {
+    setSelectedCategory(catKey);
+    if (onCategoryClick) {
+      onCategoryClick(catKey);
+    }
+    onGetStarted();
+  };
+
   return (
-    <section className="w-full bg-gradient-to-r from-white via-[#F0F6FF] to-[#E6F0FA] border-b border-slate-200/90 relative overflow-hidden">
+    <section className="w-full bg-gradient-to-b from-white via-slate-50 to-[#F0F6FF] dark:from-slate-900 dark:via-slate-900/90 dark:to-slate-950 border-b border-slate-200 dark:border-slate-800 relative overflow-hidden transition-colors duration-300">
       {/* Subtle Sovereign Pattern Grid Overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-40"
+        className="absolute inset-0 pointer-events-none opacity-30 dark:opacity-10"
         style={{
           backgroundImage:
             'linear-gradient(to right, #CBD5E1 1px, transparent 1px), linear-gradient(to bottom, #CBD5E1 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
+          backgroundSize: '40px 40px',
         }}
       />
 
-      {/* Subtle Ambient Light Glows */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-10 w-80 h-80 bg-emerald-100/40 rounded-full blur-3xl pointer-events-none" />
+      {/* Ambient Lighting Accents */}
+      <div className="absolute top-0 right-1/3 w-80 h-80 bg-blue-100/40 dark:bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-emerald-100/40 dark:bg-emerald-900/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Edge-to-Edge Inner Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* ======================================================== */}
-          {/* LEFT COLUMN: Bold, Modern, Left-Aligned Typography */}
-          {/* ======================================================== */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            {/* Government Eyebrow Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-2xs text-xs font-bold text-gray-700">
-              <span className="w-2 h-2 rounded-full bg-[#1E7B34]" />
-              <span className="text-[11px] uppercase tracking-wider text-gray-800 font-extrabold">
-                Government of India • National Citizen Welfare Portal
+      {/* Main Expansive Centered Hero Content */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16 relative z-10 text-center space-y-6">
+        {/* Simple Trust Pill */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-2xs text-xs font-bold text-slate-700 dark:text-slate-200 animate-fadeIn">
+          <span className="w-2 h-2 rounded-full bg-[#1E7B34]" />
+          <span className="text-[11px] font-bold tracking-wide">
+            National Citizen Welfare &amp; Direct Benefits Helper
+          </span>
+        </div>
+
+        {/* Hero Main Headline */}
+        <div className="space-y-3 max-w-4xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-slate-100 leading-[1.12]">
+            Apni Yojana, <span className="text-[#D96B00] dark:text-amber-500">Apna Haq.</span>
+          </h1>
+          <p
+            className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-800 dark:text-slate-200 leading-tight"
+            style={{ fontFamily: "'Playfair Display', 'Merriweather', Georgia, serif" }}
+          >
+            Find every government scheme and money{' '}
+            <span className="text-[#1E7B34] dark:text-emerald-400">you qualify for.</span>
+          </p>
+        </div>
+
+        {/* 5th-Grade Simple English Subtitle */}
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          A simple AI helper to find government schemes and money you qualify for. Tell us your work, age, or location in your own language to get your benefits directly.
+        </p>
+
+        {/* Core Primary Action Buttons */}
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={onGetStarted}
+            className="flex items-center gap-2.5 px-7 py-3.5 bg-[#1E7B34] hover:bg-[#18682B] dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-extrabold text-sm rounded-2xl shadow-sm transition-all transform hover:-translate-y-0.5 cursor-pointer"
+          >
+            <span>Find Schemes For You</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+
+          {onOpenVoiceCopilot && (
+            <button
+              type="button"
+              onClick={onOpenVoiceCopilot}
+              className="flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm rounded-2xl border border-slate-300 dark:border-slate-700 shadow-2xs transition-all cursor-pointer"
+            >
+              <Mic className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+              <span>Voice Help (Hindi/Marathi)</span>
+            </button>
+          )}
+
+          {onOpenFamilyDashboard && (
+            <button
+              type="button"
+              onClick={onOpenFamilyDashboard}
+              className="flex items-center gap-2 px-5 py-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/50 text-[#1B2A6B] dark:text-blue-300 font-bold text-sm rounded-2xl border border-blue-200 dark:border-blue-800 transition-all cursor-pointer"
+            >
+              <Users className="w-4 h-4 text-[#1E7B34] dark:text-emerald-400" />
+              <span>Family 5-Year Plan</span>
+            </button>
+          )}
+
+          {onOpenProactive && (
+            <button
+              type="button"
+              onClick={onOpenProactive}
+              className="flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-amber-50/60 dark:bg-slate-800 dark:hover:bg-slate-700/80 text-slate-800 dark:text-slate-200 font-bold text-sm rounded-2xl border border-amber-200 dark:border-amber-800/60 shadow-2xs transition-all cursor-pointer"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F28C28]"></span>
               </span>
-            </div>
+              <span>⚡ Alert Radar</span>
+            </button>
+          )}
+        </div>
 
-            {/* Primary Left-Aligned Headline */}
-            <div className="space-y-2">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-gray-900 leading-[1.12]">
-                Apni Yojana, <span className="text-[#F28C28]">Apna Haq.</span>
-                <span className="block text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-800 mt-2.5">
-                  Discover Every Welfare Scheme <span className="text-[#1E7B34]">You Deserve.</span>
-                </span>
-              </h1>
-            </div>
-
-            {/* Sub-headline Paragraph in Dark Grey */}
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed font-normal max-w-xl text-left">
-              An autonomous, 100% deterministic welfare benefits co-pilot for Indian citizens and Jan Seva Kendras. Enter demographic details or speak in your language to evaluate statutory entitlements instantly.
-            </p>
-
-            {/* Primary & Secondary Call to Actions */}
-            <div className="pt-2 flex flex-wrap items-center gap-3.5">
-              <button
-                type="button"
-                onClick={onGetStarted}
-                className="flex items-center gap-2.5 px-7 py-3.5 bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-sm rounded-xl shadow-md shadow-[#1E7B34]/20 transition-all transform hover:-translate-y-0.5 cursor-pointer"
-              >
-                <span>Find Schemes For You</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-
-              {onOpenProactive && (
+        {/* Quick Filter Category Pills */}
+        <div className="pt-4 space-y-2">
+          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+            Popular Categories:
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {QUICK_CATEGORIES.map((cat) => {
+              const isSelected = selectedCategory === cat.key;
+              return (
                 <button
+                  key={cat.key}
                   type="button"
-                  onClick={onOpenProactive}
-                  className="flex items-center gap-2 px-5 py-3.5 bg-white hover:bg-slate-50 text-gray-800 font-bold text-sm rounded-xl border border-slate-300 shadow-2xs transition-all cursor-pointer"
+                  onClick={() => handleCategorySelect(cat.key)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#1B2A6B] text-white shadow-2xs'
+                      : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                  }`}
                 >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F28C28]"></span>
-                  </span>
-                  <span className="text-[#F28C28]">⚡</span>
-                  <span>Proactive Radar</span>
-                  <span className="text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-800">
-                    Live
-                  </span>
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
                 </button>
-              )}
-            </div>
-
-            {/* Official Statutory Trust Badges */}
-            <div className="pt-4 border-t border-slate-200/80 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-gray-600">
-              <div className="flex items-center gap-1.5 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-[#1E7B34] shrink-0" />
-                <span>100% Deterministic Rules</span>
-              </div>
-              <div className="flex items-center gap-1.5 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-[#1E7B34] shrink-0" />
-                <span>Direct Benefit Transfer (DBT)</span>
-              </div>
-              <div className="flex items-center gap-1.5 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-[#1E7B34] shrink-0" />
-                <span>Hindi • Marathi • English</span>
-              </div>
-            </div>
+              );
+            })}
           </div>
+        </div>
 
-          {/* ======================================================== */}
-          {/* RIGHT COLUMN: Real-Life High-Resolution Photograph Layout */}
-          {/* ======================================================== */}
-          <div className="lg:col-span-5 relative">
-            {/* Photographic Card Showcase Container */}
-            <div className="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200/90 bg-white group">
-              {/* High-Resolution Real-Life Citizen Photograph */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                <img
-                  src="/dashboard/slide-1.png"
-                  alt="Real Indian citizens accessing government welfare services and DBT benefits"
-                  className="w-full h-full object-cover select-none transform group-hover:scale-102 transition-transform duration-700"
-                  referrerPolicy="no-referrer"
-                  loading="eager"
-                />
-
-                {/* Subtle Photographic Contrast Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
-
-                {/* Top-Right Floating Trust Chip */}
-                <div className="absolute top-4 right-4 z-10">
-                  <div className="bg-white/95 backdrop-blur-md border border-slate-200/80 rounded-xl px-3 py-1.5 shadow-md flex items-center gap-2 text-xs font-bold text-gray-800">
-                    <span className="w-2 h-2 rounded-full bg-[#1E7B34]" />
-                    <span>PFMS &amp; DBT Gateway Active</span>
-                  </div>
-                </div>
-
-                {/* Bottom Left Floating Benefit Highlight Card */}
-                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-end justify-between gap-3">
-                  <div className="bg-white/95 backdrop-blur-md border border-white/60 rounded-xl p-3 shadow-lg max-w-[210px]">
-                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block">
-                      Max Statutory Cover
-                    </span>
-                    <div className="text-xl font-black text-[#1E7B34] leading-tight">
-                      ₹5,00,000 / Yr
-                    </div>
-                    <span className="text-[10px] text-gray-600 block mt-0.5">
-                      Cashless Health &amp; Farm Credit
-                    </span>
-                  </div>
-
-                  <div className="bg-black/65 backdrop-blur-md border border-white/20 rounded-xl p-2.5 shadow-lg text-right text-white">
-                    <div className="text-base font-black text-amber-300">
-                      766 Districts
-                    </div>
-                    <span className="text-[10px] text-slate-200 block">
-                      Pan-India Coverage
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Lower Photographic Metadata Bar */}
-              <div className="p-3.5 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-gray-600">
-                <div className="flex items-center gap-2">
-                  <Landmark className="w-4 h-4 text-[#1B2A6B]" />
-                  <span className="font-bold text-gray-800">Direct Citizen Delivery</span>
-                </div>
-                <span className="text-[11px] text-gray-500">
-                  Aadhaar • 7/12 Land • Ration
-                </span>
-              </div>
-            </div>
-
-            {/* Quick Civic Metric Badges Below Image */}
-            <div className="grid grid-cols-3 gap-2.5 mt-3 text-center">
-              <div className="bg-white/90 border border-slate-200/90 rounded-xl p-2.5 shadow-2xs">
-                <div className="text-sm font-black text-gray-900">10 Schemes</div>
-                <div className="text-[10px] text-gray-500 font-medium">Flagship Portals</div>
-              </div>
-              <div className="bg-white/90 border border-slate-200/90 rounded-xl p-2.5 shadow-2xs">
-                <div className="text-sm font-black text-[#F28C28]">₹14,500+ Cr</div>
-                <div className="text-[10px] text-gray-500 font-medium">Benefits Mapped</div>
-              </div>
-              <div className="bg-white/90 border border-slate-200/90 rounded-xl p-2.5 shadow-2xs">
-                <div className="text-sm font-black text-[#1E7B34]">Instant</div>
-                <div className="text-[10px] text-gray-500 font-medium">DigiLocker e-KYC</div>
-              </div>
-            </div>
+        {/* 3 Clear Plain English Trust Badges */}
+        <div className="pt-6 border-t border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-center gap-y-2 gap-x-8 text-xs text-slate-600 dark:text-slate-400">
+          <div className="flex items-center gap-2 font-medium">
+            <CheckCircle2 className="w-4 h-4 text-[#1E7B34] dark:text-emerald-400 shrink-0" />
+            <span>Accurate &amp; Verified by Govt Rules</span>
+          </div>
+          <div className="flex items-center gap-2 font-medium">
+            <CheckCircle2 className="w-4 h-4 text-[#1E7B34] dark:text-emerald-400 shrink-0" />
+            <span>Direct Bank Transfer Ready (DBT)</span>
+          </div>
+          <div className="flex items-center gap-2 font-medium">
+            <CheckCircle2 className="w-4 h-4 text-[#1E7B34] dark:text-emerald-400 shrink-0" />
+            <span>Easy Regional Languages (Hindi • Marathi • English)</span>
           </div>
         </div>
       </div>

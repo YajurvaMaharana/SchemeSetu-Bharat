@@ -2,9 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Search,
   ShieldCheck,
-  Sparkles,
-  Landmark,
-  Users,
   Sun,
   Moon,
   LogIn,
@@ -12,7 +9,6 @@ import {
   User,
   FileText,
   ChevronDown,
-  Mic,
 } from 'lucide-react';
 import { OfficialEmblemLogo } from './OfficialEmblemLogo';
 import { AuthState } from '../types/auth';
@@ -50,14 +46,11 @@ export const Header: React.FC<HeaderProps> = ({
   onSignOut,
   onOpenProfile,
   onOpenDocuments,
-  onOpenProactive,
-  onOpenFamilyDashboard,
-  onOpenVoiceCopilot,
-  isAuthRoute = false,
+  isAuthRoute,
 }) => {
-  const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -81,268 +74,196 @@ export const Header: React.FC<HeaderProps> = ({
     : '';
 
   return (
-    <header className={`${isAuthRoute ? 'relative' : 'sticky top-0'} z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs`}>
-      {/* Tricolour Accent Bar */}
-      <div className="h-1.5 w-full tricolour-gradient" />
-
-      {/* Main Header Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          {/* Logo & Branding */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3.5 cursor-pointer group" onClick={onReset}>
-              <div className="relative shrink-0 group-hover:scale-105 transition-transform duration-300">
-                <OfficialEmblemLogo size={52} className="w-13 h-13 drop-shadow-sm" />
-              </div>
-              <div>
-                <div className="flex items-baseline gap-2">
-                  <span
-                    className="text-2xl sm:text-[26px] font-black tracking-tight text-[#0B1B3D] leading-none"
-                    style={{ fontFamily: "'Playfair Display', 'Merriweather', 'Cinzel', Georgia, serif" }}
-                  >
-                    YojanaSathi
-                  </span>
-                  <span
-                    className="text-2xl sm:text-[26px] font-black tracking-tight text-[#D96B00] leading-none"
-                    style={{ fontFamily: "'Playfair Display', 'Merriweather', 'Cinzel', Georgia, serif" }}
-                  >
-                    AI
-                  </span>
-                  <span className="ml-1 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-md bg-amber-50 text-[#B45309] border border-amber-300/80 shadow-2xs">
-                    ApnaAdhikar
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 mt-1">
-                  <p className="text-[11px] font-bold text-slate-600 tracking-wide">
-                    राष्ट्रीय कल्याण एवं अधिकार पोर्टल • ApnaAdhikar ("Your Right")
-                  </p>
-                  <span className="hidden lg:inline-block w-1.5 h-1.5 rounded-full bg-emerald-600" />
-                  <span className="hidden lg:inline-block text-[10px] font-bold text-[#1E7B34] uppercase tracking-wider">
-                    Govt. of India Certified
-                  </span>
-                </div>
-              </div>
+    <header className={`${isAuthRoute ? 'relative' : 'sticky top-3'} z-40 max-w-7xl mx-auto px-3 sm:px-6 w-full transition-all duration-200`}>
+      {/* Compact Floating Rounded Pill Navbar */}
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 rounded-2xl sm:rounded-full px-3.5 sm:px-5 py-2 shadow-sm dark:shadow-slate-950/40 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 sm:gap-3 transition-colors">
+        
+        {/* Left: Clean Logo & Brand on a Single Line */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5 cursor-pointer group" onClick={onReset}>
+            <div className="shrink-0 group-hover:scale-105 transition-transform">
+              <OfficialEmblemLogo size={38} className="w-9 h-9 sm:w-10 sm:h-10 drop-shadow-2xs" />
             </div>
-
-            {/* Mobile actions */}
-            <div className="flex items-center gap-2 md:hidden">
-              {isSignedIn ? (
-                <button
-                  type="button"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="w-8 h-8 rounded-full bg-[#1B2A6B] text-white flex items-center justify-center font-bold text-xs shadow-xs"
-                >
-                  {userInitials}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={onSignInClick}
-                  className="px-3 py-1.5 bg-[#F28C28] text-white font-bold text-xs rounded-lg shadow-xs"
-                >
-                  {t.signIn}
-                </button>
-              )}
+            <div className="flex items-baseline gap-1.5">
+              <span
+                className="text-lg sm:text-xl font-black tracking-tight text-[#0B1B3D] dark:text-slate-100 leading-none"
+                style={{ fontFamily: "'Playfair Display', 'Merriweather', 'Cinzel', Georgia, serif" }}
+              >
+                YojanaSathi
+              </span>
+              <span
+                className="text-lg sm:text-xl font-black tracking-tight text-[#D96B00] dark:text-amber-500 leading-none"
+                style={{ fontFamily: "'Playfair Display', 'Merriweather', 'Cinzel', Georgia, serif" }}
+              >
+                AI
+              </span>
+              <span className="ml-1 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider rounded-full bg-amber-50 dark:bg-amber-950/60 text-[#B45309] dark:text-amber-400 border border-amber-300/80 dark:border-amber-700/60">
+                ApnaAdhikar
+              </span>
             </div>
           </div>
 
-          {/* Right Controls: Search + Sign In / User Profile + Language + Theme */}
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-            {/* Search Input with Orange Border */}
-            <div className="relative flex-1 sm:w-64 md:w-72">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                placeholder={t.searchPlaceholder}
-                className="w-full pl-9 pr-4 py-2 text-xs font-medium text-slate-700 bg-white border-2 border-[#F28C28] rounded-full placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#F28C28]/25 shadow-xs transition"
-              />
-              <Search className="w-4 h-4 text-[#F28C28] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
+          {/* Mobile Right Controls */}
+          <div className="flex items-center gap-1.5 md:hidden">
+            {/* Dark Mode Icon Mobile */}
+            <button
+              type="button"
+              onClick={onToggleDarkMode}
+              aria-label="Toggle theme"
+              className="p-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4" />}
+            </button>
 
-            {/* Proactive Life-Event Radar Trigger */}
-            {onOpenProactive && (
-              <button
-                type="button"
-                onClick={onOpenProactive}
-                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-amber-50 via-emerald-50 to-amber-50 hover:from-amber-100 hover:to-emerald-100 border border-amber-300 rounded-full text-xs font-bold text-[#1B2A6B] shadow-2xs transition cursor-pointer relative group"
-                title="Proactive Life-Event Welfare Radar"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F28C28]"></span>
-                </span>
-                <span className="text-[#F28C28]">⚡</span>
-                <span className="hidden sm:inline font-black">Proactive Radar</span>
-                <span className="bg-[#1E7B34] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
-                  Live
-                </span>
-              </button>
-            )}
-
-            {/* Family 5-Year Optimizer Trigger */}
-            {onOpenFamilyDashboard && (
-              <button
-                type="button"
-                onClick={onOpenFamilyDashboard}
-                className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-blue-50 to-emerald-50 hover:from-blue-100 hover:to-emerald-100 border border-blue-200 rounded-full text-xs font-bold text-[#1B2A6B] shadow-2xs transition cursor-pointer"
-                title="Household Combinatorial Optimizer"
-              >
-                <Users className="w-3.5 h-3.5 text-[#1E7B34]" />
-                <span className="hidden md:inline font-extrabold">Family 5-Yr Optimizer</span>
-                <span className="md:hidden font-bold">Family</span>
-              </button>
-            )}
-
-            {/* Vernacular Dialect Voice Copilot (Bhojpuri / Marwari) */}
-            {onOpenVoiceCopilot && (
-              <button
-                type="button"
-                onClick={onOpenVoiceCopilot}
-                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-purple-50 to-amber-50 hover:from-purple-100 hover:to-amber-100 border border-purple-200 rounded-full text-xs font-bold text-purple-900 shadow-2xs transition cursor-pointer"
-                title="Voice Copilot in Bhojpuri, Marwari & Regional Dialects"
-              >
-                <Mic className="w-3.5 h-3.5 text-purple-700 animate-pulse" />
-                <span className="hidden lg:inline font-black">Dialect Voice</span>
-                <span className="lg:hidden font-bold">Voice</span>
-              </button>
-            )}
-
-            {/* User Profile Dropdown OR Sign in Button */}
             {isSignedIn ? (
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  type="button"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
-                >
-                  <div className="w-7 h-7 rounded-full bg-[#1B2A6B] text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                    {userInitials}
-                  </div>
-                  <span className="hidden sm:inline text-xs font-bold text-[#1B2A6B] max-w-[120px] truncate">
-                    {authState.user.name}
-                  </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                </button>
-
-                {/* Dropdown Menu */}
-                {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl py-2 z-50 animate-fadeIn text-xs">
-                    <div className="px-4 py-2.5 border-b border-slate-100">
-                      <div className="font-bold text-[#1B2A6B] truncate">{authState.user.name}</div>
-                      <div className="text-[11px] text-slate-500 font-mono">
-                        {authState.user.mobile ? `+91 ${authState.user.mobile}` : 'DigiLocker Citizen'}
-                      </div>
-                      <span className="mt-1 inline-block text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-50 text-[#1E7B34] border border-emerald-200">
-                        {authState.user.authMethod === 'digilocker' ? 'DigiLocker Verified' : 'OTP Verified'}
-                      </span>
-                    </div>
-
-                    <div className="py-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsDropdownOpen(false);
-                          onOpenProfile();
-                        }}
-                        className="w-full flex items-center gap-2.5 px-4 py-2 text-slate-700 hover:bg-slate-50 font-medium transition cursor-pointer"
-                      >
-                        <User className="w-4 h-4 text-slate-500" />
-                        <span>{t.myProfile}</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsDropdownOpen(false);
-                          onOpenDocuments();
-                        }}
-                        className="w-full flex items-center justify-between px-4 py-2 text-slate-700 hover:bg-slate-50 font-medium transition cursor-pointer"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <FileText className="w-4 h-4 text-slate-500" />
-                          <span>{t.myDocuments}</span>
-                        </div>
-                        {authState.user.documents && authState.user.documents.length > 0 && (
-                          <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.2 rounded-full font-bold">
-                            {authState.user.documents.length}
-                          </span>
-                        )}
-                      </button>
-                    </div>
-
-                    <div className="border-t border-slate-100 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsDropdownOpen(false);
-                          onSignOut();
-                        }}
-                        className="w-full flex items-center gap-2.5 px-4 py-2 text-rose-600 hover:bg-rose-50 font-bold transition cursor-pointer"
-                      >
-                        <LogOut className="w-4 h-4 text-rose-500" />
-                        <span>{t.signOut}</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-7 h-7 rounded-full bg-[#1B2A6B] dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[11px] shadow-2xs"
+              >
+                {userInitials}
+              </button>
             ) : (
               <button
                 type="button"
                 onClick={onSignInClick}
-                className="flex items-center gap-1.5 px-4 py-2 bg-[#F28C28] hover:bg-[#d97706] text-white font-bold text-xs rounded-xl shadow-xs transition transform hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
+                className="px-3 py-1 bg-[#1E7B34] hover:bg-[#18682B] dark:bg-emerald-600 text-white font-bold text-xs rounded-full shadow-2xs"
               >
-                <LogIn className="w-3.5 h-3.5" />
-                <span>{t.signIn}</span>
+                {t.signIn}
               </button>
             )}
-
-            {/* Language Toggle Pill */}
-            <div className="inline-flex items-center p-1 bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold shadow-2xs">
-              {(['hi', 'mr', 'en'] as const).map((lang) => (
-                <button
-                  key={lang}
-                  type="button"
-                  onClick={() => onLanguageChange(lang)}
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                    selectedLanguage === lang
-                      ? 'bg-white text-[#1B2A6B] shadow-xs font-bold border border-slate-200/60'
-                      : 'text-slate-500 hover:text-slate-900'
-                  }`}
-                >
-                  {lang === 'hi' ? 'हिन्दी' : lang === 'mr' ? 'मराठी' : 'English'}
-                </button>
-              ))}
-            </div>
-
-            {/* Light / Dark Mode Icon */}
-            <button
-              type="button"
-              onClick={onToggleDarkMode}
-              aria-label="Toggle visual mode"
-              className="hidden md:flex p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
-              title="Toggle view"
-            >
-              {isDarkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4" />}
-            </button>
           </div>
         </div>
 
-        {/* Feature Badges Strip (Light clean pills) */}
-        <div className="flex flex-wrap items-center gap-2 pt-2.5 border-t border-slate-100 mt-2 text-xs">
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/90 border border-slate-200 text-slate-700 font-medium">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#1E7B34]" />
-            <span>100% Deterministic Engine</span>
+        {/* Right: Streamlined Essential Controls (Search, Language, Dark Mode, Avatar) */}
+        <div className="flex items-center gap-2 sm:gap-2.5 justify-between md:justify-end">
+          {/* Compact Search Bar */}
+          <div className="relative flex-1 md:w-60 lg:w-72">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder="Search government schemes..."
+              className="w-full pl-8 pr-3 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-full placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#1E7B34] dark:focus:ring-emerald-500 transition"
+            />
+            <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/90 border border-slate-200 text-slate-700 font-medium">
-            <Users className="w-3.5 h-3.5 text-[#1B2A6B]" />
-            <span>10 Flagship Schemes</span>
+
+          {/* Quick Language Toggle */}
+          <div className="inline-flex items-center p-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-[11px] font-semibold">
+            {(['hi', 'mr', 'en'] as const).map((lang) => (
+              <button
+                key={lang}
+                type="button"
+                onClick={() => onLanguageChange(lang)}
+                className={`px-2 py-0.5 rounded-full transition-all cursor-pointer ${
+                  selectedLanguage === lang
+                    ? 'bg-white dark:bg-slate-700 text-[#1B2A6B] dark:text-slate-100 shadow-2xs font-bold'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                }`}
+              >
+                {lang === 'hi' ? 'हिन्दी' : lang === 'mr' ? 'मराठी' : 'En'}
+              </button>
+            ))}
           </div>
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/90 border border-slate-200 text-slate-700 font-medium">
-            <Sparkles className="w-3.5 h-3.5 text-[#F28C28]" />
-            <span>Vernacular AI (Hindi • Marathi • English)</span>
-          </div>
+
+          {/* Dark Mode Toggle Desktop */}
+          <button
+            type="button"
+            onClick={onToggleDarkMode}
+            aria-label="Toggle dark mode"
+            className="hidden md:flex p-1.5 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+            title="Toggle theme"
+          >
+            {isDarkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4" />}
+          </button>
+
+          {/* Sign In Button / User Avatar Desktop */}
+          {isSignedIn ? (
+            <div className="relative hidden md:block" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 transition cursor-pointer"
+              >
+                <div className="w-6 h-6 rounded-full bg-[#1B2A6B] dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[10px] shadow-2xs">
+                  {userInitials}
+                </div>
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 max-w-[100px] truncate">
+                  {authState.user.name}
+                </span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl py-2 z-50 animate-fadeIn text-xs">
+                  <div className="px-4 py-2.5 border-b border-slate-100 dark:border-slate-700">
+                    <div className="font-bold text-[#1B2A6B] dark:text-blue-400 truncate">{authState.user.name}</div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                      {authState.user.mobile ? `+91 ${authState.user.mobile}` : 'DigiLocker Citizen'}
+                    </div>
+                  </div>
+
+                  <div className="py-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        onOpenProfile();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/60 font-medium transition cursor-pointer"
+                    >
+                      <User className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                      <span>{t.myProfile}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        onOpenDocuments();
+                      }}
+                      className="w-full flex items-center justify-between px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/60 font-medium transition cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <FileText className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                        <span>{t.myDocuments}</span>
+                      </div>
+                      {authState.user.documents && authState.user.documents.length > 0 && (
+                        <span className="text-[10px] bg-blue-50 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.2 rounded-full font-bold">
+                          {authState.user.documents.length}
+                        </span>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="border-t border-slate-100 dark:border-slate-700 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        onSignOut();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-4 py-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 font-bold transition cursor-pointer"
+                    >
+                      <LogOut className="w-4 h-4 text-rose-500" />
+                      <span>{t.signOut}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={onSignInClick}
+              className="hidden md:flex items-center gap-1.5 px-4 py-1.5 bg-[#1E7B34] hover:bg-[#18682B] dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-bold text-xs rounded-full shadow-2xs transition transform hover:-translate-y-0.5 cursor-pointer whitespace-nowrap"
+            >
+              <LogIn className="w-3 h-3" />
+              <span>{t.signIn}</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

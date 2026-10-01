@@ -96,28 +96,28 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
   return (
     <div className="space-y-6 pt-2">
       {/* Top Banner Metric & Summary */}
-      <div className="bg-gradient-to-br from-white via-emerald-50/30 to-amber-50/40 border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+      <div className="bg-gradient-to-br from-white via-emerald-50/40 to-amber-50/40 dark:from-slate-800 dark:via-slate-800/90 dark:to-slate-800 border border-slate-200/90 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-xs relative overflow-hidden transition-colors">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2.5 max-w-3xl">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-[#1E7B34]/10 text-[#1E7B34] font-bold text-xs border border-[#1E7B34]/25">
+              <span className="px-3 py-1 rounded-full bg-[#1E7B34]/10 dark:bg-emerald-950/60 text-[#1E7B34] dark:text-emerald-400 font-bold text-xs border border-[#1E7B34]/25 dark:border-emerald-800">
                 ✅ Eligibility Verified
               </span>
               {response.used_fallback && (
-                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs border border-slate-200 font-medium">
-                  Deterministic Engine
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs border border-slate-200 dark:border-slate-600 font-medium">
+                  Accurate &amp; Verified
                 </span>
               )}
             </div>
 
-            <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1B2A6B] tracking-tight">
+            <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1B2A6B] dark:text-slate-100 tracking-tight">
               ₹ {response.total_potential_benefit_inr.toLocaleString('en-IN')}
-              <span className="text-sm sm:text-base font-medium text-slate-500 ml-2">
-                / total potential annual benefit unlocked
+              <span className="text-sm sm:text-base font-medium text-slate-500 dark:text-slate-400 ml-2">
+                / total benefits you can receive per year
               </span>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line font-medium">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line font-medium">
               {response.vernacular_summary || response.summary_text}
             </p>
           </div>
@@ -126,10 +126,10 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
             <button
               type="button"
               onClick={handleSpeak}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-[10px] font-bold text-xs transition shadow-xs cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition shadow-xs cursor-pointer ${
                 isSpeaking
                   ? 'bg-rose-600 text-white animate-pulse'
-                  : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300'
+                  : 'bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600'
               }`}
             >
               {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-[#F28C28]" />}
@@ -139,10 +139,10 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
             <button
               type="button"
               onClick={onOpenPdfModal}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs transition shadow-sm cursor-pointer"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1E7B34] hover:bg-[#18682B] dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs cursor-pointer"
             >
               <FileDown className="w-4 h-4" />
-              <span>Download Action Pack (PDF)</span>
+              <span>Download Claim Guide (PDF)</span>
             </button>
           </div>
         </div>
@@ -155,17 +155,17 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
           {/* Eligible Schemes Section */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#1B2A6B] flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-[#1E7B34]" />
+              <h3 className="text-lg font-bold text-[#1B2A6B] dark:text-slate-100 flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[#1E7B34] dark:text-emerald-400" />
                 <span>Eligible Schemes ({response.eligible_schemes.length})</span>
               </h3>
-              <span className="text-xs text-[#1E7B34] font-bold bg-[#1E7B34]/10 px-3 py-1 rounded-full border border-[#1E7B34]/25">
-                Statutory Verified
+              <span className="text-xs text-[#1E7B34] dark:text-emerald-400 font-bold bg-[#1E7B34]/10 dark:bg-emerald-950/60 px-3 py-1 rounded-full border border-[#1E7B34]/25 dark:border-emerald-800">
+                Verified by Govt Rules
               </span>
             </div>
 
             {response.eligible_schemes.length === 0 ? (
-              <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center text-slate-500 text-sm">
+              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 text-center text-slate-500 dark:text-slate-400 text-sm">
                 No direct eligibility found with current criteria. Check review section or update profile details.
               </div>
             ) : (
@@ -177,12 +177,12 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                   return (
                     <div
                       key={scheme.scheme_id}
-                      className="bg-white border border-slate-200/90 hover:border-[#1E7B34]/60 transition-all rounded-2xl p-5 sm:p-6 shadow-xs space-y-4"
+                      className="bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 hover:border-[#1E7B34]/60 dark:hover:border-emerald-500 transition-all rounded-3xl p-5 sm:p-6 shadow-xs space-y-4"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h4 className="text-base font-bold text-[#1B2A6B]">
+                            <h4 className="text-base font-bold text-[#1B2A6B] dark:text-slate-100">
                               {scheme.scheme_name}
                             </h4>
                             {scheme.scheme_name_hi && (
@@ -191,9 +191,9 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-slate-500 mt-0.5">
-                            Category: <span className="font-semibold text-slate-700">{scheme.category}</span> • Mode:{' '}
-                            <span className="text-slate-600">{scheme.application_mode || 'Online / CSC'}</span>
+                          <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                            Category: <span className="font-semibold text-slate-700 dark:text-slate-300">{scheme.category}</span> • Mode:{' '}
+                            <span className="text-slate-600 dark:text-slate-400">{scheme.application_mode || 'Online / Help Center'}</span>
                           </div>
                         </div>
 
