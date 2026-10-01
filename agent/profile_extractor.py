@@ -68,6 +68,10 @@ def heuristic_extract_profile(text: str) -> UserProfile:
     }
 
     t = text.lower()
+    # Normalize Devanagari digits to ASCII digits
+    devanagari_digits = "०१२३४५६७८९"
+    for d_idx, d_char in enumerate(devanagari_digits):
+        t = t.replace(d_char, str(d_idx))
 
     # 1. Pincode
     pin_match = re.search(r"\b([1-9][0-9]{5})\b", text)
@@ -76,7 +80,7 @@ def heuristic_extract_profile(text: str) -> UserProfile:
 
     # 2. Age
     age_match = re.search(
-        r"(?:age|उम्र|आयु|वर्ष|साल)\s*[:=-]?\s*(\d{1,2})|(\d{1,2})\s*(?:साल|saal|year|years|वर्ष)",
+        r"(?:age|उम्र|आयु|वर्ष|साल|वय)\s*[:=-]?\s*(\d{1,2})|(\d{1,2})\s*(?:साल|saal|year|years|वर्ष|वर्षे)",
         t,
     )
     if age_match:
@@ -91,21 +95,23 @@ def heuristic_extract_profile(text: str) -> UserProfile:
         profile_dict["gender"] = "Male"
 
     # 4. Occupation
-    if any(w in t for w in ["kisan", "farmer", "किसान", "खेती", "agriculture", "काश्तकार"]):
+    if any(w in t for w in ["kisan", "farmer", "किसान", "खेती", "agriculture", "काश्तकार", "शेतकरी", "shetkari"]):
         profile_dict["occupation"] = "Farmer"
     elif any(w in t for w in ["student", "विद्यार्थी", "छात्र", "padhai", "college"]):
         profile_dict["occupation"] = "Student"
         profile_dict["is_student"] = True
-    elif any(w in t for w in ["majdoor", "labourer", "मजदूर", "daily wage", "दिहाड़ी"]):
+    elif any(w in t for w in ["majdoor", "labourer", "मजदूर", "daily wage", "दिहाड़ी", "कामगार"]):
         profile_dict["occupation"] = "Daily Wage Worker"
     elif any(w in t for w in ["artisan", "karigar", "कारीगर", "weaver", "bunker", "tailor", "दर्जी"]):
         profile_dict["occupation"] = "Artisan"
     elif any(w in t for w in ["shop", "business", "दुकान", "व्यापार", "self employed", "स्वरोजगार"]):
         profile_dict["occupation"] = "Self-Employed"
+    elif any(w in t for w in ["homemaker", "गृहणी", "गृहिणी", "housewife"]):
+        profile_dict["occupation"] = "Homemaker"
 
     # 5. Landholding
     land_match = re.search(
-        r"(\d+(?:\.\d+)?)\s*(?:एकड़|acre|acres|एकड)",
+        r"(\d+(?:\.\d+)?)\s*(?:एकड़|acre|acres|एकड|एकर)",
         t,
     )
     if land_match:
@@ -194,9 +200,9 @@ def heuristic_extract_profile(text: str) -> UserProfile:
 
     # 10. State detection (English and Hindi names)
     state_map = {
-        "bihar": "Bihar", "बिहार": "Bihar",
-        "uttar pradesh": "Uttar Pradesh", "उत्तर प्रदेश": "Uttar Pradesh", "up": "Uttar Pradesh",
+        "uttar pradesh": "Uttar Pradesh", "उत्तर प्रदेश": "Uttar Pradesh",
         "maharashtra": "Maharashtra", "महाराष्ट्र": "Maharashtra",
+        "bihar": "Bihar", "बिहार": "Bihar",
         "madhya pradesh": "Madhya Pradesh", "मध्य प्रदेश": "Madhya Pradesh", "mp": "Madhya Pradesh",
         "rajasthan": "Rajasthan", "राजस्थान": "Rajasthan",
         "punjab": "Punjab", "पंजाब": "Punjab",
@@ -218,6 +224,15 @@ def heuristic_extract_profile(text: str) -> UserProfile:
     for key, standard_name in state_map.items():
         if key in t:
             profile_dict["state"] = standard_name
+            break
+    if not profile_dict.get("state") and re.search(r"\bup\b", t):
+        profile_dict["state"] = "Uttar Pradesh"
+
+    # District detection
+    district_candidates = ["nashik", "naasik", "नासिक", "नाशिक", "satara", "सातारा", "pune", "पुणे", "patna", "पटना", "lucknow", "लखनऊ"]
+    for dist in district_candidates:
+        if dist in t:
+            profile_dict["district"] = dist.capitalize()
             break
 
     # Language detection
