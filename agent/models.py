@@ -350,18 +350,48 @@ AgentResponse = AgentResult
 class Scheme(BaseModel):
     """Raw scheme record from data/schemes_data.json."""
 
-    id: str
-    name: str
+    id: str = ""
+    scheme_id: Optional[str] = None
+    name: str = ""
+    short_name: Optional[str] = None
     name_hi: Optional[str] = None
-    ministry: str
-    category: str
-    target_audience: List[str]
-    benefit_type: str
-    benefit_amount_inr: int
-    benefit_description: str
-    benefit_frequency: str
-    eligibility_criteria: Dict[str, Any]
+    ministry: str = ""
+    category: str = "General"
+    target_audience: List[str] = Field(default_factory=list)
+    benefit_type: str = "Welfare"
+    benefit_amount_inr: int = 0
+    annual_benefit_inr: Optional[int] = None
+    benefit_description: str = ""
+    benefit_frequency: str = "Annual"
+    eligibility_criteria: Dict[str, Any] = Field(default_factory=dict)
+    eligibility: Optional[Dict[str, Any]] = None
     edge_cases: List[str] = Field(default_factory=list)
     required_documents: List[str] = Field(default_factory=list)
+    application_steps: List[str] = Field(default_factory=list)
     application_mode: Optional[str] = None
     portal_url: Optional[str] = None
+    direct_portal_url: Optional[str] = None
+    action_type: Optional[str] = None
+    friction_score: Optional[int] = 1
+    processing_time: Optional[str] = None
+    source_url: Optional[str] = None
+    last_verified: Optional[str] = None
+    notes: Optional[str] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_scheme(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "id" not in data and "scheme_id" in data:
+                data["id"] = data["scheme_id"]
+            if "scheme_id" not in data and "id" in data:
+                data["scheme_id"] = data["id"]
+            if "benefit_amount_inr" not in data and "annual_benefit_inr" in data:
+                data["benefit_amount_inr"] = data["annual_benefit_inr"]
+            if "annual_benefit_inr" not in data and "benefit_amount_inr" in data:
+                data["annual_benefit_inr"] = data["benefit_amount_inr"]
+            if "eligibility_criteria" not in data and "eligibility" in data:
+                data["eligibility_criteria"] = data["eligibility"]
+            if "portal_url" not in data and "direct_portal_url" in data:
+                data["portal_url"] = data["direct_portal_url"]
+        return data
