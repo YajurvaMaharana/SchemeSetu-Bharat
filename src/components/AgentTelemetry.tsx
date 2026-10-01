@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Terminal, CheckCircle2, AlertCircle, Clock, ChevronDown, ChevronRight, Activity, Cpu } from 'lucide-react';
+import { Terminal, Activity, ChevronDown, ChevronRight, Cpu } from 'lucide-react';
 import { AgentEvent } from '../types/agent';
 
 interface AgentTelemetryProps {
@@ -30,56 +30,57 @@ export const AgentTelemetry: React.FC<AgentTelemetryProps> = ({ events, isLoadin
 
     if (status === 'ERROR') return 'text-rose-400 border-l-2 border-rose-500 bg-rose-950/20';
     if (step === 'DELIVER' || status === 'COMPLETED') {
-      if (step === 'DELIVER') return 'text-amber-300 font-semibold border-l-2 border-amber-400 bg-amber-950/10';
-      return 'text-emerald-300 border-l-2 border-emerald-500 bg-emerald-950/10';
+      if (step === 'DELIVER') return 'text-amber-300 font-bold border-l-2 border-amber-400 bg-amber-950/20';
+      return 'text-emerald-300 border-l-2 border-emerald-500 bg-emerald-950/15';
     }
     if (step.includes('TOOL') || step.includes('CSC') || step.includes('MOCK')) {
       if (['STARTING', 'IN_PROGRESS'].includes(status)) {
-        return 'text-orange-300 border-l-2 border-orange-500 bg-orange-950/10';
+        return 'text-orange-300 border-l-2 border-orange-500 bg-orange-950/20';
       }
-      return 'text-emerald-400 border-l-2 border-emerald-500 bg-emerald-950/10';
+      return 'text-emerald-400 border-l-2 border-emerald-500 bg-emerald-950/20';
     }
-    return 'text-sky-300 border-l-2 border-sky-500 bg-sky-950/10';
+    return 'text-sky-300 border-l-2 border-sky-500 bg-sky-950/15';
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-700/80 rounded-2xl p-4 shadow-xl flex flex-col h-full min-h-[380px] max-h-[500px]">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center border border-sky-500/30">
-            <Terminal className="w-4 h-4" />
+    <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm flex flex-col h-full min-h-[420px] max-h-[540px]">
+      {/* Card Header */}
+      <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 mb-3">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-[#1B2A6B]/10 text-[#1B2A6B] flex items-center justify-center font-bold text-sm border border-[#1B2A6B]/20">
+            <Terminal className="w-5 h-5 text-[#1B2A6B]" />
           </div>
           <div>
-            <h2 className="text-sm font-bold text-white flex items-center gap-2">
+            <h2 className="text-lg font-bold text-[#1B2A6B] flex items-center gap-2">
               <span>Live Agent Telemetry Stream</span>
               {isLoading && (
-                <span className="flex items-center gap-1 text-[10px] font-semibold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 animate-pulse">
+                <span className="flex items-center gap-1 text-[10px] font-bold text-[#1E7B34] bg-[#1E7B34]/10 px-2.5 py-0.5 rounded-full border border-[#1E7B34]/20 animate-pulse">
                   <Activity className="w-3 h-3" />
-                  Running
+                  Processing
                 </span>
               )}
             </h2>
-            <p className="text-[11px] text-slate-400">Structured event lifecycle & intermediate payloads</p>
+            <p className="text-xs text-slate-500">6-Stage Autonomous Execution Logs</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
-            {events.length} Events
-          </span>
-        </div>
+        <span className="text-xs font-mono font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+          {events.length} Events
+        </span>
       </div>
 
-      {/* Terminal log window */}
+      {/* Terminal Viewport */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto space-y-2 font-mono text-xs telemetry-scroll pr-1"
+        className="flex-1 overflow-y-auto space-y-2 font-mono text-xs telemetry-scroll bg-[#0B1329] border border-slate-800 rounded-xl p-3.5 shadow-inner"
       >
         {events.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-slate-500 py-12 space-y-2">
-            <Cpu className="w-8 h-8 opacity-40 animate-pulse-subtle" />
-            <p className="text-xs">Waiting for citizen query execution...</p>
-            <p className="text-[10px] text-slate-600">Events from all 6 lifecycle stages will stream here in real time</p>
+          <div className="h-full flex flex-col items-center justify-center text-slate-500 py-16 space-y-2">
+            <Cpu className="w-9 h-9 opacity-30 animate-pulse-subtle text-slate-400" />
+            <p className="text-xs text-slate-400 font-mono">Agent idle. Ready for citizen intake.</p>
+            <p className="text-[10px] text-slate-500 text-center max-w-xs">
+              Live deterministic verification, edge case reviews, and CSC locator calls will stream here.
+            </p>
           </div>
         ) : (
           events.map((ev, idx) => {
@@ -100,11 +101,11 @@ export const AgentTelemetry: React.FC<AgentTelemetryProps> = ({ events, isLoadin
                     <span className="text-slate-500 text-[10px] whitespace-nowrap pt-0.5">
                       [{ev.timestamp}]
                     </span>
-                    <span className="font-bold text-[11px] tracking-wide whitespace-nowrap px-1 py-0.2 rounded bg-slate-800/60 border border-slate-700/50">
+                    <span className="font-bold text-[10px] tracking-wide whitespace-nowrap px-1.5 py-0.5 rounded bg-slate-900/80 border border-slate-700/60 text-slate-300">
                       {ev.step}
                     </span>
                     {ev.simulated && (
-                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap">
+                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#1E7B34]/20 text-[#4ADE80] border border-[#1E7B34]/40 whitespace-nowrap">
                         SIMULATED
                       </span>
                     )}
@@ -132,7 +133,7 @@ export const AgentTelemetry: React.FC<AgentTelemetryProps> = ({ events, isLoadin
                 </div>
 
                 {hasData && isExpanded && (
-                  <div className="mt-2 pt-2 border-t border-slate-700/60 bg-slate-950/60 p-2 rounded text-[11px] overflow-x-auto text-amber-200/90">
+                  <div className="mt-2 pt-2 border-t border-slate-700/60 bg-slate-950/80 p-2.5 rounded text-[11px] overflow-x-auto text-amber-200">
                     <pre>{JSON.stringify(ev.data, null, 2)}</pre>
                   </div>
                 )}

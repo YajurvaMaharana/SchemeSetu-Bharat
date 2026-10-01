@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header';
+import { Dashboard } from './components/Dashboard';
 import { CitizenInput } from './components/CitizenInput';
 import { AgentTelemetry } from './components/AgentTelemetry';
 import { SchemeResults } from './components/SchemeResults';
 import { DemoControls } from './components/DemoControls';
 import { ActionPackModal } from './components/ActionPackModal';
 import { SubmissionSuccessModal } from './components/SubmissionSuccessModal';
-import { AgentEvent, AgentResponse, UserProfile } from './types/agent';
+import { AgentEvent, AgentResponse, UserProfile, Scheme } from './types/agent';
 import { evaluateAllSchemes, normalizeProfile } from './services/rulesEngine';
 import { findCsc, mockPortalSubmission } from './services/cscLocator';
 import { generateFallbackEdgeReview, generateFallbackSummary, heuristicExtractProfile } from './services/heuristicExtractor';
+import { X, ShieldCheck, Lock } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<'hi' | 'mr' | 'en'>('hi');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState<boolean>(false);
   const [demoPacing, setDemoPacing] = useState<boolean>(true);
   const [useCachedDemo, setUseCachedDemo] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,6 +31,18 @@ export const App: React.FC = () => {
 
   // Sleep helper for demo pacing
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const scrollToCitizenInput = () => {
+    const el = document.getElementById('citizen-input-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const handleSelectSchemeFromDashboard = (scheme: Scheme) => {
+    // Smooth scroll down to input and set sample or context
+    scrollToCitizenInput();
+  };
 
   const runAgentWorkflow = async (input: {
     query?: string;
@@ -257,16 +274,30 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-[#F8FAFC] text-[#374151]'} flex flex-col font-sans transition-colors duration-200`}>
       <Header
         onReset={() => {
           setAgentResult(null);
           setEvents([]);
         }}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        selectedLanguage={selectedLanguage}
+        onLanguageChange={setSelectedLanguage}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
+        onSignInClick={() => setIsSignInModalOpen(true)}
       />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 w-full">
-        {/* Hackathon Demo Controls Banner */}
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 w-full">
+        {/* NEW DASHBOARD SECTION: Hero Row + 4-Slide Auto Carousel + Flagship Cards */}
+        <Dashboard
+          onGetStarted={scrollToCitizenInput}
+          onSelectScheme={handleSelectSchemeFromDashboard}
+          searchFilter={searchQuery}
+        />
+
+        {/* Demo Controls Bar */}
         <DemoControls
           demoPacing={demoPacing}
           onToggleDemoPacing={setDemoPacing}
@@ -274,7 +305,7 @@ export const App: React.FC = () => {
           onToggleUseCachedDemo={setUseCachedDemo}
         />
 
-        {/* Top Split: Citizen Input vs Live Telemetry */}
+        {/* Citizen Input vs Live Telemetry Stream */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-6">
             <CitizenInput
@@ -289,7 +320,7 @@ export const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Discovery Results View */}
+        {/* Welfare Discovery Results */}
         {agentResult && (
           <SchemeResults
             response={agentResult}
@@ -301,14 +332,21 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div>SchemeSetu Bharat — Autonomous Welfare Discovery & Application Agent for Bharat</div>
-          <div className="flex items-center gap-3">
-            <span>Deterministic Python/TypeScript Rules Engine</span>
+      {/* Official Government Portal Footer */}
+      <footer className="border-t border-slate-200 bg-white py-8 text-xs text-slate-500 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[#1B2A6B]">SchemeSetu Bharat</span>
             <span>•</span>
-            <span>Simulated CSC & DBT Submission</span>
+            <span>Apni Yojana, Apna Haq</span>
+          </div>
+
+          <div className="flex items-center gap-4 text-[11px] font-semibold text-slate-600">
+            <span>#GOVERNMENTSCHEMES</span>
+            <span>/</span>
+            <span>#SCHEMESFORYOU</span>
+            <span>/</span>
+            <span>#DIGITALINDIA</span>
           </div>
         </div>
       </footer>
@@ -330,6 +368,57 @@ export const App: React.FC = () => {
             setSubmittingSchemeId(null);
           }}
         />
+      )}
+
+      {/* Simulation Sign-in Modal (MeriPehchan / DigiLocker / Aadhaar OTP) */}
+      {isSignInModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white border border-slate-300 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl space-y-0 text-slate-800">
+            <div className="bg-slate-50 p-5 border-b border-slate-200 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-[#F28C28]/15 text-[#F28C28] flex items-center justify-center font-bold">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#1B2A6B] text-sm">Citizen Single Sign-On</h3>
+                  <p className="text-[11px] text-slate-500">MeriPehchan / DigiLocker Integration</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSignInModalOpen(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-200 transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4 text-xs">
+              <p className="text-slate-600 leading-relaxed">
+                Log in via your verified Aadhaar or DigiLocker profile for instantaneous pre-filled applications.
+              </p>
+
+              <div className="space-y-2.5">
+                <button
+                  type="button"
+                  onClick={() => setIsSignInModalOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-[10px] bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold transition shadow-xs cursor-pointer"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Continue with MeriPehchan (SSO)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsSignInModalOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-300 transition cursor-pointer"
+                >
+                  <span>Continue as Guest Citizen</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

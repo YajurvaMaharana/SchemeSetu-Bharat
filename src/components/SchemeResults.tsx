@@ -9,17 +9,12 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
-  Sparkles,
   Send,
-  Building2,
   Info,
   Check,
   Star,
-  MapPin,
-  Clock,
-  Phone,
 } from 'lucide-react';
-import { AgentResponse, SchemeEligibilityResult, UserProfile } from '../types/agent';
+import { AgentResponse, UserProfile } from '../types/agent';
 import { CscCenterCard } from './CscCenterCard';
 
 interface SchemeResultsProps {
@@ -45,7 +40,7 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
     setExpandedPayloads((prev) => ({ ...prev, [schemeId]: !prev[schemeId] }));
   };
 
-  // Web Speech API Text-to-Speech
+  // Web Speech API TTS
   const handleSpeak = () => {
     if (isSpeaking) {
       window.speechSynthesis.cancel();
@@ -80,11 +75,11 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
           <Star
             key={i}
             className={`w-3.5 h-3.5 ${
-              i < friction ? 'text-amber-400 fill-amber-400' : 'text-slate-600'
+              i < friction ? 'text-amber-400 fill-amber-400' : 'text-slate-300'
             }`}
           />
         ))}
-        <span className="text-[11px] text-slate-400 ml-1">
+        <span className="text-[11px] text-slate-500 ml-1">
           {friction <= 2 ? 'Low Friction' : friction <= 3 ? 'Moderate' : 'High Verification'}
         </span>
       </div>
@@ -92,30 +87,30 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
   };
 
   return (
-    <div className="space-y-6 pt-4">
+    <div className="space-y-6 pt-2">
       {/* Top Banner Metric & Summary */}
-      <div className="bg-gradient-to-r from-emerald-950/60 via-slate-900 to-amber-950/40 border border-emerald-500/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
-
+      <div className="bg-gradient-to-br from-white via-emerald-50/30 to-amber-50/40 border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-          <div className="space-y-2">
+          <div className="space-y-2.5 max-w-3xl">
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs border border-emerald-500/30">
-                ✅ Discovery Complete
+              <span className="px-3 py-1 rounded-full bg-[#1E7B34]/10 text-[#1E7B34] font-bold text-xs border border-[#1E7B34]/25">
+                ✅ Eligibility Verified
               </span>
               {response.used_fallback && (
-                <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 text-xs border border-slate-700">
-                  Deterministic Verified
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs border border-slate-200 font-medium">
+                  Deterministic Engine
                 </span>
               )}
             </div>
-            <div className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+
+            <div className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1B2A6B] tracking-tight">
               ₹ {response.total_potential_benefit_inr.toLocaleString('en-IN')}
-              <span className="text-sm sm:text-base font-normal text-slate-300 ml-2">
-                / total annual potential welfare unlocked
+              <span className="text-sm sm:text-base font-medium text-slate-500 ml-2">
+                / total potential annual benefit unlocked
               </span>
             </div>
-            <p className="text-xs text-slate-300 max-w-2xl leading-relaxed whitespace-pre-line">
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line font-medium">
               {response.vernacular_summary || response.summary_text}
             </p>
           </div>
@@ -124,20 +119,20 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
             <button
               type="button"
               onClick={handleSpeak}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition shadow-md cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-[10px] font-bold text-xs transition shadow-xs cursor-pointer ${
                 isSpeaking
-                  ? 'bg-rose-500 text-white animate-pulse'
-                  : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600'
+                  ? 'bg-rose-600 text-white animate-pulse'
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-300'
               }`}
             >
-              {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
+              {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-[#F28C28]" />}
               <span>{isSpeaking ? 'Stop Audio' : 'Listen in My Language 🔊'}</span>
             </button>
 
             <button
               type="button"
               onClick={onOpenPdfModal}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs transition shadow-lg shadow-emerald-600/20 cursor-pointer"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-[10px] bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs transition shadow-sm cursor-pointer"
             >
               <FileDown className="w-4 h-4" />
               <span>Download Action Pack (PDF)</span>
@@ -151,19 +146,19 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
         {/* Left 2 Cols: Eligible & Review Schemes */}
         <div className="lg:col-span-2 space-y-6">
           {/* Eligible Schemes Section */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-bold text-[#1B2A6B] flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[#1E7B34]" />
                 <span>Eligible Schemes ({response.eligible_schemes.length})</span>
               </h3>
-              <span className="text-xs text-emerald-400 font-semibold bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                100% Criteria Verified
+              <span className="text-xs text-[#1E7B34] font-bold bg-[#1E7B34]/10 px-3 py-1 rounded-full border border-[#1E7B34]/25">
+                Statutory Verified
               </span>
             </div>
 
             {response.eligible_schemes.length === 0 ? (
-              <div className="bg-slate-800/40 border border-slate-700/60 rounded-xl p-6 text-center text-slate-400 text-sm">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center text-slate-500 text-sm">
                 No direct eligibility found with current criteria. Check review section or update profile details.
               </div>
             ) : (
@@ -175,53 +170,53 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                   return (
                     <div
                       key={scheme.scheme_id}
-                      className="bg-slate-800/80 border border-slate-700/80 hover:border-emerald-500/50 transition rounded-2xl p-5 shadow-lg space-y-3.5"
+                      className="bg-white border border-slate-200/90 hover:border-[#1E7B34]/60 transition-all rounded-2xl p-5 sm:p-6 shadow-xs space-y-4"
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h4 className="text-base font-bold text-white">
+                            <h4 className="text-base font-bold text-[#1B2A6B]">
                               {scheme.scheme_name}
                             </h4>
                             {scheme.scheme_name_hi && (
-                              <span className="text-xs text-amber-300 font-medium">
+                              <span className="text-xs text-[#F28C28] font-semibold">
                                 ({scheme.scheme_name_hi})
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-slate-400 mt-0.5">
-                            Category: <span className="text-slate-300 font-medium">{scheme.category}</span> • Mode:{' '}
-                            <span className="text-slate-300">{scheme.application_mode || 'Online / CSC'}</span>
+                          <div className="text-xs text-slate-500 mt-0.5">
+                            Category: <span className="font-semibold text-slate-700">{scheme.category}</span> • Mode:{' '}
+                            <span className="text-slate-600">{scheme.application_mode || 'Online / CSC'}</span>
                           </div>
                         </div>
 
-                        <div className="text-right shrink-0">
-                          <div className="text-lg font-extrabold text-emerald-400">
+                        <div className="text-left sm:text-right shrink-0">
+                          <div className="text-xl font-extrabold text-[#1E7B34]">
                             ₹ {scheme.benefit_amount_inr.toLocaleString('en-IN')}
                           </div>
-                          <span className="text-[11px] text-slate-400">{scheme.benefit_frequency}</span>
+                          <span className="text-xs text-slate-500">{scheme.benefit_frequency}</span>
                         </div>
                       </div>
 
-                      <div className="text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800 leading-relaxed">
+                      <div className="text-xs text-slate-700 bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/70 leading-relaxed font-normal">
                         {scheme.benefit_description}
                       </div>
 
                       {/* Application Friction & Required Docs */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1 text-xs">
                         <div>
-                          <div className="text-slate-400 font-medium mb-1">Application Friction Score:</div>
+                          <div className="text-slate-500 font-semibold mb-1.5">Application Friction Score:</div>
                           {renderFrictionStars(scheme.friction_score)}
                         </div>
                         <div>
-                          <div className="text-slate-400 font-medium mb-1">Required Documents:</div>
-                          <div className="flex flex-wrap gap-1">
+                          <div className="text-slate-500 font-semibold mb-1.5">Required Documents:</div>
+                          <div className="flex flex-wrap gap-1.5">
                             {scheme.required_documents.map((doc, idx) => (
                               <span
                                 key={idx}
-                                className="text-[11px] bg-slate-900 text-slate-300 px-2 py-0.5 rounded border border-slate-700 flex items-center gap-1"
+                                className="text-[11px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 flex items-center gap-1 font-medium"
                               >
-                                <Check className="w-3 h-3 text-emerald-400" />
+                                <Check className="w-3 h-3 text-[#1E7B34]" />
                                 {doc}
                               </span>
                             ))}
@@ -230,12 +225,12 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                       </div>
 
                       {/* Action Bar */}
-                      <div className="pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-3">
-                        <div className="flex items-center gap-2">
+                      <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
                           <button
                             type="button"
                             onClick={() => togglePayload(scheme.scheme_id)}
-                            className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1 transition cursor-pointer"
+                            className="text-xs text-[#F28C28] hover:text-[#d97706] font-bold flex items-center gap-1 transition cursor-pointer"
                           >
                             <span>One-Click Payload Preview</span>
                             {isPayloadOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -245,7 +240,7 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                               href={scheme.portal_url}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-xs text-slate-400 hover:text-white flex items-center gap-1 underline ml-2"
+                              className="text-xs text-slate-500 hover:text-[#1B2A6B] flex items-center gap-1 underline"
                             >
                               <span>Official Portal</span>
                               <ExternalLink className="w-3 h-3" />
@@ -257,11 +252,11 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                           type="button"
                           disabled={isSubmitting}
                           onClick={() => onSubmitApplication(scheme.scheme_id, response.user_profile)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-bold text-xs transition shadow-md shadow-emerald-500/20 disabled:opacity-50 cursor-pointer"
+                          className="flex items-center gap-2 px-4 py-2 rounded-[10px] bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs transition shadow-xs disabled:opacity-50 cursor-pointer"
                         >
                           <Send className="w-3.5 h-3.5" />
                           <span>{isSubmitting ? 'Submitting...' : 'Submit Simulated Application'}</span>
-                          <span className="text-[9px] bg-slate-950/30 text-slate-950 px-1.5 py-0.5 rounded-full font-extrabold uppercase">
+                          <span className="text-[9px] bg-white/20 text-white px-1.5 py-0.5 rounded-full font-extrabold uppercase">
                             Simulated
                           </span>
                         </button>
@@ -269,7 +264,7 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
 
                       {/* Expandable Payload */}
                       {isPayloadOpen && (
-                        <div className="mt-2 bg-slate-950 p-3 rounded-xl border border-slate-800 text-[11px] font-mono text-amber-300/90 overflow-x-auto">
+                        <div className="mt-2 bg-[#0B1329] p-3 rounded-xl border border-slate-700 text-[11px] font-mono text-amber-200 overflow-x-auto">
                           <div className="text-slate-400 text-[10px] mb-1 font-sans">
                             API Pre-filled Payload (ready for automated dispatch):
                           </div>
@@ -296,13 +291,13 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
 
           {/* Needs Review Schemes Section */}
           {response.review_schemes.length > 0 && (
-            <div className="pt-2">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-amber-400" />
+            <div className="space-y-4 pt-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-[#1B2A6B] flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-[#F28C28]" />
                   <span>Schemes Requiring Review ({response.review_schemes.length})</span>
                 </h3>
-                <span className="text-xs text-amber-400 font-semibold bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
+                <span className="text-xs text-[#d97706] font-bold bg-[#F28C28]/10 px-3 py-1 rounded-full border border-[#F28C28]/30">
                   Borderline / Certificate Needed
                 </span>
               </div>
@@ -311,33 +306,32 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                 {response.review_schemes.map((scheme) => (
                   <div
                     key={scheme.scheme_id}
-                    className="bg-slate-800/60 border border-amber-500/40 rounded-2xl p-5 shadow-lg space-y-3"
+                    className="bg-white border border-amber-300 rounded-2xl p-5 shadow-xs space-y-3"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h4 className="text-base font-bold text-white">{scheme.scheme_name}</h4>
-                          <span className="text-xs text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full font-bold border border-amber-500/30">
+                          <h4 className="text-base font-bold text-[#1B2A6B]">{scheme.scheme_name}</h4>
+                          <span className="text-[10px] text-[#d97706] bg-[#F28C28]/10 px-2 py-0.5 rounded-full font-bold border border-[#F28C28]/25">
                             NEEDS_REVIEW
                           </span>
                         </div>
-                        <div className="text-xs text-slate-400 mt-0.5">
+                        <div className="text-xs text-slate-500 mt-0.5">
                           Potential Benefit: ₹{scheme.benefit_amount_inr.toLocaleString('en-IN')} ({scheme.benefit_description})
                         </div>
                       </div>
                     </div>
 
-                    {/* Edge case resolution note */}
-                    <div className="bg-amber-950/20 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-200 leading-relaxed">
-                      <div className="font-bold text-amber-300 flex items-center gap-1.5 mb-1">
+                    <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-3 text-xs text-amber-950 leading-relaxed font-normal">
+                      <div className="font-bold text-[#d97706] flex items-center gap-1.5 mb-1">
                         <Info className="w-3.5 h-3.5" />
-                        <span>Statutory Administrative Guidance & Resolution Note:</span>
+                        <span>Statutory Administrative Guidance &amp; Resolution Note:</span>
                       </div>
                       <p>{scheme.llm_edge_review || scheme.edge_case_flags.join(' • ')}</p>
                     </div>
 
-                    <div className="text-xs text-slate-300">
-                      <span className="text-slate-400 font-medium">Flagged Conditions: </span>
+                    <div className="text-xs text-slate-600">
+                      <span className="font-semibold text-slate-700">Flagged Conditions: </span>
                       {scheme.edge_case_flags.join(', ')}
                     </div>
                   </div>
@@ -352,10 +346,10 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
               <button
                 type="button"
                 onClick={() => setShowIneligible(!showIneligible)}
-                className="w-full flex items-center justify-between p-3.5 bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700/60 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition cursor-pointer"
+                className="w-full flex items-center justify-between p-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-600 transition shadow-2xs cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <XCircle className="w-4 h-4 text-slate-500" />
+                  <XCircle className="w-4 h-4 text-slate-400" />
                   <span>Not Eligible Schemes ({response.ineligible_schemes.length})</span>
                 </div>
                 {showIneligible ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -366,15 +360,15 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                   {response.ineligible_schemes.map((scheme) => (
                     <div
                       key={scheme.scheme_id}
-                      className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 text-xs text-slate-400 space-y-1.5"
+                      className="bg-white border border-slate-200 rounded-xl p-4 text-xs text-slate-600 space-y-1"
                     >
-                      <div className="flex items-center justify-between font-bold text-slate-300">
+                      <div className="flex items-center justify-between font-bold text-slate-700">
                         <span>{scheme.scheme_name}</span>
-                        <span className="text-slate-500 font-normal">
+                        <span className="text-slate-400 font-normal">
                           ₹{scheme.benefit_amount_inr.toLocaleString('en-IN')}
                         </span>
                       </div>
-                      <div className="text-rose-400/90 text-[11px]">
+                      <div className="text-rose-600 text-[11px]">
                         <strong>Disqualification Reasons: </strong>
                         {scheme.failed_criteria.join(' • ')}
                       </div>
@@ -391,54 +385,54 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
           <CscCenterCard csc={response.csc_recommendation} />
 
           {/* User Profile Summary Card */}
-          <div className="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 shadow-lg text-xs space-y-3">
-            <div className="font-bold text-white flex items-center justify-between border-b border-slate-700/60 pb-2">
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm text-xs space-y-3">
+            <div className="font-bold text-[#1B2A6B] flex items-center justify-between border-b border-slate-100 pb-2.5">
               <span>Citizen Profile Snapshot</span>
-              <span className="text-[10px] text-amber-400 font-mono">ID: IN-{Date.now().toString().slice(-6)}</span>
+              <span className="text-[10px] text-[#F28C28] font-mono font-bold">ID: IN-{Date.now().toString().slice(-6)}</span>
             </div>
 
-            <div className="space-y-2 text-slate-300">
+            <div className="space-y-2 text-slate-600">
               <div className="flex justify-between">
                 <span className="text-slate-400">Name:</span>
-                <span className="font-medium text-white">{response.user_profile.name || 'Citizen'}</span>
+                <span className="font-semibold text-slate-800">{response.user_profile.name || 'Citizen'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Age / Gender:</span>
-                <span className="font-medium text-white">
+                <span className="font-semibold text-slate-800">
                   {response.user_profile.age ? `${response.user_profile.age} yrs` : 'N/A'} •{' '}
                   {response.user_profile.gender || 'Not specified'}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Location:</span>
-                <span className="font-medium text-white">
+                <span className="font-semibold text-slate-800">
                   {response.user_profile.district || 'District'}, {response.user_profile.state || 'State'} (
                   {response.user_profile.pincode || 'PIN N/A'})
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Occupation:</span>
-                <span className="font-medium text-white">{response.user_profile.occupation || 'General'}</span>
+                <span className="font-semibold text-slate-800">{response.user_profile.occupation || 'General'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Landholding:</span>
-                <span className="font-medium text-white">
+                <span className="font-semibold text-slate-800">
                   {response.user_profile.land_acres ?? 0} acres ({response.user_profile.land_hectares ?? 0} ha)
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Annual Income:</span>
-                <span className="font-medium text-emerald-400">
+                <span className="font-bold text-[#1E7B34]">
                   ₹{(response.user_profile.annual_income_inr ?? 0).toLocaleString('en-IN')}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Housing Type:</span>
-                <span className="font-medium text-white">{response.user_profile.housing_type || 'Pucca'}</span>
+                <span className="font-semibold text-slate-800">{response.user_profile.housing_type || 'Pucca'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Social Category:</span>
-                <span className="font-medium text-white">{response.user_profile.social_category || 'General'}</span>
+                <span className="font-semibold text-slate-800">{response.user_profile.social_category || 'General'}</span>
               </div>
             </div>
           </div>

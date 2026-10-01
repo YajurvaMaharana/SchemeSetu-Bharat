@@ -1,5 +1,5 @@
 import React from 'react';
-import { Settings2, Clock, Database, Sparkles } from 'lucide-react';
+import { Settings2, Clock, Database } from 'lucide-react';
 
 interface DemoControlsProps {
   demoPacing: boolean;
@@ -15,35 +15,35 @@ export const DemoControls: React.FC<DemoControlsProps> = ({
   onToggleUseCachedDemo,
 }) => {
   return (
-    <div className="bg-slate-800/50 border border-slate-700/60 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs">
-      <div className="flex items-center gap-2 text-slate-300 font-semibold">
-        <Settings2 className="w-4 h-4 text-amber-400" />
+    <div className="bg-slate-100/90 border border-slate-200/90 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs shadow-2xs">
+      <div className="flex items-center gap-2 text-slate-700 font-bold">
+        <Settings2 className="w-4 h-4 text-[#F28C28]" />
         <span>Hackathon Demo Controls:</span>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4">
-        <label className="flex items-center gap-2 cursor-pointer text-slate-300 hover:text-white transition">
+      <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+        <label className="flex items-center gap-2 cursor-pointer text-slate-700 hover:text-slate-900 transition">
           <input
             type="checkbox"
             checked={demoPacing}
             onChange={(e) => onToggleDemoPacing(e.target.checked)}
-            className="rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+            className="rounded border-slate-300 text-[#1E7B34] focus:ring-[#1E7B34]"
           />
-          <span className="flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-sky-400" />
+          <span className="flex items-center gap-1.5 font-medium">
+            <Clock className="w-3.5 h-3.5 text-sky-600" />
             <span>Demo Pacing (0.35s delay per step)</span>
           </span>
         </label>
 
-        <label className="flex items-center gap-2 cursor-pointer text-slate-300 hover:text-white transition">
+        <label className="flex items-center gap-2 cursor-pointer text-slate-700 hover:text-slate-900 transition">
           <input
             type="checkbox"
             checked={useCachedDemo}
             onChange={(e) => onToggleUseCachedDemo(e.target.checked)}
-            className="rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+            className="rounded border-slate-300 text-[#1E7B34] focus:ring-[#1E7B34]"
           />
-          <span className="flex items-center gap-1">
-            <Database className="w-3.5 h-3.5 text-emerald-400" />
+          <span className="flex items-center gap-1.5 font-medium">
+            <Database className="w-3.5 h-3.5 text-[#1E7B34]" />
             <span>Deterministic Demo Cache</span>
           </span>
         </label>
