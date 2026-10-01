@@ -1,0 +1,8 @@
+{
+  "name": "SchemeSetu Bharat",
+  "description": "Autonomous welfare discovery and application agent for Bharat with live telemetry and deterministic eligibility verification.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
