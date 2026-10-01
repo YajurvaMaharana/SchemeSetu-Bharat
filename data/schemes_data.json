@@ -1,48 +1,18 @@
 [
   {
-    "scheme_id": "PM_KISAN_2026",
     "id": "pm_kisan",
-    "name": "Pradhan Mantri Kisan Samman Nidhi",
-    "short_name": "PM-KISAN",
+    "name": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
+    "name_hi": "प्रधानमंत्री किसान सम्मान निधि (पीएम-किसान)",
     "ministry": "Ministry of Agriculture and Farmers Welfare",
-    "annual_benefit_inr": 6000,
-    "benefit_amount_inr": 6000,
-    "benefit_description": "₹6,000 per year delivered in 3 equal installments of ₹2,000 directly into Aadhaar-seeded bank accounts (DBT) to landholding farmer families.",
-    "benefit_type": "Direct Cash Transfer",
-    "benefit_frequency": "Annual",
+    "category": "Agriculture",
     "target_audience": ["Farmer", "Rural Resident"],
-    "eligibility": {
-      "occupations": ["farmer", "agricultural_worker"],
-      "min_age": 18,
-      "max_age": null,
-      "genders": [],
-      "max_income_inr": null,
-      "max_land_hectares": null,
-      "caste_categories": [],
-      "requires_bpl": null,
-      "requires_no_pucca_house": null,
-      "requires_no_lpg": null,
-      "education_levels": [],
-      "excluded_categories": [
-        "institutional_landholders",
-        "income_tax_payers_in_last_assessment_year",
-        "serving_or_retired_officers_and_employees_of_government",
-        "constitutional_post_holders",
-        "pensioners_receiving_monthly_pension_above_10000",
-        "professionals_doctors_engineers_lawyers_ca_architects"
-      ],
-      "requires_land_ownership": true,
-      "exclusions": [
-        "Income tax payer in last assessment year",
-        "Serving or retired government officer or employee",
-        "Constitutional post holder",
-        "Monthly pension exceeding ₹10,000",
-        "Institutional landholders"
-      ]
-    },
+    "benefit_type": "Direct Cash Transfer",
+    "benefit_amount_inr": 6000,
+    "benefit_description": "₹6,000 per year delivered in 3 equal four-monthly installments directly to Aadhaar-seeded bank accounts.",
+    "benefit_frequency": "Annual",
     "eligibility_criteria": {
       "min_age": 18,
-      "max_age": null,
+      "max_age": 100,
       "occupations": ["Farmer", "Agricultural Labourer"],
       "requires_land_ownership": true,
       "min_land_hectares": 0.001,
@@ -58,73 +28,31 @@
         "Institutional landholders"
       ]
     },
-    "required_documents": [
-      "Aadhaar Card",
-      "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
-      "Bank Account Passbook (Aadhaar Seeded)",
-      "Active Mobile Number"
-    ],
-    "application_steps": [
-      "Visit the official PM-KISAN portal (pmkisan.gov.in) or visit your nearest Common Service Centre (CSC).",
-      "Click on 'New Farmer Registration' and enter your Aadhaar number, state, and mobile number to authenticate via OTP.",
-      "Fill in landholding ownership details including district, sub-district, block, village, survey/khasra number, and land area.",
-      "Upload land ownership document (RoR / 7/12 Extract / Khatauni) and Aadhaar identity copy.",
-      "Complete Aadhaar-based biometric or OTP e-KYC and submit for State/District Nodal Officer verification."
-    ],
-    "direct_portal_url": "https://pmkisan.gov.in",
-    "portal_url": "https://pmkisan.gov.in",
-    "application_mode": "Online Portal / CSC Kiosk",
-    "action_type": "ONLINE_DIRECT_OR_CSC",
-    "friction_score": 1,
-    "processing_time": "30-45 days for state nodal verification and inclusion in the next payment cycle",
-    "source_url": "https://pmkisan.gov.in",
-    "last_verified": "2026-10-01",
-    "notes": "Revised guidelines cover all landholding farmer families across India having cultivable land in their names. No statutory land size ceiling. Excludes income taxpayers and government servants. Mandatory biometric or OTP e-KYC and Aadhaar-seeded bank account required.",
     "edge_cases": [
       "Joint land ownership / undivided ancestral land records (Khatauni) require co-owner partition or affidavit.",
-      "Tenant farmers or sharecroppers without recorded title deed do not qualify directly without state-specific mutation.",
+      "Tenant farmers or sharecroppers without title deed do not qualify directly without state-specific mutation.",
       "Land acquired after cutoff date (01-02-2019) eligible only via succession/inheritance."
-    ]
+    ],
+    "required_documents": [
+      "Aadhaar Card",
+      "Land Record / Khasra-Khatauni / RoR Copy",
+      "Bank Account Passbook (Aadhaar Seeded)",
+      "Self-Declaration Affidavit"
+    ],
+    "application_mode": "Online Portal / CSC Kiosk",
+    "portal_url": "https://pmkisan.gov.in"
   },
   {
-    "scheme_id": "PM_JAY_AYUSHMAN_2026",
     "id": "ayushman_bharat",
-    "name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
-    "short_name": "PM-JAY",
+    "name": "Ayushman Bharat (PM-JAY)",
+    "name_hi": "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना (पीएम-जय)",
     "ministry": "Ministry of Health and Family Welfare",
-    "annual_benefit_inr": 500000,
-    "benefit_amount_inr": 500000,
-    "benefit_description": "₹5,00,000 per family per year for secondary and tertiary care cashless hospitalization across empaneled public and private hospitals across India.",
-    "benefit_type": "Health Insurance Cover",
-    "benefit_frequency": "Annual",
+    "category": "Healthcare",
     "target_audience": ["Low Income", "Rural Resident", "Daily Wage Worker", "Farmer"],
-    "eligibility": {
-      "occupations": [],
-      "min_age": null,
-      "max_age": null,
-      "genders": [],
-      "max_income_inr": 250000,
-      "max_land_hectares": null,
-      "caste_categories": [],
-      "requires_bpl": true,
-      "requires_no_pucca_house": null,
-      "requires_no_lpg": null,
-      "education_levels": [],
-      "excluded_categories": [
-        "income_tax_payers",
-        "government_employees_and_pensioners",
-        "households_with_formal_health_cover_cghs_esic",
-        "owners_of_motorized_three_or_four_wheelers",
-        "pucca_house_with_3_or_more_rooms"
-      ],
-      "housing_type_allowed": ["Kutcha", "Homeless", "Rented"],
-      "exclusions": [
-        "Income tax payer",
-        "Government employees and organized sector workers with ESI/CGHS",
-        "Owns motorized 3/4 wheeler or mechanized agricultural equipment",
-        "Pucca house with 3+ rooms"
-      ]
-    },
+    "benefit_type": "Health Insurance Cover",
+    "benefit_amount_inr": 500000,
+    "benefit_description": "₹5,00,000 per family per year for secondary and tertiary cashless hospitalization across empaneled hospitals.",
+    "benefit_frequency": "Annual",
     "eligibility_criteria": {
       "min_age": 0,
       "max_age": 120,
@@ -143,73 +71,30 @@
         "Pucca house with 3+ rooms"
       ]
     },
-    "required_documents": [
-      "Aadhaar Card",
-      "Ration Card (BPL / Antyodaya / Priority Household) or PM-JAY Family ID",
-      "Active Mobile Number",
-      "Income Certificate from Tahsildar (if requested for state NFSA top-up)"
-    ],
-    "application_steps": [
-      "Visit the Ayushman Beneficiary portal (beneficiary.nha.gov.in) or nearest CSC / Empaneled Hospital Helpdesk (Ayushman Mitra).",
-      "Login with mobile number and verify via OTP to check family inclusion using Aadhaar number or Ration Card ID.",
-      "Select the beneficiary family member and proceed to Aadhaar e-KYC.",
-      "Authenticate via Aadhaar OTP or Biometric Iris/Fingerprint scan at CSC/Hospital desk.",
-      "Download and print the official PVC Ayushman Golden Card for cashless medical treatments."
-    ],
-    "direct_portal_url": "https://beneficiary.nha.gov.in",
-    "portal_url": "https://beneficiary.nha.gov.in",
-    "application_mode": "CSC Center / Empaneled Hospital Desk",
-    "action_type": "ONLINE_DIRECT_OR_CSC",
-    "friction_score": 2,
-    "processing_time": "Instant digital card generation upon Aadhaar e-KYC authentication",
-    "source_url": "https://pmjay.gov.in",
-    "last_verified": "2026-10-01",
-    "notes": "Benefit is up to ₹5,00,000 per family per year on a floater basis for secondary and tertiary care. Entitlement is determined by SECC 2011 deprivation criteria or state NFSA ration card linkage. All senior citizens aged 70 and above receive a distinct ₹5,00,000 top-up under Ayushman Vay Vandana regardless of economic status.",
     "edge_cases": [
       "Family listed in SECC 2011 or NFSA ration card database is auto-eligible even if recent income documentation is pending.",
       "Senior citizens aged 70+ in family qualify for top-up coverage under expanded Ayushman Vay Vandana."
-    ]
+    ],
+    "required_documents": [
+      "Aadhaar Card",
+      "Ration Card (BPL / Antyodaya / Priority Household)",
+      "Income Certificate from Tahsildar / SDO",
+      "Active Mobile Number"
+    ],
+    "application_mode": "CSC Center / Empaneled Hospital Desk",
+    "portal_url": "https://beneficiary.nha.gov.in"
   },
   {
-    "scheme_id": "PMAY_G_2026",
     "id": "pmay_g",
-    "name": "Pradhan Mantri Awaas Yojana - Gramin",
-    "short_name": "PMAY-G",
+    "name": "PMAY-G (Pradhan Mantri Awaas Yojana - Gramin)",
+    "name_hi": "प्रधानमंत्री आवास योजना - ग्रामीण",
     "ministry": "Ministry of Rural Development",
-    "annual_benefit_inr": 120000,
-    "benefit_amount_inr": 120000,
-    "benefit_description": "Financial grant assistance of ₹1,20,000 in plain areas (₹1,30,000 in hilly/difficult/IAP areas) in 3 direct installments for pucca house construction, plus 90-95 days of unskilled MGNREGA wages.",
-    "benefit_type": "Housing Construction Grant",
-    "benefit_frequency": "One-Time",
+    "category": "Housing",
     "target_audience": ["Rural Resident", "Low Income", "Homeless", "Daily Wage Worker"],
-    "eligibility": {
-      "occupations": [],
-      "min_age": 18,
-      "max_age": null,
-      "genders": [],
-      "max_income_inr": 180000,
-      "max_land_hectares": null,
-      "caste_categories": [],
-      "requires_bpl": null,
-      "requires_no_pucca_house": true,
-      "requires_no_lpg": null,
-      "education_levels": [],
-      "excluded_categories": [
-        "pucca_house_owners_anywhere_in_india",
-        "owners_of_motorized_two_three_or_four_wheelers",
-        "owners_of_mechanized_agricultural_equipment",
-        "holders_of_kisan_credit_card_with_credit_limit_50000_or_above",
-        "families_with_government_employees",
-        "income_tax_payers_or_professional_tax_payers"
-      ],
-      "housing_type_allowed": ["Kutcha", "Homeless"],
-      "exclusions": [
-        "Family already owns a pucca brick/concrete house anywhere in India",
-        "Owns motorized two/three/four wheeler",
-        "Income tax payer or government employee in family",
-        "Family possesses Kisan Credit Card with credit limit of ₹50,000 or above"
-      ]
-    },
+    "benefit_type": "Housing Construction Grant",
+    "benefit_amount_inr": 120000,
+    "benefit_description": "Financial grant of ₹1,20,000 (plains) / ₹1,30,000 (hilly/northeastern states) in direct installments for pucca house construction, plus 90 days MGNREGA wages.",
+    "benefit_frequency": "One-Time",
     "eligibility_criteria": {
       "min_age": 18,
       "max_age": 100,
@@ -228,70 +113,180 @@
         "Family possesses Kisan Credit Card with credit limit of ₹50,000 or above"
       ]
     },
-    "required_documents": [
-      "Aadhaar Card",
-      "Bank Account Passbook (Aadhaar Seeded)",
-      "MGNREGA Job Card Number",
-      "Photograph of existing Kutcha/Dilapidated House (Geo-tagged)",
-      "Self-Declaration Affidavit of owning no pucca house anywhere"
-    ],
-    "application_steps": [
-      "Verify inclusion in the Gram Panchayat Awaas+ / SECC permanent priority waiting list.",
-      "Submit Aadhaar, bank passbook, and MGNREGA job card to the Gram Rozgar Sevak or Panchayat Secretary.",
-      "Gram Panchayat surveyor conducts initial geo-tagged photographic inspection of the kutcha dwelling.",
-      "Upon administrative sanction, first installment (₹25,000-₹40,000) is credited to start plinth construction.",
-      "Subsequent installments are disbursed after stage-wise geo-tagged mobile verification (plinth level, lintel level, and completion)."
-    ],
-    "direct_portal_url": "https://pmayg.nic.in",
-    "portal_url": "https://pmayg.nic.in",
-    "application_mode": "Gram Panchayat / Block Development Office / AwaasSoft",
-    "action_type": "ONLINE_DIRECT_OR_CSC",
-    "friction_score": 4,
-    "processing_time": "30-90 days for Gram Sabha verification, geo-tagging, and administrative sanction",
-    "source_url": "https://pmayg.nic.in",
-    "last_verified": "2026-10-01",
-    "notes": "Headline assistance figure is ₹1,20,000 for plain areas (₹1,30,000 for hilly/difficult states) provided in 3-4 milestone-based installments. Additional ₹12,000 provided under Swachh Bharat Mission (Grameen) for toilet construction plus 90-95 days of unskilled MGNREGA wages.",
     "edge_cases": [
       "Kutcha house roof made of grass/thatch qualifies; partially bricked walls with unpaved tin roof require Gram Sabha verification.",
       "Landless rural families eligible for free homestead land allocation via District Administration."
-    ]
+    ],
+    "required_documents": [
+      "Aadhaar Card",
+      "Bank Account Passbook",
+      "MGNREGA Job Card (for 90 days wage integration)",
+      "Photograph of existing kutcha house structure",
+      "Affidavit of no pucca house anywhere"
+    ],
+    "application_mode": "Gram Panchayat / Block Development Office / AwaasSoft",
+    "portal_url": "https://pmayg.nic.in"
   },
   {
-    "scheme_id": "NSP_POST_MATRIC_SC_2026",
-    "id": "nsp_post_matric",
-    "name": "Centrally Sponsored Post-Matric Scholarship Scheme for SC Students",
-    "short_name": "NSP Post-Matric SC",
-    "ministry": "Ministry of Social Justice and Empowerment",
-    "annual_benefit_inr": 48000,
-    "benefit_amount_inr": 48000,
-    "benefit_description": "Full reimbursement of compulsory non-refundable fees plus annual maintenance allowance up to ₹48,000 (Group 1 to Group 4 courses) disbursed directly to students via DBT.",
-    "benefit_type": "Education Scholarship & Maintenance Allowance",
-    "benefit_frequency": "Annual",
-    "target_audience": ["Student", "Youth"],
-    "eligibility": {
-      "occupations": ["student"],
-      "min_age": 15,
-      "max_age": 35,
-      "genders": [],
-      "max_income_inr": 250000,
+    "id": "kcc",
+    "name": "KCC (Kisan Credit Card)",
+    "name_hi": "किसान क्रेडिट कार्ड योजना",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "category": "Agriculture",
+    "target_audience": ["Farmer", "Dairy Farmer", "Fisherman"],
+    "benefit_type": "Concessional Agricultural Credit",
+    "benefit_amount_inr": 300000,
+    "benefit_description": "Credit limit up to ₹3,00,000 with subvention interest rate of 4% per annum for timely repayments, covering crop production and animal husbandry.",
+    "benefit_frequency": "Revolving Credit",
+    "eligibility_criteria": {
+      "min_age": 18,
+      "max_age": 75,
+      "occupations": ["Farmer", "Agricultural Labourer", "Dairy Farmer", "Fisherman"],
+      "requires_land_ownership": false,
+      "min_land_hectares": null,
       "max_land_hectares": null,
-      "caste_categories": ["sc"],
-      "requires_bpl": null,
-      "requires_no_pucca_house": null,
-      "requires_no_lpg": null,
-      "education_levels": ["school", "undergraduate", "postgraduate", "other"],
-      "excluded_categories": [
-        "general_category_students",
-        "students_availing_another_central_or_state_scholarship",
-        "family_annual_income_exceeding_250000_inr"
-      ],
-      "social_categories_allowed": ["SC"],
+      "max_annual_income_inr": null,
+      "social_categories_allowed": ["All"],
+      "states_applicable": ["All"],
       "exclusions": [
-        "Family income exceeds ₹2,50,000 per annum",
-        "Student already availing any other government scholarship",
-        "General category students (covered under separate EWS merit schemes)"
+        "Defaulter with existing non-performing agricultural loan from commercial/cooperative banks"
       ]
     },
+    "edge_cases": [
+      "Tenant farmers, oral lessees, and sharecroppers qualify under Joint Liability Groups (JLG) without land title.",
+      "Animal husbandry & fisheries farmers qualify for standalone credit limit up to ₹2,00,000."
+    ],
+    "required_documents": [
+      "Aadhaar Card and PAN Card",
+      "Land Title Deed / Record of Rights (Khasra) or JLG Lease Agreement",
+      "Cropping Pattern Certificate from Village Revenue Officer (Patwari)",
+      "Passport Size Photographs"
+    ],
+    "application_mode": "Bank Branch / CSC / PM-KISAN Portal Linkage",
+    "portal_url": "https://agricoop.nic.in/kcc"
+  },
+  {
+    "id": "pm_kmy",
+    "name": "PM-KMY (Pradhan Mantri Kisan Maandhan Yojana)",
+    "name_hi": "प्रधानमंत्री किसान मानधन योजना",
+    "ministry": "Ministry of Agriculture and Farmers Welfare",
+    "category": "Social Security",
+    "target_audience": ["Farmer"],
+    "benefit_type": "Old Age Pension",
+    "benefit_amount_inr": 36000,
+    "benefit_description": "Guaranteed minimum monthly pension of ₹3,000 (₹36,000 annually) upon attaining 60 years of age.",
+    "benefit_frequency": "Annual",
+    "eligibility_criteria": {
+      "min_age": 18,
+      "max_age": 40,
+      "occupations": ["Farmer"],
+      "requires_land_ownership": true,
+      "min_land_hectares": 0.001,
+      "max_land_hectares": 2.0,
+      "max_annual_income_inr": null,
+      "social_categories_allowed": ["All"],
+      "states_applicable": ["All"],
+      "exclusions": [
+        "Cultivable landholding exceeds 2.0 hectares (5 acres)",
+        "Enrolled in any other statutory social security scheme (NPS, ESIC, EPFO)",
+        "Income tax payer"
+      ]
+    },
+    "edge_cases": [
+      "Applicant aged exactly 40 is eligible; age 41 is strictly disqualified by central pension rules.",
+      "Monthly contribution (₹55 - ₹200 depending on entry age) can be auto-debited directly from PM-KISAN installments."
+    ],
+    "required_documents": [
+      "Aadhaar Card",
+      "Savings Bank Account Passbook / IFSC",
+      "Khasra/Khatauni Land Record proving holding <= 2 hectares"
+    ],
+    "application_mode": "CSC Kiosk / Maandhan Portal",
+    "portal_url": "https://maandhan.in"
+  },
+  {
+    "id": "pmjjby",
+    "name": "PMJJBY (Pradhan Mantri Jeevan Jyoti Bima Yojana)",
+    "name_hi": "प्रधानमंत्री जीवन ज्योति बीमा योजना",
+    "ministry": "Ministry of Finance",
+    "category": "Social Security",
+    "target_audience": ["All Citizens", "Low Income", "Daily Wage Worker", "Farmer"],
+    "benefit_type": "Term Life Insurance Cover",
+    "benefit_amount_inr": 200000,
+    "benefit_description": "₹2,00,000 life insurance cover payable to nominee on death of the insured due to any cause, for annual premium of ₹436.",
+    "benefit_frequency": "Annual",
+    "eligibility_criteria": {
+      "min_age": 18,
+      "max_age": 50,
+      "occupations": ["Any"],
+      "requires_land_ownership": false,
+      "min_land_hectares": null,
+      "max_land_hectares": null,
+      "max_annual_income_inr": null,
+      "social_categories_allowed": ["All"],
+      "states_applicable": ["All"],
+      "exclusions": [
+        "Age above 50 at entry (cover extends until age 55 if enrolled by age 50)"
+      ]
+    },
+    "edge_cases": [
+      "Auto-debit consent required on bank account; lien must clear by May 31 each year."
+    ],
+    "required_documents": [
+      "Aadhaar Card",
+      "Savings Bank Account with Auto-Debit Mandate",
+      "Nominee KYC Details"
+    ],
+    "application_mode": "Bank Branch / Net Banking / CSC",
+    "portal_url": "https://jansuraksha.gov.in"
+  },
+  {
+    "id": "pmsby",
+    "name": "PMSBY (Pradhan Mantri Suraksha Bima Yojana)",
+    "name_hi": "प्रधानमंत्री सुरक्षा बीमा योजना",
+    "ministry": "Ministry of Finance",
+    "category": "Social Security",
+    "target_audience": ["All Citizens", "Daily Wage Worker", "Farmer", "Youth"],
+    "benefit_type": "Accidental Death & Disability Cover",
+    "benefit_amount_inr": 200000,
+    "benefit_description": "₹2,00,000 for accidental death or total permanent disability (₹1,00,000 for partial disability) for nominal annual premium of ₹20.",
+    "benefit_frequency": "Annual",
+    "eligibility_criteria": {
+      "min_age": 18,
+      "max_age": 70,
+      "occupations": ["Any"],
+      "requires_land_ownership": false,
+      "min_land_hectares": null,
+      "max_land_hectares": null,
+      "max_annual_income_inr": null,
+      "social_categories_allowed": ["All"],
+      "states_applicable": ["All"],
+      "exclusions": [
+        "Age above 70 at entry"
+      ]
+    },
+    "edge_cases": [
+      "Multiple accounts with different banks can only hold one active PMSBY claim."
+    ],
+    "required_documents": [
+      "Aadhaar Card",
+      "Savings Bank Account Passbook",
+      "Nominee Details"
+    ],
+    "application_mode": "Bank Branch / Net Banking / CSC",
+    "portal_url": "https://jansuraksha.gov.in"
+  },
+  {
+    "id": "nsp_post_matric",
+    "name": "Post-Matric Scholarship for SC/ST/OBC Students",
+    "name_hi": "अनुसूचित जाति/जनजाति/पिछड़ा वर्ग पोस्ट-मैट्रिक छात्रवृत्ति",
+    "ministry": "Ministry of Social Justice and Empowerment",
+    "category": "Education",
+    "target_audience": ["Student", "Youth"],
+    "benefit_type": "Education Scholarship & Maintenance Allowance",
+    "benefit_amount_inr": 48000,
+    "benefit_description": "Compulsory non-refundable fees reimbursement plus maintenance allowance up to ₹48,000 per academic year.",
+    "benefit_frequency": "Annual",
     "eligibility_criteria": {
       "min_age": 15,
       "max_age": 35,
@@ -308,149 +303,75 @@
         "General category students (covered under separate EWS merit schemes)"
       ]
     },
-    "required_documents": [
-      "Aadhaar Card",
-      "SC Caste Certificate issued by Competent Revenue Authority",
-      "Income Certificate from Tahsildar / Revenue Officer (<= ₹2,50,000)",
-      "Previous Academic Class 10/12/Degree Marksheet",
-      "College Fee Receipt & Bonafide Certificate",
-      "Aadhaar-Seeded Bank Passbook"
-    ],
-    "application_steps": [
-      "Register on the National Scholarship Portal (scholarships.gov.in) with Aadhaar and mobile OTP.",
-      "Select 'Post-Matric Scholarship Scheme for SC Students' under the Ministry of Social Justice and Empowerment.",
-      "Enter academic enrollment details, college AISHE/DISE code, and upload previous qualifying marksheet.",
-      "Upload verified SC Caste Certificate and Tahsildar Income Certificate (<= ₹2,50,000 per annum).",
-      "Submit application for online verification by Institute Nodal Officer (INO) and State Nodal Officer (SNO)."
-    ],
-    "direct_portal_url": "https://scholarships.gov.in",
-    "portal_url": "https://scholarships.gov.in",
-    "application_mode": "National Scholarship Portal (NSP)",
-    "action_type": "ONLINE_DIRECT_OR_CSC",
-    "friction_score": 3,
-    "processing_time": "30-60 days across Institute, District, and State level digital verification cycles",
-    "source_url": "https://scholarships.gov.in",
-    "last_verified": "2026-10-01",
-    "notes": "Representative flagship scheme under the National Scholarship Portal (NSP). Annual support covers 100% compulsory non-refundable fees plus annual academic maintenance allowance. Family annual income ceiling is strictly ₹2,50,000.",
     "edge_cases": [
       "OBC category income limit is strictly ₹2,50,000 non-creamy layer; requires Tahsildar certificate.",
       "Dual degree or repeater courses require special institute clearance."
-    ]
+    ],
+    "required_documents": [
+      "Aadhaar Card",
+      "Caste / Category Certificate (SC/ST/OBC Non-Creamy Layer)",
+      "Income Certificate from Competent Authority",
+      "Previous Class 10/12 Marksheet",
+      "Fee Receipt & Bonafide Certificate from College"
+    ],
+    "application_mode": "National Scholarship Portal (NSP)",
+    "portal_url": "https://scholarships.gov.in"
   },
   {
-    "scheme_id": "PM_UJJWALA_2_2026",
-    "id": "pm_ujjwala",
-    "name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
-    "short_name": "PM Ujjwala 2.0",
-    "ministry": "Ministry of Petroleum and Natural Gas",
-    "annual_benefit_inr": 3600,
-    "benefit_amount_inr": 3600,
-    "benefit_description": "Deposit-free LPG cylinder connection, free first refill and hotplate stove (worth ₹1,600+), plus ₹300 per cylinder targeted subsidy for up to 12 domestic refills per year (₹3,600 annual subsidy).",
-    "benefit_type": "Clean Cooking Fuel Subsidy & Grant",
-    "benefit_frequency": "Annual",
-    "target_audience": ["Women", "Rural Resident", "Low Income"],
-    "eligibility": {
-      "occupations": [],
-      "min_age": 18,
-      "max_age": null,
-      "genders": ["female"],
-      "max_income_inr": null,
-      "max_land_hectares": null,
-      "caste_categories": [],
-      "requires_bpl": true,
-      "requires_no_pucca_house": null,
-      "requires_no_lpg": true,
-      "education_levels": [],
-      "excluded_categories": [
-        "male_applicants",
-        "households_with_any_existing_lpg_connection_from_any_omc",
-        "applicants_below_18_years_of_age"
-      ],
-      "exclusions": [
-        "Male applicants",
-        "Existing LPG connection in same household"
-      ]
-    },
+    "id": "lakhpati_didi",
+    "name": "Lakhpati Didi (NRLM - DAY)",
+    "name_hi": "लखपति दीदी योजना (दीनदयाल अंत्योदय - एनआरएलएम)",
+    "ministry": "Ministry of Rural Development",
+    "category": "Women Empowerment",
+    "target_audience": ["Women", "Rural Resident", "Artisan"],
+    "benefit_type": "Livelihood Capital & Skill Support",
+    "benefit_amount_inr": 100000,
+    "benefit_description": "Support to achieve sustainable annual household income of ₹1,00,000 or more through SHG community investment fund, technical training, and market access.",
+    "benefit_frequency": "One-Time",
     "eligibility_criteria": {
       "min_age": 18,
-      "max_age": null,
+      "max_age": 60,
       "gender": "Female",
       "occupations": ["Any"],
       "requires_land_ownership": false,
       "min_land_hectares": null,
       "max_land_hectares": null,
-      "max_annual_income_inr": null,
+      "max_annual_income_inr": 150000,
       "social_categories_allowed": ["All"],
       "states_applicable": ["All"],
       "exclusions": [
         "Male applicants",
-        "Existing LPG connection in same household"
+        "Non-rural residents without local Gram Panchayat SHG presence"
       ]
     },
-    "required_documents": [
-      "Aadhaar Card of the adult woman applicant",
-      "Aadhaar Cards of all adult family members residing together",
-      "Ration Card / 14-Point Poor Household Declaration Certificate",
-      "Aadhaar-Linked Bank Account Passbook",
-      "Proof of Address / Migrant Self-Declaration Certificate"
-    ],
-    "application_steps": [
-      "Visit the official PMUY portal (pmuy.gov.in) or visit your nearest LPG distributor (Indane, Bharatgas, or HP Gas).",
-      "Fill out the Ujjwala 2.0 application form specifying details of all adult family members.",
-      "Submit declaration affirming no existing LPG connection in the household.",
-      "Provide Aadhaar and Aadhaar-seeded bank account details for direct transfer of the ongoing refill subsidy.",
-      "Oil Marketing Company (OMC) performs deduplication check and releases the free LPG cylinder and stove within 7-14 days."
-    ],
-    "direct_portal_url": "https://www.pmuy.gov.in",
-    "portal_url": "https://www.pmuy.gov.in",
-    "application_mode": "LPG Distributor / CSC / PMUY Portal",
-    "action_type": "ONLINE_DIRECT_OR_CSC",
-    "friction_score": 2,
-    "processing_time": "7-14 days for OMC de-duplication check and cylinder connection issuance",
-    "source_url": "https://www.pmuy.gov.in",
-    "last_verified": "2026-10-01",
-    "notes": "Ujjwala 2.0 provides deposit-free LPG connection including security deposit, pressure regulator, and free first refill and hotplate stove. Annual benefit is benchmarked at ₹3,600 reflecting the targeted subsidy of ₹300 per cylinder across up to 12 refills annually. Applicant must be an adult woman from a poor household without an existing LPG connection.",
     "edge_cases": [
-      "Migrant families do not require local ration card; self-declaration of address is accepted under Ujjwala 2.0.",
-      "Name mismatch between Aadhaar and Ration Card requires Village Pradhan verification certificate."
-    ]
+      "Individual woman not yet in an SHG can be fast-tracked for cluster federations through nearest Gram Panchayat Village Organization.",
+      "Existing SHG members with small trade proposals get interest-subvented bank loans."
+    ],
+    "required_documents": [
+      "Aadhaar Card",
+      "SHG Membership Passbook / Resolution",
+      "Bank Account Details",
+      "Livelihood Activity Proposal"
+    ],
+    "application_mode": "Gram Panchayat / Self Help Group VO / BDO",
+    "portal_url": "https://nrlm.gov.in"
   },
   {
-    "scheme_id": "KCC_2026",
-    "id": "kcc",
-    "name": "Kisan Credit Card (KCC) Scheme",
-    "short_name": "KCC",
-    "ministry": "Ministry of Agriculture and Farmers Welfare",
-    "annual_benefit_inr": 300000,
-    "benefit_amount_inr": 300000,
-    "benefit_description": "Concessional revolving agricultural credit up to ₹3,00,000 at a 4% effective interest rate (7% baseline with 3% prompt repayment incentive) covering crops, animal husbandry, and fisheries.",
-    "benefit_type": "Concessional Agricultural Credit",
-    "benefit_frequency": "Revolving Credit",
-    "target_audience": ["Farmer", "Dairy Farmer", "Fisherman"],
-    "eligibility": {
-      "occupations": ["farmer", "agricultural_worker"],
-      "min_age": 18,
-      "max_age": 75,
-      "genders": [],
-      "max_income_inr": null,
-      "max_land_hectares": null,
-      "caste_categories": [],
-      "requires_bpl": null,
-      "requires_no_pucca_house": null,
-      "requires_no_lpg": null,
-      "education_levels": [],
-      "excluded_categories": [
-        "defaulters_with_existing_non_performing_agricultural_loans",
-        "applicants_above_age_75_without_co_borrower"
-      ],
-      "exclusions": [
-        "Defaulter with existing non-performing agricultural loan from commercial/cooperative banks"
-      ]
-    },
+    "id": "mudra_shishu",
+    "name": "PM Mudra Yojana (Shishu Loan)",
+    "name_hi": "प्रधानमंत्री मुद्रा योजना (शिशु ऋण)",
+    "ministry": "Ministry of Finance",
+    "category": "Financial Inclusion",
+    "target_audience": ["Self-Employed", "Artisan", "Daily Wage Worker", "Youth"],
+    "benefit_type": "Collateral-Free Micro Business Credit",
+    "benefit_amount_inr": 50000,
+    "benefit_description": "Collateral-free business loan up to ₹50,000 for starting or expanding micro-enterprises, shops, tailoring, or artisanal trades at regulated interest.",
+    "benefit_frequency": "One-Time",
     "eligibility_criteria": {
       "min_age": 18,
-      "max_age": 75,
-      "occupations": ["Farmer", "Agricultural Labourer", "Dairy Farmer", "Fisherman"],
+      "max_age": 65,
+      "occupations": ["Self-Employed", "Artisan", "Daily Wage Worker", "Any"],
       "requires_land_ownership": false,
       "min_land_hectares": null,
       "max_land_hectares": null,
@@ -458,34 +379,21 @@
       "social_categories_allowed": ["All"],
       "states_applicable": ["All"],
       "exclusions": [
-        "Defaulter with existing non-performing agricultural loan from commercial/cooperative banks"
+        "Defaulter with any commercial or cooperative bank",
+        "Large corporations or non-micro enterprises"
       ]
     },
+    "edge_cases": [
+      "No collateral or third-party guarantee required by law; processing fee waived for Shishu category.",
+      "Vendor certificate or trade quotation serves as proof of enterprise."
+    ],
     "required_documents": [
       "Aadhaar Card and PAN Card",
-      "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
-      "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
-      "Passport Size Photographs"
+      "Proof of Business Address / Trade Idea",
+      "Bank Statement (Last 6 Months)",
+      "Passport Size Photos"
     ],
-    "application_steps": [
-      "Download the simplified one-page KCC application form from agricoop.nic.in / pmkisan.gov.in or obtain it at any rural bank branch / CSC.",
-      "Fill in personal details, Aadhaar number, existing PM-KISAN bank account details, and crop cultivation area.",
-      "Attach land title extract (7/12 Extract / Khasra) or Joint Liability Group (JLG) tenancy agreement.",
-      "Submit the completed form to any Commercial Bank, Regional Rural Bank (RRB), or Cooperative Bank branch.",
-      "Bank processes the application and issues the RuPay Kisan Credit Card within a statutory 14-day timeline."
-    ],
-    "direct_portal_url": "https://agricoop.nic.in",
-    "portal_url": "https://agricoop.nic.in/kcc",
-    "application_mode": "Bank Branch / CSC / PM-KISAN Portal Linkage",
-    "action_type": "ONLINE_DIRECT_OR_CSC",
-    "friction_score": 2,
-    "processing_time": "14 days statutory turnaround time mandated by RBI and Indian Banks Association",
-    "source_url": "https://agricoop.nic.in",
-    "last_verified": "2026-10-01",
-    "notes": "Headline benefit reflects the standard concessional credit limit of ₹3,00,000 eligible for 4% effective interest rate (7% base interest minus 3% prompt repayment incentive). Up to ₹1,60,000 credit is completely collateral-free. Open to owner-farmers, oral lessees, sharecroppers, and animal husbandry/fishery rearers.",
-    "edge_cases": [
-      "Tenant farmers, oral lessees, and sharecroppers qualify under Joint Liability Groups (JLG) without land title.",
-      "Animal husbandry & fisheries farmers qualify for standalone credit limit up to ₹2,00,000."
-    ]
+    "application_mode": "Commercial / Grameen Bank / Udyamimitra Portal",
+    "portal_url": "https://www.mudra.org.in"
   }
 ]
