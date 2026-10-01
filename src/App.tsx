@@ -20,6 +20,7 @@ import { AutomatedPortalFilingModal } from './components/AutomatedPortalFilingMo
 import { CscAppointmentModal } from './components/CscAppointmentModal';
 import { FamilyBenefitDashboard } from './components/FamilyBenefitDashboard';
 import { VernacularVoiceCopilotModal } from './components/VernacularVoiceCopilotModal';
+import { DocumentInspectionStudioModal } from './components/DocumentInspectionStudioModal';
 import { AgentEvent, AgentResponse, UserProfile, Scheme, CscCenter, CscAppointment } from './types/agent';
 import { AuthState, AuthUser } from './types/auth';
 import { SupportedLanguage, TRANSLATIONS } from './data/translations';
@@ -100,6 +101,7 @@ export const App: React.FC = () => {
   const [selectedCenterForAppointment, setSelectedCenterForAppointment] = useState<CscCenter | null>(null);
   const [activeDiscoveryMode, setActiveDiscoveryMode] = useState<'individual' | 'family'>('individual');
   const [isVoiceCopilotOpen, setIsVoiceCopilotOpen] = useState<boolean>(false);
+  const [isInspectionStudioOpen, setIsInspectionStudioOpen] = useState<boolean>(false);
 
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
 
@@ -747,6 +749,10 @@ export const App: React.FC = () => {
           setIsDocumentsModalOpen(false);
           setIsDigiLockerOpen(true);
         }}
+        onOpenInspectionStudio={() => {
+          setIsDocumentsModalOpen(false);
+          setIsInspectionStudioOpen(true);
+        }}
         language={selectedLanguage}
       />
 
@@ -838,6 +844,26 @@ export const App: React.FC = () => {
           runAgentWorkflow(prof);
           showToast(`Discovery initialized from ${prof.language === 'mr' ? 'Marathi' : 'Vernacular'} voice input!`);
         }}
+      />
+
+      {/* Multi-Layer Document Pre-Flight Validation Studio (<10% Rejection Target) */}
+      <DocumentInspectionStudioModal
+        isOpen={isInspectionStudioOpen}
+        onClose={() => setIsInspectionStudioOpen(false)}
+        documents={authState.user?.documents || []}
+        userProfile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
+        onFetchMoreFromDigiLocker={() => {
+          setIsInspectionStudioOpen(false);
+          setIsDigiLockerOpen(true);
+        }}
+        onBookCscSlot={() => {
+          setIsInspectionStudioOpen(false);
+          const cscEl = document.getElementById('csc-card-section');
+          if (cscEl) {
+            cscEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }}
+        language={selectedLanguage}
       />
     </div>
   );

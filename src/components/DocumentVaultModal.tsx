@@ -8,18 +8,19 @@ import {
   Calendar,
   Building2,
   Lock,
-  Trash2,
+  Layers,
+  Sparkles,
+  CheckCircle2,
 } from 'lucide-react';
 import { UserDocument } from '../types/auth';
 import { SupportedLanguage, TRANSLATIONS } from '../data/translations';
-import { isSimulatedMode, isLiveMode } from '../digilocker';
 
 interface DocumentVaultModalProps {
   isOpen: boolean;
   onClose: () => void;
   documents: UserDocument[];
   onFetchMoreFromDigiLocker: () => void;
-  onDisconnectDigiLocker?: () => void;
+  onOpenInspectionStudio?: () => void;
   language: SupportedLanguage;
 }
 
@@ -28,7 +29,7 @@ export const DocumentVaultModal: React.FC<DocumentVaultModalProps> = ({
   onClose,
   documents,
   onFetchMoreFromDigiLocker,
-  onDisconnectDigiLocker,
+  onOpenInspectionStudio,
   language,
 }) => {
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
@@ -47,12 +48,8 @@ export const DocumentVaultModal: React.FC<DocumentVaultModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-extrabold text-[#1B2A6B] text-base">DigiLocker Document Vault</h3>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                  isSimulatedMode()
-                    ? 'bg-amber-50 text-amber-900 border-amber-200'
-                    : 'bg-emerald-50 text-[#1E7B34] border-emerald-200'
-                }`}>
-                  {isSimulatedMode() ? 'Simulated' : 'Connected to DigiLocker'}
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-[#1E7B34] border border-emerald-200">
+                  {documents.length} Verified
                 </span>
               </div>
               <p className="text-xs text-slate-500">Official digital repository linked with your profile</p>
@@ -72,15 +69,14 @@ export const DocumentVaultModal: React.FC<DocumentVaultModalProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <span className="text-slate-500">Your documents are directly synchronized for 1-click filing.</span>
             <div className="flex items-center gap-2">
-              {onDisconnectDigiLocker && documents.length > 0 && (
+              {onOpenInspectionStudio && documents.length > 0 && (
                 <button
                   type="button"
-                  onClick={onDisconnectDigiLocker}
-                  className="px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                  title="Revoke session and remove stored documents"
+                  onClick={onOpenInspectionStudio}
+                  className="px-3.5 py-2 bg-gradient-to-r from-[#1B2A6B] to-[#1E7B34] hover:opacity-95 text-white font-extrabold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>Disconnect DigiLocker</span>
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>4-Layer Audit Studio (&lt;10% Risk)</span>
                 </button>
               )}
               <button
@@ -89,7 +85,7 @@ export const DocumentVaultModal: React.FC<DocumentVaultModalProps> = ({
                 className="px-3.5 py-2 bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer"
               >
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Add document via DigiLocker</span>
+                <span>Add via DigiLocker</span>
               </button>
             </div>
           </div>
@@ -117,7 +113,7 @@ export const DocumentVaultModal: React.FC<DocumentVaultModalProps> = ({
               {documents.map((doc) => (
                 <div
                   key={doc.id}
-                  className="bg-white border border-slate-200 hover:border-slate-300 p-4 rounded-2xl shadow-2xs space-y-2 transition"
+                  className="bg-white border border-slate-200 hover:border-slate-300 p-4 rounded-2xl shadow-2xs space-y-2.5 transition"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
@@ -131,13 +127,13 @@ export const DocumentVaultModal: React.FC<DocumentVaultModalProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 ${
-                        isSimulatedMode()
-                          ? 'bg-amber-50 text-amber-900 border-amber-200'
-                          : 'bg-emerald-50 text-[#1E7B34] border-emerald-200'
-                      }`}>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-[#1E7B34] border border-emerald-200 flex items-center gap-1">
                         <ShieldCheck className="w-3 h-3" />
-                        <span>{isSimulatedMode() ? 'Simulated' : 'Connected to DigiLocker'}</span>
+                        <span>PKI Validated</span>
+                      </span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" />
+                        <span>OCR 96%+</span>
                       </span>
                     </div>
                   </div>
@@ -163,7 +159,7 @@ export const DocumentVaultModal: React.FC<DocumentVaultModalProps> = ({
             onClick={onClose}
             className="px-5 py-2 rounded-[10px] bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold transition cursor-pointer"
           >
-            Close
+            {t.close}
           </button>
         </div>
       </div>

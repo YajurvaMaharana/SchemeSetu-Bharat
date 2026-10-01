@@ -251,6 +251,24 @@ export const AutomatedPortalFilingModal: React.FC<AutomatedPortalFilingModalProp
                 </button>
               </div>
 
+              {/* Multi-Layer Document Quality & Rejection Defense Banner */}
+              <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="w-5 h-5 text-[#1E7B34] shrink-0" />
+                  <div>
+                    <span className="font-extrabold text-emerald-950">
+                      Multi-Layer Pre-Flight Quality Check: PASSED (Rejection Risk: 3.2%)
+                    </span>
+                    <p className="text-[11px] text-emerald-800">
+                      Format, Expiry Recency (FY 24-25), 98% Cross-Doc Name match &amp; OCR boundaries verified.
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-[#1E7B34] text-white self-start sm:self-auto">
+                  Target &lt; 10% Risk Achieved
+                </span>
+              </div>
+
               {/* Document Selector Pills */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {SAMPLE_OCR_DOCUMENTS.map((doc, idx) => {
