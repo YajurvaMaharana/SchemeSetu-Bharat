@@ -15,6 +15,7 @@ import { UserProfileModal } from './components/UserProfileModal';
 import { CitizenProfileSetupPage } from './components/CitizenProfileSetupPage';
 import { SchemeApplicationModal } from './components/SchemeApplicationModal';
 import { ProactiveWhatsAppModal } from './components/ProactiveWhatsAppModal';
+import { AutomatedPortalFilingModal } from './components/AutomatedPortalFilingModal';
 import { AgentEvent, AgentResponse, UserProfile, Scheme } from './types/agent';
 import { AuthState, AuthUser } from './types/auth';
 import { SupportedLanguage, TRANSLATIONS } from './data/translations';
@@ -90,6 +91,8 @@ export const App: React.FC = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [selectedSchemeForApplication, setSelectedSchemeForApplication] = useState<Scheme | null>(null);
   const [isProactiveModalOpen, setIsProactiveModalOpen] = useState<boolean>(false);
+  const [isPortalFilingModalOpen, setIsPortalFilingModalOpen] = useState<boolean>(false);
+  const [portalFilingScheme, setPortalFilingScheme] = useState<Scheme | null>(null);
 
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
 
@@ -579,6 +582,10 @@ export const App: React.FC = () => {
             onToggleDemoPacing={setDemoPacing}
             useCachedDemo={useCachedDemo}
             onToggleUseCachedDemo={setUseCachedDemo}
+            onLaunchPortalFiling={() => {
+              setPortalFilingScheme(agentResult?.eligible_schemes?.[0] || null);
+              setIsPortalFilingModalOpen(true);
+            }}
           />
 
           {/* Citizen Input vs Live Telemetry Stream */}
@@ -607,6 +614,10 @@ export const App: React.FC = () => {
               onSubmitApplication={handleApplySubmission}
               submittingSchemeId={submittingSchemeId}
               onOpenApplyModal={(scheme) => setSelectedSchemeForApplication(scheme)}
+              onLaunchPortalFiling={(scheme) => {
+                setPortalFilingScheme(scheme);
+                setIsPortalFilingModalOpen(true);
+              }}
             />
           )}
         </main>
@@ -643,6 +654,11 @@ export const App: React.FC = () => {
           handleApplySubmission(schemeId, prof);
         }}
         isSubmitting={Boolean(submittingSchemeId)}
+        onLaunchPortalRpa={() => {
+          setPortalFilingScheme(selectedSchemeForApplication);
+          setSelectedSchemeForApplication(null);
+          setIsPortalFilingModalOpen(true);
+        }}
       />
 
       {/* Shared Simulated DigiLocker Modal */}
@@ -722,6 +738,18 @@ export const App: React.FC = () => {
           } else {
             scrollToCitizenInput();
           }
+        }}
+      />
+
+      {/* Autonomous OCR & 25+ Field Portal RPA Filing Modal */}
+      <AutomatedPortalFilingModal
+        isOpen={isPortalFilingModalOpen}
+        onClose={() => setIsPortalFilingModalOpen(false)}
+        scheme={portalFilingScheme}
+        userProfile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
+        authUser={authState.user}
+        onApplicationConfirmed={(appId) => {
+          showToast(`Application ${appId} confirmed via Portal RPA!`);
         }}
       />
     </div>

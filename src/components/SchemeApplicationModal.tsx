@@ -14,6 +14,7 @@ import {
   Loader2,
   Paperclip,
   ExternalLink,
+  Scan,
 } from 'lucide-react';
 import { Scheme, UserProfile } from '../types/agent';
 import { AuthUser } from '../types/auth';
@@ -26,6 +27,7 @@ interface SchemeApplicationModalProps {
   authUser: AuthUser | null;
   onSubmitSuccess: (schemeId: string, profile: UserProfile) => void;
   isSubmitting?: boolean;
+  onLaunchPortalRpa?: () => void;
 }
 
 interface StatutoryDocStatus {
@@ -45,6 +47,7 @@ export const SchemeApplicationModal: React.FC<SchemeApplicationModalProps> = ({
   authUser,
   onSubmitSuccess,
   isSubmitting = false,
+  onLaunchPortalRpa,
 }) => {
   const [isFetchingDigiLocker, setIsFetchingDigiLocker] = useState<boolean>(false);
   const [allowManualUpload, setAllowManualUpload] = useState<boolean>(false);
@@ -261,36 +264,50 @@ export const SchemeApplicationModal: React.FC<SchemeApplicationModalProps> = ({
                 </p>
               </div>
 
-              {/* Official DigiLocker Button */}
-              <button
-                type="button"
-                onClick={handleFetchViaDigiLocker}
-                disabled={isFetchingDigiLocker || hasFetchedDigiLocker}
-                className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow-xs transition cursor-pointer shrink-0 ${
-                  hasFetchedDigiLocker
-                    ? 'bg-emerald-50 text-[#1E7B34] border border-emerald-300 cursor-default'
-                    : 'bg-[#1E7B34] hover:bg-[#18682B] text-white'
-                }`}
-              >
-                {isFetchingDigiLocker ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    <span>Verifying with DigiLocker...</span>
-                  </>
-                ) : hasFetchedDigiLocker ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4 text-[#1E7B34]" />
-                    <span>All Certificates Linked</span>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-4 h-4 rounded-sm bg-white/20 flex items-center justify-center font-black text-[10px]">
-                      DL
-                    </div>
-                    <span>Fetch via DigiLocker</span>
-                  </>
+              <div className="flex items-center gap-2">
+                {onLaunchPortalRpa && (
+                  <button
+                    type="button"
+                    onClick={onLaunchPortalRpa}
+                    className="px-3.5 py-2.5 bg-blue-50 hover:bg-blue-100 text-[#1B2A6B] border border-blue-300 font-bold text-xs rounded-xl shadow-xs transition cursor-pointer shrink-0 flex items-center gap-1.5"
+                    title="Run OCR and simulate navigation across official portals to auto-fill 25+ fields"
+                  >
+                    <Scan className="w-4 h-4 text-[#F28C28]" />
+                    <span>OCR &amp; Auto-Fill 26 Fields</span>
+                  </button>
                 )}
-              </button>
+
+                {/* Official DigiLocker Button */}
+                <button
+                  type="button"
+                  onClick={handleFetchViaDigiLocker}
+                  disabled={isFetchingDigiLocker || hasFetchedDigiLocker}
+                  className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 shadow-xs transition cursor-pointer shrink-0 ${
+                    hasFetchedDigiLocker
+                      ? 'bg-emerald-50 text-[#1E7B34] border border-emerald-300 cursor-default'
+                      : 'bg-[#1E7B34] hover:bg-[#18682B] text-white'
+                  }`}
+                >
+                  {isFetchingDigiLocker ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      <span>Verifying with DigiLocker...</span>
+                    </>
+                  ) : hasFetchedDigiLocker ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-[#1E7B34]" />
+                      <span>All Certificates Linked</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-4 h-4 rounded-sm bg-white/20 flex items-center justify-center font-black text-[10px]">
+                        DL
+                      </div>
+                      <span>Fetch via DigiLocker</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Simulated Fetching Progress Banner */}

@@ -13,8 +13,9 @@ import {
   Info,
   Check,
   Star,
+  Scan,
 } from 'lucide-react';
-import { AgentResponse, UserProfile } from '../types/agent';
+import { AgentResponse, UserProfile, Scheme } from '../types/agent';
 import { CscCenterCard } from './CscCenterCard';
 
 interface SchemeResultsProps {
@@ -24,6 +25,7 @@ interface SchemeResultsProps {
   onSubmitApplication: (schemeId: string, profile: UserProfile) => void;
   submittingSchemeId: string | null;
   onOpenApplyModal?: (scheme: Scheme) => void;
+  onLaunchPortalFiling?: (scheme: Scheme) => void;
 }
 
 export const SchemeResults: React.FC<SchemeResultsProps> = ({
@@ -33,6 +35,7 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
   onSubmitApplication,
   submittingSchemeId,
   onOpenApplyModal,
+  onLaunchPortalFiling,
 }) => {
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [showIneligible, setShowIneligible] = useState<boolean>(false);
@@ -250,24 +253,38 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                           )}
                         </div>
 
-                        <button
-                          type="button"
-                          disabled={isSubmitting}
-                          onClick={() => {
-                            if (onOpenApplyModal) {
-                              onOpenApplyModal(scheme);
-                            } else {
-                              onSubmitApplication(scheme.scheme_id, response.user_profile);
-                            }
-                          }}
-                          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs transition shadow-xs disabled:opacity-50 cursor-pointer"
-                        >
-                          <Send className="w-3.5 h-3.5" />
-                          <span>{isSubmitting ? 'Submitting...' : 'Apply via DigiLocker'}</span>
-                          <span className="text-[9px] bg-white/20 text-white px-1.5 py-0.5 rounded-full font-extrabold uppercase">
-                            Simulated
-                          </span>
-                        </button>
+                        <div className="flex items-center gap-2">
+                          {onLaunchPortalFiling && (
+                            <button
+                              type="button"
+                              onClick={() => onLaunchPortalFiling(scheme)}
+                              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1B2A6B] border border-blue-200 font-bold text-xs transition shadow-2xs cursor-pointer"
+                              title="Use OCR to extract document proofs and simulate navigation to fill 25+ fields across government portals"
+                            >
+                              <Scan className="w-3.5 h-3.5 text-[#F28C28]" />
+                              <span>Auto-Fill 26 Fields (OCR)</span>
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            disabled={isSubmitting}
+                            onClick={() => {
+                              if (onOpenApplyModal) {
+                                onOpenApplyModal(scheme);
+                              } else {
+                                onSubmitApplication(scheme.scheme_id, response.user_profile);
+                              }
+                            }}
+                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs transition shadow-xs disabled:opacity-50 cursor-pointer"
+                          >
+                            <Send className="w-3.5 h-3.5" />
+                            <span>{isSubmitting ? 'Submitting...' : 'Apply via DigiLocker'}</span>
+                            <span className="text-[9px] bg-white/20 text-white px-1.5 py-0.5 rounded-full font-extrabold uppercase">
+                              Simulated
+                            </span>
+                          </button>
+                        </div>
                       </div>
 
                       {/* Expandable Payload */}

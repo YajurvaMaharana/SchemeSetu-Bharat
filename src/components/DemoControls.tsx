@@ -1,11 +1,12 @@
 import React from 'react';
-import { Settings2, Clock, Database } from 'lucide-react';
+import { Settings2, Clock, Database, Scan } from 'lucide-react';
 
 interface DemoControlsProps {
   demoPacing: boolean;
   onToggleDemoPacing: (val: boolean) => void;
   useCachedDemo: boolean;
   onToggleUseCachedDemo: (val: boolean) => void;
+  onLaunchPortalFiling?: () => void;
 }
 
 export const DemoControls: React.FC<DemoControlsProps> = ({
@@ -13,6 +14,7 @@ export const DemoControls: React.FC<DemoControlsProps> = ({
   onToggleDemoPacing,
   useCachedDemo,
   onToggleUseCachedDemo,
+  onLaunchPortalFiling,
 }) => {
   return (
     <div className="bg-slate-100/90 border border-slate-200/90 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs shadow-2xs">
@@ -47,7 +49,19 @@ export const DemoControls: React.FC<DemoControlsProps> = ({
             <span>Deterministic Demo Cache</span>
           </span>
         </label>
+
+        {onLaunchPortalFiling && (
+          <button
+            type="button"
+            onClick={onLaunchPortalFiling}
+            className="px-3 py-1.5 bg-[#1B2A6B] hover:bg-[#142052] text-white font-bold rounded-xl shadow-xs transition flex items-center gap-1.5 cursor-pointer ml-auto"
+          >
+            <Scan className="w-3.5 h-3.5 text-amber-300" />
+            <span>OCR &amp; 25+ Field Portal RPA</span>
+          </button>
+        )}
       </div>
     </div>
   );
 };
+
