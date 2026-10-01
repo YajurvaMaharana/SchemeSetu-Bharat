@@ -57,6 +57,7 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
     passed_criteria: List[str] = []
     failed_criteria: List[str] = []
     edge_case_flags: List[str] = []
+    missing_info: List[str] = []
 
     criteria = scheme.eligibility_criteria
     exclusions = criteria.get("exclusions", [])
@@ -64,17 +65,17 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
     # -------------------------------------------------------------
     # 1. HARD EXCLUSIONS CHECK
     # -------------------------------------------------------------
-    if profile.is_taxpayer:
+    if profile.is_taxpayer is True:
         tax_exclusion = any("tax" in ex.lower() for ex in exclusions)
         if tax_exclusion:
             failed_criteria.append("Income Tax Payer exclusion: Statutory rules bar income taxpayers.")
 
-    if profile.is_govt_employee:
+    if profile.is_govt_employee is True:
         govt_exclusion = any("government" in ex.lower() or "govt" in ex.lower() for ex in exclusions)
         if govt_exclusion:
             failed_criteria.append("Government Employee exclusion: Serving or retired govt personnel barred.")
 
-    if profile.has_pension_above_10k:
+    if profile.has_pension_above_10k is True:
         pension_exclusion = any("pension" in ex.lower() for ex in exclusions)
         if pension_exclusion:
             failed_criteria.append("Pension ceiling exclusion: Pension exceeds statutory threshold of ₹10,000/mo.")
@@ -90,6 +91,7 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
             else:
                 failed_criteria.append(f"Scheme restricted to {required_gender}; applicant is {profile.gender}")
         else:
+            missing_info.append("Gender")
             edge_case_flags.append(f"Scheme specifically targets {required_gender}; gender unconfirmed in profile.")
 
     # -------------------------------------------------------------
@@ -110,8 +112,9 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
                 age_desc.append(f"<={max_age}")
             passed_criteria.append(f"Age criteria met ({profile.age} yrs within {' and '.join(age_desc)}).")
     elif min_age is not None or max_age is not None:
-        # Age omitted
-        passed_criteria.append("Age requirement assumed subject to Aadhaar verification.")
+        # Age omitted - never assumed
+        missing_info.append("Age")
+        edge_case_flags.append("Age requirement unconfirmed; subject to Aadhaar verification.")
 
     # -------------------------------------------------------------
     # 4. OCCUPATION MATCHING
@@ -169,6 +172,9 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
         elif is_tenant_farmer and scheme.id == "pm_kisan":
             # PM-KISAN specifically excludes tenant farmers without title deed
             failed_criteria.append("PM-KISAN statutory rules exclude tenant farmers/sharecroppers without recorded ownership.")
+        elif profile.has_land_ownership is None and profile.land_hectares is None and profile.land_acres is None:
+            missing_info.append("Land Ownership Details")
+            edge_case_flags.append("Cultivable land ownership document / RoR / 7/12 extract verification needed.")
         else:
             if has_joint_land:
                 edge_case_flags.append("Joint land title / undivided ancestral Khatauni requires co-owner partition or affidavit.")
@@ -190,32 +196,47 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
                     )
             else:
                 passed_criteria.append(f"Landholding ({profile.land_hectares:.2f} ha) is within permissible limit of {max_land} ha.")
+    elif max_land is not None:
+        missing_info.append("Landholding (hectares)")
 
     # -------------------------------------------------------------
     # 6. ANNUAL INCOME THRESHOLD
     # -------------------------------------------------------------
     max_income = criteria.get("max_annual_income_inr")
-    if max_income is not None and profile.annual_income_inr is not None:
-        if profile.annual_income_inr > max_income:
-            # Check 10% edge case margin
-            if profile.annual_income_inr <= max_income * 1.10:
-                edge_case_flags.append(
-                    f"Income (₹{profile.annual_income_inr:,}) is within 10% margin of ₹{max_income:,} threshold; net taxable vs gross deductions review required."
-                )
+    if max_income is not None:
+        if profile.annual_income_inr is not None:
+            if profile.annual_income_inr > max_income:
+                # Check 10% edge case margin
+                if profile.annual_income_inr <= max_income * 1.10:
+                    edge_case_flags.append(
+                        f"Income (₹{profile.annual_income_inr:,}) is within 10% margin of ₹{max_income:,} threshold; net taxable vs gross deductions review required."
+                    )
+                else:
+                    failed_criteria.append(
+                        f"Annual income (₹{profile.annual_income_inr:,}) exceeds maximum ceiling of ₹{max_income:,}."
+                    )
             else:
-                failed_criteria.append(
-                    f"Annual income (₹{profile.annual_income_inr:,}) exceeds maximum ceiling of ₹{max_income:,}."
-                )
+                passed_criteria.append(f"Annual income (₹{profile.annual_income_inr:,}) complies with ceiling of ₹{max_income:,}.")
         else:
-            passed_criteria.append(f"Annual income (₹{profile.annual_income_inr:,}) complies with ceiling of ₹{max_income:,}.")
+            missing_info.append("Annual Income")
+            edge_case_flags.append(f"Scheme imposes income ceiling of ₹{max_income:,}; income certificate needed.")
 
     # -------------------------------------------------------------
     # 7. HOUSING DWELLING TYPE
     # -------------------------------------------------------------
     housing_allowed = criteria.get("housing_type_allowed")
     if housing_allowed:
-        user_housing = (profile.housing_type or "Pucca").strip()
-        if user_housing.lower() in [h.lower() for h in housing_allowed]:
+        if profile.housing_type is not None:
+            user_housing = profile.housing_type.strip()
+        elif profile.has_pucca_house is not None:
+            user_housing = "Pucca" if profile.has_pucca_house else "Kutcha"
+        else:
+            user_housing = None
+
+        if user_housing is None:
+            missing_info.append("Housing Dwelling Type")
+            edge_case_flags.append(f"Scheme targets {', '.join(housing_allowed)} housing; dwelling status verification needed.")
+        elif user_housing.lower() in [h.lower() for h in housing_allowed]:
             passed_criteria.append(f"Housing dwelling status ({user_housing}) satisfies scheme criteria.")
         else:
             # If user has Pucca, PMAY-G is disqualified
@@ -229,12 +250,13 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
     # -------------------------------------------------------------
     allowed_categories = criteria.get("social_categories_allowed", ["All"])
     if "All" not in allowed_categories:
-        user_cat = (profile.social_category or "").strip()
-        if user_cat in allowed_categories:
+        user_cat = (profile.social_category or profile.caste_category or "").strip()
+        if user_cat and user_cat.lower() in [c.lower() for c in allowed_categories]:
             passed_criteria.append(f"Social category ({user_cat}) qualifies under reservation guidelines.")
         elif user_cat:
             failed_criteria.append(f"Category ({user_cat}) does not meet scheme requirements ({', '.join(allowed_categories)}).")
         else:
+            missing_info.append("Social Category")
             edge_case_flags.append(f"Scheme requires category in {allowed_categories}; caste certificate verification needed.")
 
     # -------------------------------------------------------------
@@ -252,7 +274,7 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
     # -------------------------------------------------------------
     if len(failed_criteria) > 0:
         status = EligibilityStatus.NOT_ELIGIBLE
-    elif len(edge_case_flags) > 0:
+    elif len(edge_case_flags) > 0 or len(missing_info) > 0:
         status = EligibilityStatus.NEEDS_REVIEW
     else:
         status = EligibilityStatus.ELIGIBLE
@@ -269,6 +291,7 @@ def evaluate_single_scheme(profile: UserProfile, scheme: Scheme) -> SchemeEligib
         passed_criteria=passed_criteria,
         failed_criteria=failed_criteria,
         edge_case_flags=edge_case_flags,
+        missing_info=missing_info,
         required_documents=scheme.required_documents,
         portal_url=scheme.portal_url,
         application_mode=scheme.application_mode,

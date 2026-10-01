@@ -144,3 +144,61 @@ def test_negative_salaried_urban_person():
     # Benefit sum for ineligible person must be 0
     total_benefit = calc_benefits(matches)
     assert total_benefit == 0
+
+
+def test_none_fields_handling_and_missing_info():
+    """Verify that any None field in CitizenProfile evaluated against a scheme's criteria
+    is added to missing_info, and None is NEVER assumed to be true or false.
+    """
+    # Profile with essential fields omitted (None)
+    profile = CitizenProfile(
+        name="Unknown",
+        age=30,
+        # occupation is None
+        # annual_income_inr is None
+        # land_hectares is None
+        # is_bpl is None
+        # has_pucca_house is None
+        # has_lpg_connection is None
+    )
+
+    schemes = load_schemes()
+    pm_kisan = next(s for s in schemes if s.get("scheme_id") == "PM_KISAN_2026")
+    match = evaluate_scheme(profile, pm_kisan)
+
+    # Missing occupation or land must be captured in missing_info
+    assert len(match.missing_info) > 0, "Missing fields must be populated in missing_info"
+    assert "Occupation" in match.missing_info
+    # Since there are no hard failures yet but fields are missing, status must be NEEDS_INFO
+    assert match.status == "NEEDS_INFO"
+
+    # For PMAY-G requiring no-pucca-house:
+    pmay_g = next(s for s in schemes if s.get("scheme_id") == "PMAY_G_2026")
+    match_pmay = evaluate_scheme(profile, pmay_g)
+    assert any("Housing" in item for item in match_pmay.missing_info)
+    assert match_pmay.status == "NEEDS_INFO"
+
+
+def test_hard_disqualification_explicit_not_eligible():
+    """Verify that failing any hard criterion explicitly marks status as NOT_ELIGIBLE."""
+    profile_high_income = CitizenProfile(
+        age=30,
+        occupation="student",
+        annual_income_inr=5000000,  # 50 Lakhs exceeds NSP cap of 2.5L
+        education_level="undergraduate",
+        caste_category="sc",
+    )
+    schemes = load_schemes()
+    nsp = next(s for s in schemes if s.get("scheme_id") == "NSP_POST_MATRIC_SC_2026")
+    match = evaluate_scheme(profile_high_income, nsp)
+
+    assert match.status == "NOT_ELIGIBLE"
+    assert any("exceeds the cap" in r.lower() for r in match.reasons)
+
+
+def test_land_acre_conversion_standard():
+    """Ensure that 1.5 acres converts to approx 0.61 ha (0.6071 ha)."""
+    h = acres_to_hectares(1.5)
+    assert round(h, 2) == 0.61
+    assert abs(h - (1.5 * 0.404686)) < 0.001
+
