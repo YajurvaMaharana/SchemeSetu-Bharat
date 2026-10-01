@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, X, FileText, Printer } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { AuthUser } from '../types/auth';
 
 interface SubmissionSuccessModalProps {
   receipt: {
@@ -14,11 +15,13 @@ interface SubmissionSuccessModalProps {
     simulated: boolean;
   } | null;
   onClose: () => void;
+  authUser?: AuthUser | null;
 }
 
 export const SubmissionSuccessModal: React.FC<SubmissionSuccessModalProps> = ({
   receipt,
   onClose,
+  authUser,
 }) => {
   React.useEffect(() => {
     if (receipt) {
@@ -32,6 +35,9 @@ export const SubmissionSuccessModal: React.FC<SubmissionSuccessModalProps> = ({
   }, [receipt]);
 
   if (!receipt) return null;
+
+  const isDigiLocker = authUser?.authMethod === 'digilocker';
+  const applicantName = authUser?.name || receipt.applicant_snapshot?.name || 'Citizen Applicant';
 
   const handlePrint = () => {
     window.print();
@@ -68,8 +74,14 @@ export const SubmissionSuccessModal: React.FC<SubmissionSuccessModalProps> = ({
         {/* Body */}
         <div className="p-6 space-y-4 text-xs">
           <div className="bg-emerald-50/80 border border-emerald-300 rounded-2xl p-4 space-y-1.5">
-            <div className="text-emerald-800 text-[11px] font-bold uppercase tracking-wider">
-              Acknowledgement Number:
+            <div className="text-emerald-800 text-[11px] font-bold uppercase tracking-wider flex items-center justify-between">
+              <span>Acknowledgement Number:</span>
+              {isDigiLocker && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white text-[#1E7B34] border border-emerald-300 flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  <span>DigiLocker Verified</span>
+                </span>
+              )}
             </div>
             <div className="text-2xl font-mono font-black text-[#1E7B34] tracking-wider">
               {receipt.acknowledgement_number}
@@ -89,12 +101,12 @@ export const SubmissionSuccessModal: React.FC<SubmissionSuccessModalProps> = ({
                 Scheme Code: <span className="text-slate-900 font-bold">{receipt.scheme_id.toUpperCase()}</span>
               </div>
               <div>
-                Applicant: <span className="text-slate-900 font-bold">{receipt.applicant_snapshot?.name || 'Citizen'}</span>
+                Applicant: <span className="text-slate-900 font-bold">{applicantName}</span>
               </div>
               <div>
                 Location:{' '}
                 <span className="text-slate-900 font-medium">
-                  {receipt.applicant_snapshot?.district || 'District'}, {receipt.applicant_snapshot?.state || 'State'}
+                  {receipt.applicant_snapshot?.district || 'Nashik'}, {receipt.applicant_snapshot?.state || 'Maharashtra'}
                 </span>
               </div>
               <div>

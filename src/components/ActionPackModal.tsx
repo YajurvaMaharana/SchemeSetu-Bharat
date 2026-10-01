@@ -1,17 +1,22 @@
 import React from 'react';
 import { jsPDF } from 'jspdf';
-import { X, Download, Printer, FileText, MapPin, CheckCircle } from 'lucide-react';
+import { X, Download, Printer, FileText, MapPin, CheckCircle, ShieldCheck } from 'lucide-react';
 import { AgentResponse } from '../types/agent';
+import { AuthUser } from '../types/auth';
+import { isSimulatedMode } from '../digilocker';
 
 interface ActionPackModalProps {
   response: AgentResponse | null;
   onClose: () => void;
+  authUser?: AuthUser | null;
 }
 
-export const ActionPackModal: React.FC<ActionPackModalProps> = ({ response, onClose }) => {
+export const ActionPackModal: React.FC<ActionPackModalProps> = ({ response, onClose, authUser }) => {
   if (!response) return null;
 
   const { user_profile: profile, eligible_schemes, csc_recommendation } = response;
+  const citizenName = authUser?.name || profile.name || 'Citizen Applicant';
+  const isDigiLocker = authUser?.authMethod === 'digilocker';
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -26,6 +31,11 @@ export const ActionPackModal: React.FC<ActionPackModalProps> = ({ response, onCl
     doc.setFontSize(10);
     doc.setTextColor(100, 116, 139);
     doc.text('Apni Yojana, Apna Haq - Official Welfare Discovery Summary', 20, y);
+    if (isDigiLocker) {
+      doc.setTextColor(30, 123, 52); // Green #1E7B34
+      doc.setFontSize(9);
+      doc.text('[ DIGILOCKER VERIFIED CITIZEN ]', 135, y);
+    }
     y += 10;
 
     doc.setDrawColor(242, 140, 40); // Saffron #F28C28
@@ -41,7 +51,7 @@ export const ActionPackModal: React.FC<ActionPackModalProps> = ({ response, onCl
 
     doc.setFontSize(10);
     doc.setTextColor(51, 65, 85);
-    doc.text(`Name: ${profile.name || 'Citizen Applicant'}`, 25, y);
+    doc.text(`Name: ${citizenName}`, 25, y);
     doc.text(`Age: ${profile.age || 'N/A'} yrs`, 110, y);
     y += 6;
     doc.text(`Occupation: ${profile.occupation || 'General'}`, 25, y);
@@ -49,7 +59,16 @@ export const ActionPackModal: React.FC<ActionPackModalProps> = ({ response, onCl
     y += 6;
     doc.text(`Landholding: ${profile.land_acres || 0} acres (${profile.land_hectares || 0} ha)`, 25, y);
     doc.text(`Location: ${profile.district || ''}, ${profile.state || ''} (${profile.pincode || 'N/A'})`, 110, y);
-    y += 12;
+    y += 6;
+    if (isDigiLocker) {
+      doc.setTextColor(30, 123, 52);
+      const verifyText = isSimulatedMode()
+        ? `Verification: Verified via DigiLocker (Simulated) (Aadhaar: ${authUser?.aadhaar_masked || 'XXXX XXXX 4821'})`
+        : `Verification: Connected to DigiLocker (Aadhaar: ${authUser?.aadhaar_masked || 'XXXX XXXX 4821'})`;
+      doc.text(verifyText, 25, y);
+      y += 6;
+    }
+    y += 6;
 
     // Total Financial Benefit
     doc.setFontSize(12);
@@ -158,12 +177,22 @@ export const ActionPackModal: React.FC<ActionPackModalProps> = ({ response, onCl
 
           {/* Citizen Details */}
           <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
-            <div className="font-bold text-[#1B2A6B] border-b border-slate-200 pb-1.5 text-xs">
-              1. Citizen Profile &amp; Declarations
+            <div className="font-bold text-[#1B2A6B] border-b border-slate-200 pb-1.5 text-xs flex items-center justify-between">
+              <span>1. Citizen Profile &amp; Declarations</span>
+              {isDigiLocker && (
+                <span className={`px-2 py-0.5 rounded-full border text-[10px] font-bold flex items-center gap-1 ${
+                  isSimulatedMode()
+                    ? 'bg-amber-50 text-amber-900 border-amber-200'
+                    : 'bg-emerald-50 text-[#1E7B34] border-emerald-200'
+                }`}>
+                  <ShieldCheck className="w-3 h-3 text-[#1E7B34]" />
+                  <span>{isSimulatedMode() ? 'DigiLocker Verified (Simulated)' : 'Connected to DigiLocker'}</span>
+                </span>
+              )}
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-slate-700">
               <div>
-                Name: <span className="font-semibold text-slate-900">{profile.name || 'Citizen Applicant'}</span>
+                Name: <span className="font-semibold text-slate-900">{citizenName}</span>
               </div>
               <div>
                 Age: <span className="font-semibold text-slate-900">{profile.age || 'N/A'} yrs</span>

@@ -34,9 +34,9 @@ export function normalizeProfile(raw: Partial<UserProfile>): UserProfile {
   };
 
   // Convert land units
-  if (profile.land_acres !== null && profile.land_hectares === null) {
+  if (profile.land_acres != null && profile.land_hectares == null) {
     profile.land_hectares = Number((profile.land_acres * ACRES_TO_HECTARES).toFixed(4));
-  } else if (profile.land_hectares !== null && profile.land_acres === null) {
+  } else if (profile.land_hectares != null && profile.land_acres == null) {
     profile.land_acres = Number((profile.land_hectares / ACRES_TO_HECTARES).toFixed(2));
   }
 
@@ -264,11 +264,11 @@ export function evaluateSingleScheme(
   // 10. FINAL STATUS
   let status: EligibilityStatus = EligibilityStatus.ELIGIBLE;
   if (failedCriteria.length > 0) {
-    status = 'NOT_ELIGIBLE';
+    status = EligibilityStatus.NOT_ELIGIBLE;
   } else if (edgeCaseFlags.length > 0) {
-    status = 'NEEDS_REVIEW';
+    status = EligibilityStatus.NEEDS_REVIEW;
   } else {
-    status = 'ELIGIBLE';
+    status = EligibilityStatus.ELIGIBLE;
   }
 
   // Calculate friction score based on docs and criteria

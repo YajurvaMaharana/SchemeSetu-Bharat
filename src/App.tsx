@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Dashboard } from './components/Dashboard';
 import { CitizenInput } from './components/CitizenInput';
@@ -7,27 +7,188 @@ import { SchemeResults } from './components/SchemeResults';
 import { DemoControls } from './components/DemoControls';
 import { ActionPackModal } from './components/ActionPackModal';
 import { SubmissionSuccessModal } from './components/SubmissionSuccessModal';
+import { SignInPage } from './components/SignInPage';
+import { SignUpPage } from './components/SignUpPage';
+import { DigiLockerModal } from './components/DigiLockerModal';
+import { DocumentVaultModal } from './components/DocumentVaultModal';
+import { UserProfileModal } from './components/UserProfileModal';
+import { CitizenProfileSetupPage } from './components/CitizenProfileSetupPage';
+import { SchemeApplicationModal } from './components/SchemeApplicationModal';
 import { AgentEvent, AgentResponse, UserProfile, Scheme } from './types/agent';
+import { AuthState, AuthUser } from './types/auth';
+import { SupportedLanguage, TRANSLATIONS } from './data/translations';
 import { evaluateAllSchemes, normalizeProfile } from './services/rulesEngine';
 import { findCsc, mockPortalSubmission } from './services/cscLocator';
 import { generateFallbackEdgeReview, generateFallbackSummary, heuristicExtractProfile } from './services/heuristicExtractor';
-import { X, ShieldCheck, Lock } from 'lucide-react';
+import { X, ShieldCheck, Lock, LogIn, CheckCircle2 } from 'lucide-react';
+
+const STORAGE_KEY = 'schemesetu_user';
 
 export const App: React.FC = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState<'hi' | 'mr' | 'en'>('hi');
+  // Routing state based on window.location.hash
+  const [currentRoute, setCurrentRoute] = useState<string>(() => {
+    return window.location.hash || '#/';
+  });
+
+  // Global Auth State
+  const [authState, setAuthState] = useState<AuthState>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.name) {
+          return { status: 'signedIn', user: parsed };
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load auth state from localStorage:', e);
+    }
+    return { status: 'guest', user: null };
+  });
+
+  // Language & UI Controls
+  const [selectedLanguage, setSelectedLanguage] = useState<SupportedLanguage>(() => {
+    if (authState.user?.language) return authState.user.language;
+    return 'hi';
+  });
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-  const [isSignInModalOpen, setIsSignInModalOpen] = useState<boolean>(false);
   const [demoPacing, setDemoPacing] = useState<boolean>(true);
   const [useCachedDemo, setUseCachedDemo] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [events, setEvents] = useState<AgentEvent[]>([]);
   const [agentResult, setAgentResult] = useState<AgentResponse | null>(null);
 
-  // Modals
+  // Modals & Drawers
+  const [isDigiLockerOpen, setIsDigiLockerOpen] = useState<boolean>(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+  const [isDocumentsModalOpen, setIsDocumentsModalOpen] = useState<boolean>(false);
   const [isPdfModalOpen, setIsPdfModalOpen] = useState<boolean>(false);
   const [submissionReceipt, setSubmissionReceipt] = useState<any | null>(null);
   const [submittingSchemeId, setSubmittingSchemeId] = useState<string | null>(null);
+
+  // Guest banner dismissal for session
+  const [isGuestBannerDismissed, setIsGuestBannerDismissed] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('schemesetu_dismiss_guest_banner') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const handleDismissGuestBanner = () => {
+    setIsGuestBannerDismissed(true);
+    try {
+      sessionStorage.setItem('schemesetu_dismiss_guest_banner', 'true');
+    } catch {
+      // Ignore
+    }
+  };
+
+  // Toast Notification
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [selectedSchemeForApplication, setSelectedSchemeForApplication] = useState<Scheme | null>(null);
+
+  const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
+
+  // Listen to hashchange
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash || '#/';
+      setCurrentRoute(hash);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const navigateTo = (route: string) => {
+    window.location.hash = route;
+    setCurrentRoute(route);
+  };
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  // Auth Handlers
+  const handleAuthSuccess = (user: AuthUser) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    } catch (e) {
+      console.warn('Failed to save user to localStorage:', e);
+    }
+    setAuthState({ status: 'signedIn', user });
+    if (user.language) {
+      setSelectedLanguage(user.language);
+    }
+    setIsDigiLockerOpen(false);
+    // Smoothly redirect to citizen profile setup / selection screen
+    navigateTo('#/profile-setup');
+    showToast(
+      user.authMethod === 'google'
+        ? `Signed in with Google. Review and confirm your citizen profile.`
+        : user.authMethod === 'digilocker'
+        ? 'Signed in with DigiLocker. Review prefilled profile.'
+        : `Signed in as ${user.name}. Review citizen demographic profile.`
+    );
+  };
+
+  const handleProfileSetupConfirm = async (profile: UserProfile) => {
+    if (authState.user) {
+      const updatedUser: AuthUser = {
+        ...authState.user,
+        name: profile.name || authState.user.name,
+        profile,
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+      } catch (e) {
+        console.warn('Failed to save updated user profile:', e);
+      }
+      setAuthState({ status: 'signedIn', user: updatedUser });
+    }
+
+    navigateTo('#/');
+    showToast(`Profile confirmed! Evaluating welfare schemes for ${profile.name}...`);
+    await handleExecutePipeline(profile);
+  };
+
+  const handleSignOut = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.warn('Failed to remove auth key from localStorage:', e);
+    }
+    setAuthState({ status: 'guest', user: null });
+    navigateTo('#/');
+    showToast('Signed out. Continuing as guest citizen.');
+  };
+
+  const handleLanguageChange = (lang: SupportedLanguage) => {
+    setSelectedLanguage(lang);
+    if (authState.user) {
+      const updatedUser = { ...authState.user, language: lang };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+      } catch (e) {
+        // Ignore
+      }
+      setAuthState({ ...authState, user: updatedUser });
+    }
+  };
+
+  const handleUpdateUser = (updatedUser: AuthUser) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+    } catch (e) {
+      console.warn('Failed to save updated user to localStorage:', e);
+    }
+    setAuthState({ status: 'signedIn', user: updatedUser });
+    showToast('Profile updated successfully.');
+  };
 
   // Sleep helper for demo pacing
   const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -40,7 +201,6 @@ export const App: React.FC = () => {
   };
 
   const handleSelectSchemeFromDashboard = (scheme: Scheme) => {
-    // Smooth scroll down to input and set sample or context
     scrollToCitizenInput();
   };
 
@@ -275,62 +435,178 @@ export const App: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-slate-900 text-slate-100' : 'bg-[#F8FAFC] text-[#374151]'} flex flex-col font-sans transition-colors duration-200`}>
+      {/* Toast Notification Banner */}
+      {toastMessage && (
+        <div className="fixed top-20 right-4 sm:right-6 z-50 flex items-center gap-2.5 px-4 py-3 bg-[#1B2A6B] text-white text-xs font-bold rounded-2xl shadow-xl border border-white/20 animate-fadeIn">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{toastMessage}</span>
+          <button
+            type="button"
+            onClick={() => setToastMessage(null)}
+            className="ml-2 text-slate-300 hover:text-white p-0.5 cursor-pointer"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* Global Header */}
       <Header
         onReset={() => {
+          navigateTo('#/');
           setAgentResult(null);
           setEvents([]);
         }}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         selectedLanguage={selectedLanguage}
-        onLanguageChange={setSelectedLanguage}
+        onLanguageChange={handleLanguageChange}
         isDarkMode={isDarkMode}
         onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
-        onSignInClick={() => setIsSignInModalOpen(true)}
+        onSignInClick={() => navigateTo('#/signin')}
+        authState={authState}
+        onSignOut={handleSignOut}
+        onOpenProfile={() => setIsProfileModalOpen(true)}
+        onOpenDocuments={() => setIsDocumentsModalOpen(true)}
+        isAuthRoute={currentRoute === '#/signin' || currentRoute === '#/signup' || currentRoute === '#/profile-setup'}
       />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 w-full">
-        {/* NEW DASHBOARD SECTION: Hero Row + 4-Slide Auto Carousel + Flagship Cards */}
-        <Dashboard
-          onGetStarted={scrollToCitizenInput}
-          onSelectScheme={handleSelectSchemeFromDashboard}
-          searchFilter={searchQuery}
-        />
-
-        {/* Demo Controls Bar */}
-        <DemoControls
-          demoPacing={demoPacing}
-          onToggleDemoPacing={setDemoPacing}
-          useCachedDemo={useCachedDemo}
-          onToggleUseCachedDemo={setUseCachedDemo}
-        />
-
-        {/* Citizen Input vs Live Telemetry Stream */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-6">
-            <CitizenInput
-              onRunAgent={runAgentWorkflow}
-              isLoading={isLoading}
-              selectedLanguage={selectedLanguage}
-              onLanguageChange={setSelectedLanguage}
-            />
-          </div>
-          <div className="lg:col-span-6">
-            <AgentTelemetry events={events} isLoading={isLoading} />
-          </div>
-        </div>
-
-        {/* Welfare Discovery Results */}
-        {agentResult && (
-          <SchemeResults
-            response={agentResult}
-            selectedLanguage={selectedLanguage}
-            onOpenPdfModal={() => setIsPdfModalOpen(true)}
-            onSubmitApplication={handleApplySubmission}
-            submittingSchemeId={submittingSchemeId}
+      {/* VIEW ROUTING: #/signin, #/signup, #/profile-setup, or #/ (Dashboard & Main App) */}
+      {currentRoute === '#/signin' ? (
+        <div className="flex-1 animate-fadeIn">
+          <SignInPage
+            onSuccess={handleAuthSuccess}
+            onOpenDigiLocker={() => setIsDigiLockerOpen(true)}
+            onNavigateSignUp={() => navigateTo('#/signup')}
+            onContinueGuest={() => navigateTo('#/')}
+            language={selectedLanguage}
+            onShowToast={showToast}
           />
-        )}
-      </main>
+        </div>
+      ) : currentRoute === '#/signup' ? (
+        <div className="flex-1 animate-fadeIn">
+          <SignUpPage
+            onSuccess={handleAuthSuccess}
+            onOpenDigiLocker={() => setIsDigiLockerOpen(true)}
+            onNavigateSignIn={() => navigateTo('#/signin')}
+            onContinueGuest={() => navigateTo('#/')}
+            language={selectedLanguage}
+            onShowToast={showToast}
+          />
+        </div>
+      ) : currentRoute === '#/profile-setup' ? (
+        <div className="flex-1 animate-fadeIn">
+          <CitizenProfileSetupPage
+            user={
+              authState.user || {
+                name: 'Citizen Applicant',
+                email: 'valentinine14feb@gmail.com',
+                language: selectedLanguage,
+                authMethod: 'google',
+                documents: [],
+                profile: {
+                  name: 'Citizen Applicant',
+                  state: 'Maharashtra',
+                  district: 'Nashik',
+                  occupation: 'Farmer',
+                  age: 38,
+                  land_acres: 1.5,
+                  annual_income_inr: 120000,
+                  housing_type: 'Kutcha',
+                  social_category: 'OBC',
+                },
+              }
+            }
+            onConfirmProfile={handleProfileSetupConfirm}
+            onSkip={() => navigateTo('#/')}
+            language={selectedLanguage}
+          />
+        </div>
+      ) : (
+        /* Default Dashboard & Autonomous Discovery App View (#/) */
+        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 w-full animate-fadeIn">
+          {/* Guest Citizen Callout Banner */}
+          {authState.status === 'guest' && !isGuestBannerDismissed && (
+            <div className="bg-gradient-to-r from-amber-50 via-white to-emerald-50 border border-amber-200/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-[#F28C28] flex items-center justify-center font-bold">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-[#1B2A6B] block">
+                    {t.guestBannerText}
+                  </span>
+                  <span className="text-[11px] text-slate-500">
+                    Use simulated DigiLocker or Mobile OTP to link land records and instant filing kits.
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => navigateTo('#/signin')}
+                  className="px-4 py-2 bg-[#1E7B34] hover:bg-[#18682B] text-white text-xs font-bold rounded-xl shadow-xs transition cursor-pointer"
+                >
+                  {t.guestBannerAction}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDismissGuestBanner}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition cursor-pointer"
+                  title="Dismiss for session"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* DASHBOARD SECTION: Hero Row + 4-Slide Auto Carousel + Flagship Cards */}
+          <Dashboard
+            onGetStarted={scrollToCitizenInput}
+            onSelectScheme={handleSelectSchemeFromDashboard}
+            searchFilter={searchQuery}
+          />
+
+          {/* Demo Controls Bar */}
+          <DemoControls
+            demoPacing={demoPacing}
+            onToggleDemoPacing={setDemoPacing}
+            useCachedDemo={useCachedDemo}
+            onToggleUseCachedDemo={setUseCachedDemo}
+          />
+
+          {/* Citizen Input vs Live Telemetry Stream */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="lg:col-span-6">
+              <CitizenInput
+                onRunAgent={runAgentWorkflow}
+                isLoading={isLoading}
+                selectedLanguage={selectedLanguage}
+                onLanguageChange={handleLanguageChange}
+                prefilledProfile={authState.user?.profile}
+                isSignedIn={authState.status === 'signedIn'}
+              />
+            </div>
+            <div className="lg:col-span-6">
+              <AgentTelemetry events={events} isLoading={isLoading} />
+            </div>
+          </div>
+
+          {/* Welfare Discovery Results */}
+          {agentResult && (
+            <SchemeResults
+              response={agentResult}
+              selectedLanguage={selectedLanguage}
+              onOpenPdfModal={() => setIsPdfModalOpen(true)}
+              onSubmitApplication={handleApplySubmission}
+              submittingSchemeId={submittingSchemeId}
+              onOpenApplyModal={(scheme) => setSelectedSchemeForApplication(scheme)}
+            />
+          )}
+        </main>
+      )}
 
       {/* Official Government Portal Footer */}
       <footer className="border-t border-slate-200 bg-white py-8 text-xs text-slate-500 mt-12">
@@ -351,11 +627,58 @@ export const App: React.FC = () => {
         </div>
       </footer>
 
+      {/* Scheme Application Modal with DigiLocker Document Verification */}
+      <SchemeApplicationModal
+        isOpen={Boolean(selectedSchemeForApplication)}
+        onClose={() => setSelectedSchemeForApplication(null)}
+        scheme={selectedSchemeForApplication}
+        profile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
+        authUser={authState.user}
+        onSubmitSuccess={(schemeId, prof) => {
+          setSelectedSchemeForApplication(null);
+          handleApplySubmission(schemeId, prof);
+        }}
+        isSubmitting={Boolean(submittingSchemeId)}
+      />
+
+      {/* Shared Simulated DigiLocker Modal */}
+      <DigiLockerModal
+        isOpen={isDigiLockerOpen}
+        onClose={(reason) => {
+          setIsDigiLockerOpen(false);
+          if (reason) showToast(reason);
+        }}
+        onSuccess={handleAuthSuccess}
+        language={selectedLanguage}
+      />
+
+      {/* Document Vault Drawer/Modal */}
+      <DocumentVaultModal
+        isOpen={isDocumentsModalOpen}
+        onClose={() => setIsDocumentsModalOpen(false)}
+        documents={authState.user?.documents || []}
+        onFetchMoreFromDigiLocker={() => {
+          setIsDocumentsModalOpen(false);
+          setIsDigiLockerOpen(true);
+        }}
+        language={selectedLanguage}
+      />
+
+      {/* User Profile Modal */}
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        user={authState.user}
+        onUpdateUser={handleUpdateUser}
+        language={selectedLanguage}
+      />
+
       {/* Action Pack PDF Modal */}
       {isPdfModalOpen && (
         <ActionPackModal
           response={agentResult}
           onClose={() => setIsPdfModalOpen(false)}
+          authUser={authState.user}
         />
       )}
 
@@ -367,58 +690,8 @@ export const App: React.FC = () => {
             setSubmissionReceipt(null);
             setSubmittingSchemeId(null);
           }}
+          authUser={authState.user}
         />
-      )}
-
-      {/* Simulation Sign-in Modal (MeriPehchan / DigiLocker / Aadhaar OTP) */}
-      {isSignInModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white border border-slate-300 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl space-y-0 text-slate-800">
-            <div className="bg-slate-50 p-5 border-b border-slate-200 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#F28C28]/15 text-[#F28C28] flex items-center justify-center font-bold">
-                  <Lock className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-[#1B2A6B] text-sm">Citizen Single Sign-On</h3>
-                  <p className="text-[11px] text-slate-500">MeriPehchan / DigiLocker Integration</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsSignInModalOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-800 hover:bg-slate-200 transition cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 space-y-4 text-xs">
-              <p className="text-slate-600 leading-relaxed">
-                Log in via your verified Aadhaar or DigiLocker profile for instantaneous pre-filled applications.
-              </p>
-
-              <div className="space-y-2.5">
-                <button
-                  type="button"
-                  onClick={() => setIsSignInModalOpen(false)}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-[10px] bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold transition shadow-xs cursor-pointer"
-                >
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Continue with MeriPehchan (SSO)</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsSignInModalOpen(false)}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-[10px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-300 transition cursor-pointer"
-                >
-                  <span>Continue as Guest Citizen</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );

@@ -23,6 +23,7 @@ interface SchemeResultsProps {
   onOpenPdfModal: () => void;
   onSubmitApplication: (schemeId: string, profile: UserProfile) => void;
   submittingSchemeId: string | null;
+  onOpenApplyModal?: (scheme: Scheme) => void;
 }
 
 export const SchemeResults: React.FC<SchemeResultsProps> = ({
@@ -31,6 +32,7 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
   onOpenPdfModal,
   onSubmitApplication,
   submittingSchemeId,
+  onOpenApplyModal,
 }) => {
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [showIneligible, setShowIneligible] = useState<boolean>(false);
@@ -251,11 +253,17 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
                         <button
                           type="button"
                           disabled={isSubmitting}
-                          onClick={() => onSubmitApplication(scheme.scheme_id, response.user_profile)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-[10px] bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs transition shadow-xs disabled:opacity-50 cursor-pointer"
+                          onClick={() => {
+                            if (onOpenApplyModal) {
+                              onOpenApplyModal(scheme);
+                            } else {
+                              onSubmitApplication(scheme.scheme_id, response.user_profile);
+                            }
+                          }}
+                          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1E7B34] hover:bg-[#18682B] text-white font-bold text-xs transition shadow-xs disabled:opacity-50 cursor-pointer"
                         >
                           <Send className="w-3.5 h-3.5" />
-                          <span>{isSubmitting ? 'Submitting...' : 'Submit Simulated Application'}</span>
+                          <span>{isSubmitting ? 'Submitting...' : 'Apply via DigiLocker'}</span>
                           <span className="text-[9px] bg-white/20 text-white px-1.5 py-0.5 rounded-full font-extrabold uppercase">
                             Simulated
                           </span>
