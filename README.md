@@ -1,4 +1,4 @@
-# 🏛️ SchemeSetu Bharat (स्कीमसेतु भारत)
+# 🏛️ YojnaSathi (योजना साथी)
 ### Autonomous Multilingual AI Agent for Last-Mile Welfare Discovery, Verification & Action
 
 [![Hackathon](https://img.shields.io/badge/BHARAT_AGENTIC_2026-1_Oct_2026-orange.svg)](https://unstop.com)
@@ -38,8 +38,9 @@ $$\text{Understand} \longrightarrow \text{Reason} \longrightarrow \text{Plan} \l
 ---
 
 ## 🧠 3. Core Agent Flow (Architecture)
+YojnaSathi operates across six deterministic stages:
 
-SchemeSetu operates across six deterministic stages:
+┌─────────────────────────────────┐
 │           UNDERSTAND            │ ➔ Multilingual intent & attribute extraction
 └────────────────┬────────────────┘   (Income, Landholding, Category, State)
                  │
@@ -55,20 +56,18 @@ SchemeSetu operates across six deterministic stages:
                  │
                  ▼
 ┌─────────────────────────────────┐
-│           USE TOOLS             │ ➔ • `query_scheme_database()`
-└────────────────┬────────────────┘   • `locate_nearest_csc()`
-                 │                    • `generate_application_checklist()`
+│            USE TOOLS            │ ➔ • query_scheme_database()
+└────────────────┬────────────────┘   • locate_nearest_csc()
+                 │                    • generate_application_checklist()
                  ▼
 ┌─────────────────────────────────┐
-│              ACT                │ ➔ Pre-fill mock portal application payload
+│               ACT               │ ➔ Pre-fill mock portal application payload
 └────────────────┬────────────────┘   and compile PDF action plan
                  │
                  ▼
 ┌─────────────────────────────────┐
-│            DELIVER              │ ➔ Ready-to-file PDF Roadmap + Voice Summary
+│             DELIVER             │ ➔ Ready-to-file PDF Roadmap + Voice Summary
 └─────────────────────────────────┘   + Direct link to verified CSC desk
-
----
 
 ## 🛠️ 4. Tools & Integrations
 
@@ -99,4 +98,56 @@ SchemeSetu-Bharat/
 │   └── pdf_generator.py        # PDF Roadmap export tool
 └── docs/
     ├── architecture.png        # System architecture diagram
-    └── demo_script.md          # 2-minute pitch & evaluation guide 
+    └── demo_script.md          # 2-minute pitch & evaluation guide
+```
+## 🚀 6. Quickstart & Installation
+
+Follow these steps to set up and run **YojanaSathi** locally:
+
+### Prerequisites
+* Python 3.10+ or Node.js 18+ (depending on your environment)
+* Valid API keys for Groq/OpenAI, Bhashini (optional), and Google Maps Places API
+
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/YajurvaMaharana/YojnaSathi.git](https://github.com/YajurvaMaharana/YojnaSathi.git)
+cd YojnaSathi
+```
+2. Configure Environment Variables
+Copy the example environment file and add your credentials:
+cp .env.example .env
+Fill in the required keys in .env:
+GROQ_API_KEY=your_groq_api_key_here
+BHASHINI_API_KEY=your_bhashini_key_here
+GOOGLE_MAPS_API_KEY=your_places_api_key_here
+
+3. Install Dependencies
+  pip install -r requirements.txt
+4. Launch the Application
+   streamlit run app.py 
+
+🛠️ 7. Technology StackLLM Reasoning Engine: Llama 3.1 / GPT-4o via Groq for ultra-low-latency deterministic routing   Orchestration: LangChain / LlamaIndex agent workflow   Vernacular Voice & Translation: Bhashini Indic API & Whisper for interrupt-driven dialect processing (Bhojpuri, Marwari, Maithili, Hinglish)   Vision & Extraction: Tesseract OCR / Google Vision API for identity and landholding record verification   Portal Automation: Playwright / Selenium for automated form filling across public schemes   Geolocation & Mapping: Google Maps Places API for locating the nearest verified Common Service Centres (CSCs) with queue prediction   Document Compilation: ReportLab / FPDF for generating instant downloadable PDF roadmaps   ⏱️ 8. Demo Pitch Script (2 Minutes)
+
+## ⏱️ 8. Demo Pitch Script (2 Minutes)
+
+| Timestamp | Screen / Flow | Action & Narration |
+|---|---|---|
+| **0:00 - 0:30** | **Vernacular Voice Input** | Citizen speaks in Bhojpuri describing flood damage. YojanaSathi instantly responds in dialect with PM Fasal Bima eligibility. |
+| **0:30 - 1:00** | **Family Optimizer Engine** | Shows dynamic dashboard: *"Ramesh's household is eligible for ₹4.5 lakh over 5 years across 7 combined schemes."* |
+| **1:00 - 1:30** | **Multi-Step Autopilot** | One-click auto-fill populates all 25+ application parameters on the mock portal in 20 seconds and retrieves an Application ID. |
+| **1:30 - 2:00** | **Proactive Notification & CSC Booking** | System detects upcoming scholarship deadline for daughter, |
+
+## 🏆 9. Competitive Advantage
+
+| Capability | Jugalbandi | myScheme | Saarthi AI |
+|---|---|---|---|
+| **Eligibility Checker** | Yes | Yes | Yes |
+| **Language Coverage** | 10 Languages | EN / HI only | Multilingual |
+| **Voice Interface** | Audio only | No | Conversational |
+| **Form Filling** | No | No | Limited |
+| **Document Pre-Verification** | No | No | Yes |
+|Status & Grievance**| No | Manual |Basic |Automated 60-Day RTI & Escalation Bot |
+|Ground**| Support |No | No | No |
+
+👥 10. Mission
+"YojanaSathi — ApnaAdhikar: Ensuring no citizen is left behind from claiming what is rightfully theirs."
