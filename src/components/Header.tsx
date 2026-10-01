@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Mic,
 } from 'lucide-react';
+import { OfficialEmblemLogo } from './OfficialEmblemLogo';
 import { AuthState } from '../types/auth';
 import { SupportedLanguage, TRANSLATIONS } from '../data/translations';
 
@@ -89,25 +90,37 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           {/* Logo & Branding */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 cursor-pointer group" onClick={onReset}>
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1B2A6B] to-[#1E7B34] flex items-center justify-center shadow-sm ring-1 ring-slate-200 group-hover:scale-105 transition-transform">
-                <Landmark className="w-5 h-5 text-white" />
+            <div className="flex items-center gap-3.5 cursor-pointer group" onClick={onReset}>
+              <div className="relative shrink-0 group-hover:scale-105 transition-transform duration-300">
+                <OfficialEmblemLogo size={52} className="w-13 h-13 drop-shadow-sm" />
               </div>
               <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xl font-black tracking-tight text-[#1B2A6B]">
+                <div className="flex items-baseline gap-2">
+                  <span
+                    className="text-2xl sm:text-[26px] font-black tracking-tight text-[#0B1B3D] leading-none"
+                    style={{ fontFamily: "'Playfair Display', 'Merriweather', 'Cinzel', Georgia, serif" }}
+                  >
                     YojanaSathi
                   </span>
-                  <span className="text-xl font-black tracking-tight text-[#F28C28]">
+                  <span
+                    className="text-2xl sm:text-[26px] font-black tracking-tight text-[#D96B00] leading-none"
+                    style={{ fontFamily: "'Playfair Display', 'Merriweather', 'Cinzel', Georgia, serif" }}
+                  >
                     AI
                   </span>
-                  <span className="ml-1.5 px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-[#1E7B34]/10 text-[#1E7B34] border border-[#1E7B34]/20 uppercase tracking-wider">
+                  <span className="ml-1 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider rounded-md bg-amber-50 text-[#B45309] border border-amber-300/80 shadow-2xs">
                     ApnaAdhikar
                   </span>
                 </div>
-                <p className="text-[11px] font-semibold text-slate-500 tracking-wide">
-                  ApnaAdhikar ("Your Right") • अपनी योजना, अपना हक
-                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <p className="text-[11px] font-bold text-slate-600 tracking-wide">
+                    राष्ट्रीय कल्याण एवं अधिकार पोर्टल • ApnaAdhikar ("Your Right")
+                  </p>
+                  <span className="hidden lg:inline-block w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                  <span className="hidden lg:inline-block text-[10px] font-bold text-[#1E7B34] uppercase tracking-wider">
+                    Govt. of India Certified
+                  </span>
+                </div>
               </div>
             </div>
 
