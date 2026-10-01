@@ -9,6 +9,8 @@ import {
 } from './src/services/rulesEngine';
 import {
   findCsc,
+  find5NearestCscs,
+  generateCscAppointment,
   mockPortalSubmission,
 } from './src/services/cscLocator';
 import {
@@ -18,6 +20,7 @@ import {
 } from './src/services/heuristicExtractor';
 import { LIFE_EVENTS } from './src/data/lifeEventsData';
 import { generateProactiveWhatsAppMessage } from './src/services/proactiveEngine';
+import { optimizeHouseholdBenefits } from './src/services/householdOptimizer';
 import {
   AgentEvent,
   AgentResponse,
@@ -304,12 +307,13 @@ app.post('/api/agent/run', async (req: Request, res: Response) => {
       true
     );
 
-    const cscInfo = findCsc(profile.district, profile.pincode, profile.state);
+    const fiveNearest = find5NearestCscs(profile.district, profile.pincode, profile.state);
+    const cscInfo = fiveNearest[0];
     addEvent(
       'CSC_LOCATOR',
       'COMPLETED',
-      `Located nearest CSC desk: ${cscInfo.name} (${cscInfo.distance_km ?? 1.5} km away).`,
-      cscInfo,
+      `Identified 5 nearest CSCs. Nearest desk: ${cscInfo.name} (${cscInfo.distance_km ?? 0.8} km away, ${cscInfo.current_queue_length} in queue, ~${cscInfo.predicted_wait_time_minutes}m wait, VLE: ${cscInfo.vle_rating}★).`,
+      { nearest: cscInfo, five_nearest: fiveNearest },
       true
     );
 
@@ -357,6 +361,7 @@ app.post('/api/agent/run', async (req: Request, res: Response) => {
       summary_text: summaryText,
       vernacular_summary: summaryText,
       csc_recommendation: cscInfo,
+      nearby_cscs: fiveNearest,
       events,
       used_fallback: isGeminiKeyDisabled || !getGeminiClient(),
     };
@@ -374,8 +379,36 @@ app.post('/api/agent/run', async (req: Request, res: Response) => {
 
 app.post('/api/agent/locate-csc', (req: Request, res: Response) => {
   const { district, pincode, state } = req.body;
-  const csc = findCsc(district, pincode, state);
-  return res.json(csc);
+  const nearby = find5NearestCscs(district, pincode, state);
+  return res.json({
+    nearest: nearby[0],
+    nearby_cscs: nearby,
+  });
+});
+
+app.post('/api/agent/csc-appointment', (req: Request, res: Response) => {
+  const { center, user_profile, slot_time, service } = req.body;
+  if (!center) {
+    return res.status(400).json({ error: 'center object is required' });
+  }
+  const appt = generateCscAppointment(
+    center,
+    normalizeProfile(user_profile || {}),
+    slot_time || '10:30 AM - 11:00 AM',
+    service || 'PM-KISAN DBT e-KYC & Land Record Verification'
+  );
+  return res.json(appt);
+});
+
+app.post('/api/agent/family-optimize', (req: Request, res: Response) => {
+  const { members, householdName, district, state } = req.body;
+  const result = optimizeHouseholdBenefits(
+    members || [],
+    householdName || 'Patil Family',
+    district || 'Nashik',
+    state || 'Maharashtra'
+  );
+  return res.json(result);
 });
 
 app.post('/api/agent/submit', (req: Request, res: Response) => {

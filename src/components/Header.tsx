@@ -30,6 +30,7 @@ interface HeaderProps {
   onOpenProfile: () => void;
   onOpenDocuments: () => void;
   onOpenProactive?: () => void;
+  onOpenFamilyDashboard?: () => void;
   isAuthRoute?: boolean;
 }
 
@@ -47,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenProfile,
   onOpenDocuments,
   onOpenProactive,
+  onOpenFamilyDashboard,
   isAuthRoute = false,
 }) => {
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
@@ -157,8 +159,22 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="text-[#F28C28]">⚡</span>
                 <span className="hidden sm:inline font-black">Proactive Radar</span>
                 <span className="bg-[#1E7B34] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
-                  Live Alert
+                  Live
                 </span>
+              </button>
+            )}
+
+            {/* Family 5-Year Optimizer Trigger */}
+            {onOpenFamilyDashboard && (
+              <button
+                type="button"
+                onClick={onOpenFamilyDashboard}
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-blue-50 to-emerald-50 hover:from-blue-100 hover:to-emerald-100 border border-blue-200 rounded-full text-xs font-bold text-[#1B2A6B] shadow-2xs transition cursor-pointer"
+                title="Household Combinatorial Optimizer"
+              >
+                <Users className="w-3.5 h-3.5 text-[#1E7B34]" />
+                <span className="hidden md:inline font-extrabold">Family 5-Yr Optimizer</span>
+                <span className="md:hidden font-bold">Family</span>
               </button>
             )}
 

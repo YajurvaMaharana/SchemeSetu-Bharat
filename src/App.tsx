@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Dashboard } from './components/Dashboard';
+import { OfficialHeroSection } from './components/OfficialHeroSection';
 import { CitizenInput } from './components/CitizenInput';
 import { AgentTelemetry } from './components/AgentTelemetry';
 import { SchemeResults } from './components/SchemeResults';
@@ -16,13 +17,15 @@ import { CitizenProfileSetupPage } from './components/CitizenProfileSetupPage';
 import { SchemeApplicationModal } from './components/SchemeApplicationModal';
 import { ProactiveWhatsAppModal } from './components/ProactiveWhatsAppModal';
 import { AutomatedPortalFilingModal } from './components/AutomatedPortalFilingModal';
-import { AgentEvent, AgentResponse, UserProfile, Scheme } from './types/agent';
+import { CscAppointmentModal } from './components/CscAppointmentModal';
+import { FamilyBenefitDashboard } from './components/FamilyBenefitDashboard';
+import { AgentEvent, AgentResponse, UserProfile, Scheme, CscCenter, CscAppointment } from './types/agent';
 import { AuthState, AuthUser } from './types/auth';
 import { SupportedLanguage, TRANSLATIONS } from './data/translations';
 import { evaluateAllSchemes, normalizeProfile } from './services/rulesEngine';
-import { findCsc, mockPortalSubmission } from './services/cscLocator';
+import { findCsc, find5NearestCscs, mockPortalSubmission } from './services/cscLocator';
 import { generateFallbackEdgeReview, generateFallbackSummary, heuristicExtractProfile } from './services/heuristicExtractor';
-import { X, ShieldCheck, Lock, LogIn, CheckCircle2 } from 'lucide-react';
+import { X, ShieldCheck, Lock, LogIn, CheckCircle2, Sparkles, Users } from 'lucide-react';
 
 const STORAGE_KEY = 'schemesetu_user';
 
@@ -93,6 +96,8 @@ export const App: React.FC = () => {
   const [isProactiveModalOpen, setIsProactiveModalOpen] = useState<boolean>(false);
   const [isPortalFilingModalOpen, setIsPortalFilingModalOpen] = useState<boolean>(false);
   const [portalFilingScheme, setPortalFilingScheme] = useState<Scheme | null>(null);
+  const [selectedCenterForAppointment, setSelectedCenterForAppointment] = useState<CscCenter | null>(null);
+  const [activeDiscoveryMode, setActiveDiscoveryMode] = useState<'individual' | 'family'>('individual');
 
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
 
@@ -363,12 +368,13 @@ export const App: React.FC = () => {
         true
       );
 
-      const cscInfo = findCsc(profile.district, profile.pincode, profile.state);
+      const fiveNearestCscs = find5NearestCscs(profile.district, profile.pincode, profile.state);
+      const cscInfo = fiveNearestCscs[0];
       await emitEvent(
         'CSC_LOCATOR',
         'COMPLETED',
-        `Located nearest CSC desk: ${cscInfo.name} (${cscInfo.distance_km ?? 1.5} km away).`,
-        cscInfo,
+        `Identified 5 nearest CSCs. Nearest desk: ${cscInfo.name} (${cscInfo.distance_km ?? 0.8} km away, ${cscInfo.current_queue_length} in queue, ~${cscInfo.predicted_wait_time_minutes}m wait, VLE: ${cscInfo.vle_rating}★).`,
+        { nearest: cscInfo, five_nearest_count: fiveNearestCscs.length },
         true
       );
 
@@ -402,6 +408,7 @@ export const App: React.FC = () => {
         summary_text: summaryText,
         vernacular_summary: summaryText,
         csc_recommendation: cscInfo,
+        nearby_cscs: fiveNearestCscs,
         events: accumulatedEvents,
         used_fallback: true,
       };
@@ -474,6 +481,7 @@ export const App: React.FC = () => {
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onOpenDocuments={() => setIsDocumentsModalOpen(true)}
         onOpenProactive={() => setIsProactiveModalOpen(true)}
+        onOpenFamilyDashboard={() => setActiveDiscoveryMode('family')}
         isAuthRoute={currentRoute === '#/signin' || currentRoute === '#/signup' || currentRoute === '#/profile-setup'}
       />
 
@@ -530,8 +538,15 @@ export const App: React.FC = () => {
         </div>
       ) : (
         /* Default Dashboard & Autonomous Discovery App View (#/) */
-        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 w-full animate-fadeIn">
-          {/* Guest Citizen Callout Banner */}
+        <div className="flex-1 w-full flex flex-col animate-fadeIn">
+          {/* Edge-to-Edge Full-Width Official Government Hero Banner */}
+          <OfficialHeroSection
+            onGetStarted={scrollToCitizenInput}
+            onOpenProactive={() => setIsProactiveModalOpen(true)}
+          />
+
+          <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 w-full">
+            {/* Guest Citizen Callout Banner */}
           {authState.status === 'guest' && !isGuestBannerDismissed && (
             <div className="bg-gradient-to-r from-amber-50 via-white to-emerald-50 border border-amber-200/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
               <div className="flex items-center gap-3">
@@ -588,39 +603,86 @@ export const App: React.FC = () => {
             }}
           />
 
-          {/* Citizen Input vs Live Telemetry Stream */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-6">
-              <CitizenInput
-                onRunAgent={runAgentWorkflow}
-                isLoading={isLoading}
-                selectedLanguage={selectedLanguage}
-                onLanguageChange={handleLanguageChange}
-                prefilledProfile={authState.user?.profile}
-                isSignedIn={authState.status === 'signedIn'}
-              />
-            </div>
-            <div className="lg:col-span-6">
-              <AgentTelemetry events={events} isLoading={isLoading} />
-            </div>
+          {/* Discovery Mode Switcher Tabs */}
+          <div className="flex items-center justify-center p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200 max-w-md mx-auto shadow-2xs">
+            <button
+              type="button"
+              onClick={() => setActiveDiscoveryMode('individual')}
+              className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+                activeDiscoveryMode === 'individual'
+                  ? 'bg-white text-[#1B2A6B] shadow-xs border border-slate-200 font-extrabold'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#F28C28]" />
+              <span>Individual Discovery</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveDiscoveryMode('family')}
+              className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+                activeDiscoveryMode === 'family'
+                  ? 'bg-[#1E7B34] text-white shadow-xs font-black'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>Family 5-Yr Dashboard</span>
+            </button>
           </div>
 
-          {/* Welfare Discovery Results */}
-          {agentResult && (
-            <SchemeResults
-              response={agentResult}
-              selectedLanguage={selectedLanguage}
+          {/* Conditional Mode Render: Family 5-Year Combinatorial Dashboard OR Individual Citizen Flow */}
+          {activeDiscoveryMode === 'family' ? (
+            <FamilyBenefitDashboard
               onOpenPdfModal={() => setIsPdfModalOpen(true)}
-              onSubmitApplication={handleApplySubmission}
-              submittingSchemeId={submittingSchemeId}
-              onOpenApplyModal={(scheme) => setSelectedSchemeForApplication(scheme)}
-              onLaunchPortalFiling={(scheme) => {
-                setPortalFilingScheme(scheme);
-                setIsPortalFilingModalOpen(true);
+              onBookCscSlot={() => {
+                const cscEl = document.getElementById('csc-card-section');
+                if (cscEl) {
+                  cscEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
               }}
             />
+          ) : (
+            <>
+              {/* Citizen Input vs Live Telemetry Stream */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div className="lg:col-span-6">
+                  <CitizenInput
+                    onRunAgent={runAgentWorkflow}
+                    isLoading={isLoading}
+                    selectedLanguage={selectedLanguage}
+                    onLanguageChange={handleLanguageChange}
+                    prefilledProfile={authState.user?.profile}
+                    isSignedIn={authState.status === 'signedIn'}
+                  />
+                </div>
+                <div className="lg:col-span-6">
+                  <AgentTelemetry events={events} isLoading={isLoading} />
+                </div>
+              </div>
+
+              {/* Welfare Discovery Results */}
+              {agentResult && (
+                <SchemeResults
+                  response={agentResult}
+                  selectedLanguage={selectedLanguage}
+                  onOpenPdfModal={() => setIsPdfModalOpen(true)}
+                  onSubmitApplication={handleApplySubmission}
+                  submittingSchemeId={submittingSchemeId}
+                  onOpenApplyModal={(scheme) => setSelectedSchemeForApplication(scheme)}
+                  onLaunchPortalFiling={(scheme) => {
+                    setPortalFilingScheme(scheme);
+                    setIsPortalFilingModalOpen(true);
+                  }}
+                  onBookCscAppointment={(center) => {
+                    setSelectedCenterForAppointment(center);
+                  }}
+                />
+              )}
+            </>
           )}
         </main>
+      </div>
       )}
 
       {/* Official Government Portal Footer */}
@@ -750,6 +812,17 @@ export const App: React.FC = () => {
         authUser={authState.user}
         onApplicationConfirmed={(appId) => {
           showToast(`Application ${appId} confirmed via Portal RPA!`);
+        }}
+      />
+
+      {/* CSC Helpdesk Priority Appointment Booking Modal */}
+      <CscAppointmentModal
+        isOpen={Boolean(selectedCenterForAppointment)}
+        onClose={() => setSelectedCenterForAppointment(null)}
+        center={selectedCenterForAppointment}
+        userProfile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
+        onBookingConfirmed={(appt) => {
+          showToast(`Appointment booked! Token: ${appt.tokenNumber} (${appt.appointmentTimeSlot})`);
         }}
       />
     </div>

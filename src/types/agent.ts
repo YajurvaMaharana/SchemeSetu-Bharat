@@ -94,6 +94,7 @@ export interface AgentEvent {
 }
 
 export interface CscCenter {
+  id?: string;
   name: string;
   address: string;
   district: string;
@@ -106,7 +107,33 @@ export interface CscCenter {
   match_level?: 'pin' | 'prefix' | 'district' | 'state' | 'fallback';
   distance_km?: number;
   vle_name?: string;
+  vle_rating?: number; // e.g. 4.9
+  vle_rating_count?: number; // e.g. 142
+  current_queue_length?: number; // e.g. 3
+  predicted_wait_time_minutes?: number; // e.g. 12
+  crowd_level?: 'LOW' | 'MODERATE' | 'BUSY';
+  active_counters?: number; // e.g. 2
   facilities?: string[];
+}
+
+export interface CscAppointment {
+  bookingId: string;
+  centerId: string;
+  centerName: string;
+  vleName: string;
+  vlePhone: string;
+  address: string;
+  citizenName: string;
+  citizenPhone: string;
+  serviceRequested: string;
+  appointmentDate: string;
+  appointmentTimeSlot: string;
+  tokenNumber: string;
+  estimatedWaitMinutes: number;
+  status: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
+  qrCodeData: string;
+  createdAt: string;
+  simulated: boolean;
 }
 
 export interface AgentResponse {
@@ -118,6 +145,7 @@ export interface AgentResponse {
   summary_text: string;
   vernacular_summary?: string | null;
   csc_recommendation?: CscCenter | null;
+  nearby_cscs?: CscCenter[] | null;
   mock_submission?: Record<string, any> | null;
   events: AgentEvent[];
   used_fallback?: boolean;

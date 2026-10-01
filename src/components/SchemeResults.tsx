@@ -26,6 +26,7 @@ interface SchemeResultsProps {
   submittingSchemeId: string | null;
   onOpenApplyModal?: (scheme: Scheme) => void;
   onLaunchPortalFiling?: (scheme: Scheme) => void;
+  onBookCscAppointment?: (center: CscCenter) => void;
 }
 
 export const SchemeResults: React.FC<SchemeResultsProps> = ({
@@ -36,6 +37,7 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
   submittingSchemeId,
   onOpenApplyModal,
   onLaunchPortalFiling,
+  onBookCscAppointment,
 }) => {
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
   const [showIneligible, setShowIneligible] = useState<boolean>(false);
@@ -407,7 +409,12 @@ export const SchemeResults: React.FC<SchemeResultsProps> = ({
 
         {/* Right 1 Col: Nearest CSC recommendation & Profile Summary */}
         <div className="space-y-6">
-          <CscCenterCard csc={response.csc_recommendation} />
+          <CscCenterCard
+            csc={response.csc_recommendation}
+            nearbyCscs={response.nearby_cscs}
+            userProfile={response.user_profile}
+            onBookAppointment={onBookCscAppointment}
+          />
 
           {/* User Profile Summary Card */}
           <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm text-xs space-y-3">
