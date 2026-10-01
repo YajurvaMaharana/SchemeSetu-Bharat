@@ -12,6 +12,7 @@ import {
   User,
   FileText,
   ChevronDown,
+  Mic,
 } from 'lucide-react';
 import { AuthState } from '../types/auth';
 import { SupportedLanguage, TRANSLATIONS } from '../data/translations';
@@ -31,6 +32,7 @@ interface HeaderProps {
   onOpenDocuments: () => void;
   onOpenProactive?: () => void;
   onOpenFamilyDashboard?: () => void;
+  onOpenVoiceCopilot?: () => void;
   isAuthRoute?: boolean;
 }
 
@@ -49,6 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenDocuments,
   onOpenProactive,
   onOpenFamilyDashboard,
+  onOpenVoiceCopilot,
   isAuthRoute = false,
 }) => {
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
@@ -175,6 +178,20 @@ export const Header: React.FC<HeaderProps> = ({
                 <Users className="w-3.5 h-3.5 text-[#1E7B34]" />
                 <span className="hidden md:inline font-extrabold">Family 5-Yr Optimizer</span>
                 <span className="md:hidden font-bold">Family</span>
+              </button>
+            )}
+
+            {/* Vernacular Dialect Voice Copilot (Bhojpuri / Marwari) */}
+            {onOpenVoiceCopilot && (
+              <button
+                type="button"
+                onClick={onOpenVoiceCopilot}
+                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-purple-50 to-amber-50 hover:from-purple-100 hover:to-amber-100 border border-purple-200 rounded-full text-xs font-bold text-purple-900 shadow-2xs transition cursor-pointer"
+                title="Voice Copilot in Bhojpuri, Marwari & Regional Dialects"
+              >
+                <Mic className="w-3.5 h-3.5 text-purple-700 animate-pulse" />
+                <span className="hidden lg:inline font-black">Dialect Voice</span>
+                <span className="lg:hidden font-bold">Voice</span>
               </button>
             )}
 

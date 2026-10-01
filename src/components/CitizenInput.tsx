@@ -9,6 +9,7 @@ interface CitizenInputProps {
   onLanguageChange: (lang: 'hi' | 'mr' | 'en') => void;
   prefilledProfile?: Partial<UserProfile> | null;
   isSignedIn?: boolean;
+  onOpenVoiceCopilot?: () => void;
 }
 
 const SAMPLES = [
@@ -49,6 +50,7 @@ export const CitizenInput: React.FC<CitizenInputProps> = ({
   onLanguageChange,
   prefilledProfile,
   isSignedIn,
+  onOpenVoiceCopilot,
 }) => {
   const [queryText, setQueryText] = useState<string>(SAMPLES[0].text);
   const [isListening, setIsListening] = useState<boolean>(false);
@@ -268,9 +270,22 @@ export const CitizenInput: React.FC<CitizenInputProps> = ({
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-              <span className="text-xs text-slate-500">
-                🎙️ Supports real-time speech-to-text in Hindi, Marathi &amp; English
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-500">
+                  🎙️ Real-time speech in Hindi, Marathi &amp; English
+                </span>
+                {onOpenVoiceCopilot && (
+                  <button
+                    type="button"
+                    onClick={onOpenVoiceCopilot}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 rounded-lg text-[11px] font-extrabold shadow-2xs transition cursor-pointer"
+                    title="Speak in Bhojpuri, Marwari, Maithili, etc."
+                  >
+                    <Mic className="w-3 h-3 text-purple-600 animate-pulse" />
+                    <span>Bhojpuri / Marwari Dialect Voice</span>
+                  </button>
+                )}
+              </div>
 
               <button
                 type="submit"

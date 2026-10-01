@@ -22,6 +22,11 @@ import { LIFE_EVENTS } from './src/data/lifeEventsData';
 import { generateProactiveWhatsAppMessage } from './src/services/proactiveEngine';
 import { optimizeHouseholdBenefits } from './src/services/householdOptimizer';
 import {
+  SupportedDialect,
+  extractDialectProfile,
+  generateDeterministicDialectResponse,
+} from './src/services/dialectService';
+import {
   AgentEvent,
   AgentResponse,
   SchemeEligibilityResult,
@@ -468,6 +473,55 @@ Keep it conversational yet official, matching Jan Seva / Digital India civic ton
   } catch (err: any) {
     console.error('Proactive message generation error:', err);
     return res.status(500).json({ error: err.message || 'Failed to generate proactive message' });
+  }
+});
+
+// Vernacular Dialect Voice Chat & Barge-in Copilot
+app.post('/api/agent/dialect-voice-chat', async (req: Request, res: Response) => {
+  try {
+    const { dialect = 'bhojpuri', queryText = '', userProfile } = req.body;
+    const d = (dialect || 'bhojpuri') as SupportedDialect;
+    const profile = normalizeProfile(userProfile || extractDialectProfile(queryText, d));
+
+    const fallback = generateDeterministicDialectResponse(queryText, d, profile);
+
+    const prompt = `You are SchemeSetu Bharat, an empathetic, authoritative Jan Seva Kendra civic copilot speaking fluently in the Indian regional dialect: ${d.toUpperCase()} (using Devanagari script).
+
+Citizen Query: "${queryText}"
+Citizen Profile:
+- Name: ${profile.name || 'Citizen'}
+- State: ${profile.state}
+- Occupation: ${profile.occupation}
+- Landholding: ${profile.land_acres} acres (${profile.land_hectares} ha)
+- Income: ₹${profile.annual_income_inr}
+- Housing: ${profile.housing_type}
+
+Statutory Grounding (DO NOT INVENT SCHEMES OR CRITERIA):
+- Eligible schemes for this profile: ${fallback.detectedSchemes.join(', ')}
+- PM-KISAN: ₹6,000/yr for small/marginal farmers
+- Kisan Credit Card (KCC): Up to ₹3,00,000 credit limit at 4% subsidized interest
+- Ayushman Bharat (PM-JAY): ₹5,00,000 cashless secondary/tertiary hospitalization
+- PMAY-G: ₹1,20,000 grant if living in kutcha house
+
+Instructions:
+1. Respond ENTIRELY in authentic ${d} dialect in Devanagari script (e.g. if Bhojpuri use 'रउआ', 'हमार', 'बा', 'मिली'; if Marwari use 'थारो', 'म्हारो', 'घणी', 'मिलेला'; if Maithili use 'अहाँक', 'हमर', 'अछि'; if Marathi use 'आपल्याला', 'मिळेल').
+2. Maintain warm, respectful civic tone ("भैया / जी / सा").
+3. Mention the exact monetary benefits (in ₹) and key required documents (Aadhaar, Land Record).
+4. Keep it concise (under 75 words) and suitable for clear voice text-to-speech output.`;
+
+    const aiResponse = await callGemini(prompt, 'You are SchemeSetu Bharat Jan Seva Kendra vernacular voice copilot.');
+    const responseText = aiResponse && aiResponse.trim().length > 10 ? aiResponse.trim() : fallback.responseText;
+
+    return res.json({
+      recognizedText: queryText,
+      dialectResponseText: responseText,
+      dialect: d,
+      detectedSchemes: fallback.detectedSchemes,
+      userProfileExtracted: profile,
+    });
+  } catch (error: any) {
+    console.error('Dialect voice chat error:', error);
+    return res.status(500).json({ error: error.message || 'Error processing dialect voice' });
   }
 });
 

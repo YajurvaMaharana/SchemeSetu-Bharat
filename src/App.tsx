@@ -19,6 +19,7 @@ import { ProactiveWhatsAppModal } from './components/ProactiveWhatsAppModal';
 import { AutomatedPortalFilingModal } from './components/AutomatedPortalFilingModal';
 import { CscAppointmentModal } from './components/CscAppointmentModal';
 import { FamilyBenefitDashboard } from './components/FamilyBenefitDashboard';
+import { VernacularVoiceCopilotModal } from './components/VernacularVoiceCopilotModal';
 import { AgentEvent, AgentResponse, UserProfile, Scheme, CscCenter, CscAppointment } from './types/agent';
 import { AuthState, AuthUser } from './types/auth';
 import { SupportedLanguage, TRANSLATIONS } from './data/translations';
@@ -98,6 +99,7 @@ export const App: React.FC = () => {
   const [portalFilingScheme, setPortalFilingScheme] = useState<Scheme | null>(null);
   const [selectedCenterForAppointment, setSelectedCenterForAppointment] = useState<CscCenter | null>(null);
   const [activeDiscoveryMode, setActiveDiscoveryMode] = useState<'individual' | 'family'>('individual');
+  const [isVoiceCopilotOpen, setIsVoiceCopilotOpen] = useState<boolean>(false);
 
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
 
@@ -482,6 +484,7 @@ export const App: React.FC = () => {
         onOpenDocuments={() => setIsDocumentsModalOpen(true)}
         onOpenProactive={() => setIsProactiveModalOpen(true)}
         onOpenFamilyDashboard={() => setActiveDiscoveryMode('family')}
+        onOpenVoiceCopilot={() => setIsVoiceCopilotOpen(true)}
         isAuthRoute={currentRoute === '#/signin' || currentRoute === '#/signup' || currentRoute === '#/profile-setup'}
       />
 
@@ -654,6 +657,7 @@ export const App: React.FC = () => {
                     onLanguageChange={handleLanguageChange}
                     prefilledProfile={authState.user?.profile}
                     isSignedIn={authState.status === 'signedIn'}
+                    onOpenVoiceCopilot={() => setIsVoiceCopilotOpen(true)}
                   />
                 </div>
                 <div className="lg:col-span-6">
@@ -823,6 +827,16 @@ export const App: React.FC = () => {
         userProfile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
         onBookingConfirmed={(appt) => {
           showToast(`Appointment booked! Token: ${appt.tokenNumber} (${appt.appointmentTimeSlot})`);
+        }}
+      />
+
+      {/* Vernacular Dialect Voice Copilot (Bhojpuri, Marwari, Maithili, etc.) */}
+      <VernacularVoiceCopilotModal
+        isOpen={isVoiceCopilotOpen}
+        onClose={() => setIsVoiceCopilotOpen(false)}
+        onApplyProfileToDiscovery={(prof) => {
+          runAgentWorkflow(prof);
+          showToast(`Discovery initialized from ${prof.language === 'mr' ? 'Marathi' : 'Vernacular'} voice input!`);
         }}
       />
     </div>
