@@ -80,7 +80,7 @@ def heuristic_extract_profile(text: str) -> UserProfile:
 
     # 2. Age
     age_match = re.search(
-        r"(?:age|उम्र|आयु|वर्ष|साल|वय)\s*[:=-]?\s*(\d{1,2})|(\d{1,2})\s*(?:साल|saal|year|years|वर्ष|वर्षे)",
+        r"(?:age|उम्र|आयु|वर्ष|साल|वय)\s*[:=-]?\s*(\d{1,2})|(\d{1,2})\s*[-]?\s*(?:साल|saal|year|years|yr|yrs|वर्ष|वर्षे)",
         t,
     )
     if age_match:

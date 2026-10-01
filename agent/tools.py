@@ -130,28 +130,103 @@ def build_application_payload(scheme_id: str, profile: Dict[str, Any]) -> Dict[s
         profile: The citizen profile dictionary.
         
     Returns:
-        A dictionary representing the pre-filed application payload with simulated=True.
+        A dictionary matching the standardized application payload schema:
+        - scheme_id: str
+        - scheme_name: str
+        - portal_url: str
+        - applicant: dict with relevant demographic and socio-economic fields
+        - required_documents: list of required document names
+        - documents_checklist: list of dicts with {"document": str, "status": "TO_COLLECT"}
+        - submission_mode: derived from action_type
+        - status: "DRAFT_READY_FOR_SUBMISSION"
+        - simulated: True
     """
-    import random
-    from datetime import datetime, timezone
+    schemes = rules.load_schemes()
+    scheme = next(
+        (
+            s for s in schemes
+            if s.get("scheme_id") == scheme_id or s.get("id") == scheme_id
+        ),
+        {},
+    )
+    scheme_name = scheme.get("name") or scheme.get("short_name") or scheme_id
+    portal_url = scheme.get("direct_portal_url") or scheme.get("portal_url") or "https://india.gov.in"
+    required_docs = list(scheme.get("required_documents") or ["Aadhaar Card"])
+    submission_mode = scheme.get("action_type") or scheme.get("application_mode") or "ONLINE_DIRECT_OR_CSC"
 
-    now = datetime.now(timezone.utc)
-    clean_id = scheme_id.replace(" ", "_").upper()
-    sub_id = f"APP-{clean_id[:12]}-{now.strftime('%Y%m%d')}-{random.randint(100000, 999999)}"
-    ack_code = f"ACK-{random.randint(1000, 9999)}-{random.randint(10, 99)}"
+    # Identify whether landholding is relevant for this specific scheme
+    is_farm_scheme = False
+    sid_lower = scheme_id.lower()
+    if any(k in sid_lower for k in ["kisan", "kcc", "farmer", "krishi", "kmy"]):
+        is_farm_scheme = True
+    elif "occupations" in scheme.get("eligibility", {}):
+        occs = [o.lower() for o in scheme["eligibility"]["occupations"]]
+        if "farmer" in occs or "agricultural_worker" in occs:
+            is_farm_scheme = True
 
-    name = profile.get("name") or "Citizen Applicant"
+    applicant: Dict[str, Any] = {
+        "name": profile.get("name"),
+        "age": profile.get("age"),
+        "gender": profile.get("gender"),
+        "district": profile.get("district"),
+        "state": profile.get("state"),
+        "pin_code": profile.get("pin_code") or profile.get("pincode"),
+        "occupation": profile.get("occupation"),
+        "annual_income_inr": profile.get("annual_income_inr"),
+    }
+
+    # Include land only for farm/landholding schemes
+    if is_farm_scheme:
+        applicant["land_hectares"] = profile.get("land_hectares")
+
+    # Include caste_category if present
+    caste = profile.get("caste_category") or profile.get("social_category")
+    if caste:
+        applicant["caste_category"] = caste
+
+    checklist = [{"document": doc, "status": "TO_COLLECT"} for doc in required_docs]
 
     return {
-        "simulated": True,
-        "submission_id": sub_id,
-        "acknowledgement_number": ack_code,
         "scheme_id": scheme_id,
-        "status": "PRE_FILED",
-        "applicant_name": name,
-        "timestamp": now.isoformat(),
-        "portal_endpoint": f"https://api.gov.in/v2/welfare/{scheme_id}/apply",
-        "message": f"Pre-filed application payload generated for {scheme_id}.",
+        "scheme_name": scheme_name,
+        "portal_url": portal_url,
+        "applicant": applicant,
+        "required_documents": required_docs,
+        "documents_checklist": checklist,
+        "submission_mode": submission_mode,
+        "status": "DRAFT_READY_FOR_SUBMISSION",
+        "simulated": True,
+    }
+
+
+def mock_portal_submit(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Submit pre-filed application payload to government portal API (simulated).
+    
+    Args:
+        payload: Application payload dictionary from build_application_payload.
+        
+    Returns:
+        Dictionary with simulated acknowledgement ID and disclaimer.
+    """
+    import random
+    import re
+    from datetime import datetime, timezone
+
+    scheme_id = payload.get("scheme_id", "SCHEME")
+    # Clean scheme prefix for acknowledgement ID
+    clean_prefix = re.sub(r"[^A-Za-z0-9]", "", scheme_id.replace("_2026", "").replace("_", "")).upper()
+    if not clean_prefix or len(clean_prefix) < 2:
+        clean_prefix = "GOI"
+    prefix = clean_prefix[:8]
+
+    ymd = datetime.now(timezone.utc).strftime("%Y%m%d")
+    rand4 = f"{random.randint(1000, 9999)}"
+    ack_id = f"SIM-{prefix}-{ymd}-{rand4}"
+
+    return {
+        "acknowledgement_id": ack_id,
+        "message": "Simulated submission. No real application was filed.",
+        "simulated": True,
     }
 
 

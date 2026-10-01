@@ -1,7 +1,8 @@
 """CLI runner for SchemeSetu Bharat agent execution.
 
-Runs the agent pipeline on Ramesh's golden profile query with live terminal telemetry
-and prints the full event sequence and the generated Action Pack PDF path.
+Demonstrates multilingual welfare discovery across Hindi (hi), Marathi (mr), and English (en),
+printing full live telemetry events, application pre-filing, Action Pack PDF paths,
+and the three localized citizen explanations.
 """
 
 from datetime import datetime
@@ -43,29 +44,26 @@ def cli_event_handler(event: AgentEvent) -> None:
     print(f"[{ts}] {icon} [{kind_upper}]{sim_badge} {event.title}: {event.detail}")
 
 
-def main() -> None:
-    ramesh_sentence = (
-        "नमस्ते, मैं रमेश हूँ, 40 साल का किसान, नासिक महाराष्ट्र से। "
-        "मेरी सालाना आय 1.5 लाख है और 1.5 एकड़ जमीन है। पक्का मकान है।"
-    )
-
+def run_single_language(sentence: str, lang_code: str, lang_name: str, verbose_events: bool = True) -> AgentResult:
+    """Run the agent for a specific language query and display results."""
     print("=" * 80)
-    print("🏛️  SCHEMESETU BHARAT — AUTONOMOUS WELFARE AGENT CLI")
+    print(f"🏛️  SCHEMESETU BHARAT — {lang_name.upper()} ({lang_code}) DISCOVERY")
     print("=" * 80)
-    print(f"Input Query:\n\"{ramesh_sentence}\"\n")
+    print(f"Query: \"{sentence}\"\n")
     print("-" * 80)
     print("LIVE AGENT TELEMETRY EVENTS:")
     print("-" * 80)
 
-    # Execute agent with live event streaming
+    cb = cli_event_handler if verbose_events else None
     result: AgentResult = run_agent(
-        user_text=ramesh_sentence,
-        language="hi",
-        on_event=cli_event_handler,
+        user_text=sentence,
+        language=lang_code,
+        on_event=cb,
+        auto_submit=True,
     )
 
     print("-" * 80)
-    print("EXECUTIVE SUMMARY & DELIVERABLES:")
+    print(f"EXECUTIVE SUMMARY ({lang_name}):")
     print("-" * 80)
 
     prof = result.profile
@@ -98,18 +96,51 @@ def main() -> None:
     if result.application_payloads:
         print("\nPre-Filed Application Payloads [Simulated]:")
         for sid, app in result.application_payloads.items():
-            print(f"  • {sid}: Ref {app.get('submission_id')} (Ack: {app.get('acknowledgement_number')})")
+            ack = app.get("submission_acknowledgement", {}).get("acknowledgement_id") or app.get("acknowledgement_number", "ACK-PENDING")
+            print(f"  • {sid}: Ref {app.get('submission_id', sid)} (Ack ID: {ack})")
 
-    print("\nCitizen Action Pack PDF:")
     if result.pdf_path and os.path.exists(result.pdf_path):
         size_bytes = os.path.getsize(result.pdf_path)
-        print(f"  • File Path   : {result.pdf_path} ({size_bytes:,} bytes)")
-    else:
-        print(f"  • File Path   : {result.pdf_path} (File not found on disk)")
+        print(f"\nCitizen Action Pack PDF:\n  • File Path   : {result.pdf_path} ({size_bytes:,} bytes)")
 
-    print("\nVernacular Explanation:")
+    print(f"\nVernacular Explanation ({lang_name}):")
     print(f"  \"{result.explanation}\"")
-    print("=" * 80)
+    print("=" * 80 + "\n")
+
+    return result
+
+
+def main() -> None:
+    test_cases = [
+        (
+            "नमस्ते, मैं रमेश हूँ, 40 साल का किसान, नासिक महाराष्ट्र से। मेरी सालाना आय 1.5 लाख है और 1.5 एकड़ जमीन है। पक्का मकान है।",
+            "hi",
+            "Hindi (हिन्दी)",
+        ),
+        (
+            "नमस्कार, मी रमेश आहे, ४० वर्षांचा शेतकरी, नाशिक महाराष्ट्रातून. माझे वार्षिक उत्पन्न १.५ लाख रुपये असून १.५ एकर शेतजमीन आहे. पक्के घर आहे.",
+            "mr",
+            "Marathi (मराठी)",
+        ),
+        (
+            "Hello, I am Ramesh, a 40-year-old farmer from Nashik, Maharashtra. My annual income is 1.5 lakh INR and I own 1.5 acres of agricultural land with a pucca house.",
+            "en",
+            "English",
+        ),
+    ]
+
+    results = []
+    for sentence, lang_code, lang_name in test_cases:
+        res = run_single_language(sentence, lang_code, lang_name, verbose_events=True)
+        results.append((lang_name, res.explanation))
+
+    print("\n" + "#" * 80)
+    print("📋 SUMMARY OF THE THREE CITIZEN EXPLANATIONS (HI, MR, EN):")
+    print("#" * 80)
+    for lang_name, exp in results:
+        print(f"\n[{lang_name}]:")
+        print(f"\"{exp}\"")
+    print("\n" + "#" * 80)
 
 
 if __name__ == "__main__":

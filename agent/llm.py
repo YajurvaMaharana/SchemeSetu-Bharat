@@ -19,6 +19,7 @@ from google.genai import types
 
 from agent.models import CitizenProfile, SchemeMatch
 from agent.profile_extractor import heuristic_extract_profile
+from agent.prompts import SYSTEM_PROMPTS
 
 # Load environment variables
 load_dotenv()
@@ -94,10 +95,11 @@ def call_gemini(
             return response
         except Exception as e:
             last_error = e
-            logger.warning(
-                f"Gemini call attempt {attempt}/{max_retries} failed with error: {e}. "
-                f"Backing off for {backoff_secs}s..."
-            )
+            err_str = str(e)
+            logger.warning(f"Gemini call attempt {attempt}/{max_retries} failed with error: {e}.")
+            if "API_KEY_INVALID" in err_str or "API key not valid" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                logger.info("Non-retryable API error detected; skipping further retries.")
+                break
             if attempt < max_retries:
                 time.sleep(backoff_secs * attempt)
 
@@ -237,27 +239,20 @@ def explain_results(result_summary: Dict[str, Any], language: str = "hi") -> str
     Language options: Hindi in Devanagari, Marathi in Devanagari, or simple English.
     Constraint: Max 120 words, no jargon, names schemes, yearly benefit, and first next step.
     """
-    lang_name = "Hindi in Devanagari script"
-    if language.lower() in ("mr", "marathi"):
-        lang_name = "Marathi in Devanagari script"
-    elif language.lower() in ("en", "english"):
-        lang_name = "simple English"
+    lang_key = "mr" if language.lower() in ("mr", "marathi") else ("en" if language.lower() in ("en", "english") else "hi")
+    system_instruction = SYSTEM_PROMPTS.get(lang_key, SYSTEM_PROMPTS["hi"])
 
     prompt = (
-        f"You are SchemeSetu Bharat, a friendly and empathetic government welfare guide.\n"
-        f"Write a warm, plain citizen explanation in {lang_name} at about class-6 reading level.\n"
-        f"STRICT RULES:\n"
-        f"- Maximum 120 words.\n"
-        f"- Absolutely no administrative jargon.\n"
-        f"- Clearly name the eligible welfare schemes and their total yearly monetary benefit in Rupees (Rs / ₹).\n"
-        f"- State the single immediate first next step (e.g. visit nearest CSC center with Aadhaar card and land record).\n\n"
-        f"Summary of Results:\n"
-        f"{json.dumps(result_summary, ensure_ascii=False, indent=2)}\n"
+        f"{system_instruction}\n\n"
+        f"Summary of Welfare Discovery Results:\n"
+        f"{json.dumps(result_summary, ensure_ascii=False, indent=2)}\n\n"
+        f"Produce the warm, empathetic citizen explanation in the required language following the instructions above."
     )
 
     try:
         resp = call_gemini(
             prompt=prompt,
+            system_instruction=system_instruction,
             temperature=0.2,
             timeout_secs=20.0,
             max_retries=2,
@@ -274,21 +269,22 @@ def explain_results(result_summary: Dict[str, Any], language: str = "hi") -> str
         s if isinstance(s, str) else (s.get("name") or s.get("scheme_id", "") or str(s))
         for s in eligible_schemes[:3]
     ]
-    schemes_str = ", ".join(scheme_names) if scheme_names else "सरकारी योजनाएं"
-
     if language.lower() in ("mr", "marathi"):
+        schemes_str = ", ".join(scheme_names) if scheme_names else "शासकीय योजना"
         return (
             f"नमस्कार! आपल्या माहितीनुसार आपण {schemes_str} या योजनांसाठी पात्र आहात. "
             f"याद्वारे आपल्याला दरवर्षी एकूण ₹{total_benefit:,} चा लाभ मिळू शकतो. "
             f"अर्ज करण्यासाठी आपले आधार कार्ड आणि जमिनीचा दाखला घेऊन जवळच्या सीएससी केंद्रावर (CSC Center) भेट द्या."
         )
     elif language.lower() in ("en", "english"):
+        schemes_str = ", ".join(scheme_names) if scheme_names else "government welfare schemes"
         return (
             f"Hello! Based on your details, you qualify for {schemes_str}. "
             f"You can receive total annual benefits of ₹{total_benefit:,}. "
             f"To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records."
         )
     else:
+        schemes_str = ", ".join(scheme_names) if scheme_names else "सरकारी योजनाएं"
         return (
             f"नमस्ते! आपकी जानकारी के अनुसार आप {schemes_str} के लिए पूरी तरह पात्र हैं। "
             f"इन योजनाओं से आपको हर साल कुल ₹{total_benefit:,} का आर्थिक लाभ मिल सकता है। "

@@ -21,30 +21,50 @@ from google.genai import types
 
 from agent import llm, rules, tools
 from agent.models import AgentEvent, AgentResult, CitizenProfile, SchemeMatch, UserProfile
+from agent.prompts import SYSTEM_PROMPTS
 
 load_dotenv()
 logger = logging.getLogger(__name__)
 
-SYSTEM_AGENT_PROMPT = (
-    "You are SchemeSetu, an autonomous welfare discovery and application agent for Indian citizens. "
-    "Your objective is to help the citizen discover all government welfare schemes they qualify for, "
-    "calculate their total monetary benefits, locate the nearest CSC center for biometric verification, "
-    "pre-file application payloads for each ELIGIBLE scheme, and generate an Action Pack PDF.\n\n"
-    "You must execute these tools in order:\n"
-    "1. evaluate_eligibility: Evaluate citizen eligibility against all government welfare schemes.\n"
-    "2. calc_benefits: Calculate total annual monetary benefit from eligible schemes.\n"
-    "3. find_csc: Discover the nearest CSC Digital Seva Kendra desk for biometric verification.\n"
-    "4. build_application_payload: Build pre-filed application payload for each ELIGIBLE scheme.\n"
-    "5. make_pdf: Generate the Action Pack PDF summary for the citizen.\n"
-    "6. Once all tools have been invoked, stop and respond with 'DONE'.\n\n"
-    "CRITICAL RULE: Never invent eligibility verdicts. The deterministic output of evaluate_eligibility is the sole truth."
-)
+
+def get_agent_system_prompt(language: str = "hi", auto_submit: bool = False) -> str:
+    """Generate dynamic system prompt with vernacular framing and optional auto-submit instructions."""
+    lang_key = "mr" if language.lower() in ("mr", "marathi") else ("en" if language.lower() in ("en", "english") else "hi")
+    vernacular_intro = SYSTEM_PROMPTS.get(lang_key, SYSTEM_PROMPTS["hi"])
+
+    steps = [
+        "1. evaluate_eligibility: Evaluate citizen eligibility against all government welfare schemes.",
+        "2. calc_benefits: Calculate total annual monetary benefit from eligible schemes.",
+        "3. find_csc: Discover the nearest CSC Digital Seva Kendra desk for biometric verification.",
+        "4. build_application_payload: Build pre-filed application payload for each ELIGIBLE scheme.",
+    ]
+    if auto_submit:
+        steps.append("5. mock_portal_submit: Submit pre-filed application payload directly to official portal API.")
+        steps.append("6. make_pdf: Generate the Action Pack PDF summary for the citizen.")
+        steps.append("7. Once all tools have completed, stop and respond with 'DONE'.")
+    else:
+        steps.append("5. make_pdf: Generate the Action Pack PDF summary for the citizen.")
+        steps.append("6. Once all tools have completed, stop and respond with 'DONE'.")
+
+    steps_text = "\n".join(steps)
+
+    return (
+        f"{vernacular_intro}\n\n"
+        f"You are SchemeSetu, an autonomous welfare discovery and application agent for Indian citizens. "
+        f"Your objective is to help the citizen discover all government welfare schemes they qualify for, "
+        f"calculate their total monetary benefits, locate the nearest CSC center for biometric verification, "
+        f"build application payloads for each ELIGIBLE scheme, and generate an Action Pack PDF.\n\n"
+        f"You must execute these tools in order:\n"
+        f"{steps_text}\n\n"
+        f"CRITICAL RULE: Never invent eligibility verdicts. The deterministic output of evaluate_eligibility is the sole truth."
+    )
 
 
 def run_agent(
     user_text: Union[str, CitizenProfile, UserProfile],
     language: str = "hi",
     on_event: Optional[Callable[[AgentEvent], None]] = None,
+    auto_submit: bool = False,
     **kwargs: Any,
 ) -> AgentResult:
     """Run the SchemeSetu welfare agent on a citizen query or profile.
@@ -53,6 +73,7 @@ def run_agent(
         user_text: Citizen natural language text query or already instantiated profile.
         language: Language code for communication ('hi', 'mr', 'en'). Defaults to 'hi'.
         on_event: Optional callback receiving live AgentEvent telemetry.
+        auto_submit: If True, automatically invokes mock_portal_submit for eligible schemes. Defaults to False.
         
     Returns:
         AgentResult object containing matched schemes, benefits, CSC desk, PDF path, and event history.
@@ -117,6 +138,7 @@ def run_agent(
     total_benefit: int = 0
     csc_data: Optional[Dict[str, Any]] = None
     application_payloads: Dict[str, Dict[str, Any]] = {}
+    last_mock_submission: Optional[Dict[str, Any]] = None
     pdf_path: Optional[str] = None
     used_fallback: bool = False
 
@@ -138,6 +160,7 @@ def run_agent(
                 "find_csc": tools.find_csc,
                 "build_application_payload": tools.build_application_payload,
                 "make_pdf": tools.make_pdf,
+                "mock_portal_submit": tools.mock_portal_submit,
             }
 
             tool_list = [
@@ -147,9 +170,13 @@ def run_agent(
                 tools.build_application_payload,
                 tools.make_pdf,
             ]
+            if auto_submit:
+                tool_list.append(tools.mock_portal_submit)
+
+            agent_system_prompt = get_agent_system_prompt(language=language, auto_submit=auto_submit)
 
             config = types.GenerateContentConfig(
-                system_instruction=SYSTEM_AGENT_PROMPT,
+                system_instruction=agent_system_prompt,
                 tools=tool_list,
                 automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
                 temperature=0.0,
@@ -211,7 +238,11 @@ def run_agent(
                     elif tool_name == "build_application_payload":
                         sid = tool_args.get("scheme_id", "SCHEME")
                         application_payloads[sid] = res_payload
-                        summary = f"Application payload pre-filed for {sid} (Submission ID: {res_payload.get('submission_id')})"
+                        summary = f"Application payload pre-filed for {sid} (Status: {res_payload.get('status')})"
+                        is_sim = True
+                    elif tool_name == "mock_portal_submit":
+                        last_mock_submission = res_payload
+                        summary = f"Pre-filed to portal [Simulated]: Ack {res_payload.get('acknowledgement_id')}"
                         is_sim = True
                     elif tool_name == "make_pdf":
                         pdf_path = res_payload.get("pdf_path")
@@ -284,9 +315,29 @@ def run_agent(
                 emit(
                     "tool_result",
                     "build_application_payload",
-                    f"Pre-filed application ready: ID {payload.get('submission_id')}",
+                    f"Pre-filed application ready: ID {payload.get('submission_id', payload.get('scheme_id'))}",
                     simulated=True,
                     data=payload,
+                )
+
+        # Tool 4b: mock_portal_submit for each application payload if auto_submit is True
+        if auto_submit:
+            for sid, payload in list(application_payloads.items()):
+                emit(
+                    "thought",
+                    "Submitting Application",
+                    f"Auto-submitting pre-filed application for {payload.get('scheme_name', sid)} to government portal API.",
+                )
+                emit("tool_call", "mock_portal_submit", f"Submitting payload for {sid}")
+                sub_res = tools.mock_portal_submit(payload)
+                payload["submission_acknowledgement"] = sub_res
+                last_mock_submission = sub_res
+                emit(
+                    "tool_result",
+                    "mock_portal_submit",
+                    f"Submitted [Simulated] Ack ID: {sub_res.get('acknowledgement_id')}",
+                    simulated=True,
+                    data=sub_res,
                 )
 
         # Tool 5: make_pdf
@@ -331,6 +382,7 @@ def run_agent(
         events=events,
         used_fallback=used_fallback,
         explanation=explanation,
+        mock_submission=last_mock_submission,
     )
 
     # Save last successful result for demo safety cache
