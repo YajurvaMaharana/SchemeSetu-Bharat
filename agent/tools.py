@@ -75,10 +75,10 @@ def calc_benefits(matches: List[Dict[str, Any]]) -> Dict[str, int]:
     for m in matches:
         if isinstance(m, dict):
             status = m.get("status")
-            if status == "ELIGIBLE":
+            if status in ("ELIGIBLE", "LIKELY"):
                 amt = int(m.get("annual_benefit_inr") or m.get("benefit_amount_inr") or 0)
                 total += amt
-        elif hasattr(m, "status") and m.status == "ELIGIBLE":
+        elif hasattr(m, "status") and m.status in ("ELIGIBLE", "LIKELY"):
             amt = int(getattr(m, "annual_benefit_inr", 0) or getattr(m, "benefit_amount_inr", 0))
             total += amt
     return {"total_annual_benefit_inr": total}

@@ -1,113 +1,45 @@
 {
   "profile": {
-    "name": null,
-    "age": 40,
-    "gender": null,
-    "occupation": "Farmer",
-    "state": "Maharashtra",
-    "district": "Nashik",
+    "name": "सुनीता",
+    "age": 35,
+    "gender": "female",
+    "occupation": null,
+    "state": "Bihar",
+    "district": null,
     "pin_code": null,
-    "annual_income_inr": 150000,
-    "land_hectares": 0.607,
+    "annual_income_inr": 40000,
+    "land_hectares": null,
     "caste_category": null,
-    "is_bpl": null,
-    "has_pucca_house": true,
-    "has_lpg_connection": null,
+    "is_bpl": true,
+    "has_pucca_house": false,
+    "has_lpg_connection": false,
     "education_level": null,
-    "language": "en",
+    "language": "hi",
     "pincode": null,
-    "land_acres": 1.5,
+    "land_acres": null,
     "social_category": null,
-    "housing_type": "Pucca",
-    "has_land_ownership": true,
+    "housing_type": "Kutcha",
+    "has_land_ownership": null,
     "is_taxpayer": false,
     "is_govt_employee": false,
     "has_pension_above_10k": false,
     "is_shg_member": false,
     "is_student": false,
     "special_conditions": [],
-    "raw_query": "Hello, I am Ramesh, a 40-year-old farmer from Nashik, Maharashtra. My annual income is 1.5 lakh INR and I own 1.5 acres of agricultural land with a pucca house.",
-    "preferred_language": "English"
+    "raw_query": "मैं सुनीता हूँ, बिहार से। उम्र 35 वर्ष। बीपीएल परिवार, कच्चा घर, और हमारे पास कोई एलपीजी गैस कनेक्शन नहीं है। आय 40,000 रुपये है।",
+    "preferred_language": "Hindi"
   },
   "matches": [
     {
-      "scheme_id": "KCC_2026",
-      "name": "Kisan Credit Card (KCC) Scheme",
-      "status": "ELIGIBLE",
-      "annual_benefit_inr": 300000,
-      "reasons": [
-        "Occupation 'Farmer' matches scheme requirement.",
-        "Age 40 is within eligible range (18 to 75 years)."
-      ],
-      "missing_info": [],
-      "required_documents": [
-        "Aadhaar Card and PAN Card",
-        "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
-        "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
-        "Passport Size Photographs"
-      ],
-      "portal_url": "https://agricoop.nic.in",
-      "friction_score": 2,
-      "priority_rank": 1,
-      "scheme_name": "Kisan Credit Card (KCC) Scheme",
-      "scheme_name_hi": null,
-      "category": null,
-      "benefit_amount_inr": 300000,
-      "benefit_description": null,
-      "benefit_frequency": "Annual",
-      "passed_criteria": [],
-      "failed_criteria": [],
-      "edge_case_flags": [],
-      "llm_edge_review": null,
-      "friendly_explanation": null,
-      "application_mode": null
-    },
-    {
-      "scheme_id": "PM_KISAN_2026",
-      "name": "Pradhan Mantri Kisan Samman Nidhi",
-      "status": "ELIGIBLE",
-      "annual_benefit_inr": 6000,
-      "reasons": [
-        "Occupation 'Farmer' matches scheme requirement.",
-        "Age 40 meets minimum age limit of 18 years.",
-        "Land 0.61 ha is cultivable landholding."
-      ],
-      "missing_info": [],
-      "required_documents": [
-        "Aadhaar Card",
-        "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
-        "Bank Account Passbook (Aadhaar Seeded)",
-        "Active Mobile Number"
-      ],
-      "portal_url": "https://pmkisan.gov.in",
-      "friction_score": 1,
-      "priority_rank": 2,
-      "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
-      "scheme_name_hi": null,
-      "category": null,
-      "benefit_amount_inr": 6000,
-      "benefit_description": null,
-      "benefit_frequency": "Annual",
-      "passed_criteria": [],
-      "failed_criteria": [],
-      "edge_case_flags": [],
-      "llm_edge_review": null,
-      "friendly_explanation": null,
-      "application_mode": null
-    },
-    {
       "scheme_id": "PM_JAY_AYUSHMAN_2026",
       "name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
-      "status": "NEEDS_INFO",
+      "status": "ELIGIBLE",
       "annual_benefit_inr": 500000,
       "reasons": [
-        "Income Rs 150,000 is below the cap of Rs 250,000.",
-        "Verification required for: BPL / Ration Card Status.",
-        "Administrative review note: Administrative review needed for BPL / Ration Card Status."
+        "Income Rs 40,000 is below the cap of Rs 250,000.",
+        "BPL / SECC status requirement satisfied."
       ],
-      "missing_info": [
-        "BPL / Ration Card Status"
-      ],
+      "missing_info": [],
       "required_documents": [
         "Aadhaar Card",
         "Ration Card (BPL / Antyodaya / Priority Household) or PM-JAY Family ID",
@@ -116,7 +48,7 @@
       ],
       "portal_url": "https://beneficiary.nha.gov.in",
       "friction_score": 2,
-      "priority_rank": 3,
+      "priority_rank": 1,
       "scheme_name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
       "scheme_name_hi": null,
       "category": null,
@@ -126,57 +58,19 @@
       "passed_criteria": [],
       "failed_criteria": [],
       "edge_case_flags": [],
-      "llm_edge_review": "Administrative review needed for BPL / Ration Card Status.",
-      "friendly_explanation": null,
-      "application_mode": null
-    },
-    {
-      "scheme_id": "PM_UJJWALA_2_2026",
-      "name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
-      "status": "NEEDS_INFO",
-      "annual_benefit_inr": 3600,
-      "reasons": [
-        "Age 40 meets minimum age limit of 18 years.",
-        "Verification required for: Gender, BPL / Ration Card Status, Existing LPG Connection Status.",
-        "Administrative review note: Administrative review needed for Gender, BPL / Ration Card Status, Existing LPG Connection Status."
-      ],
-      "missing_info": [
-        "Gender",
-        "BPL / Ration Card Status",
-        "Existing LPG Connection Status"
-      ],
-      "required_documents": [
-        "Aadhaar Card of the adult woman applicant",
-        "Aadhaar Cards of all adult family members residing together",
-        "Ration Card / 14-Point Poor Household Declaration Certificate",
-        "Aadhaar-Linked Bank Account Passbook",
-        "Proof of Address / Migrant Self-Declaration Certificate"
-      ],
-      "portal_url": "https://www.pmuy.gov.in",
-      "friction_score": 2,
-      "priority_rank": 4,
-      "scheme_name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
-      "scheme_name_hi": null,
-      "category": null,
-      "benefit_amount_inr": 3600,
-      "benefit_description": null,
-      "benefit_frequency": "Annual",
-      "passed_criteria": [],
-      "failed_criteria": [],
-      "edge_case_flags": [],
-      "llm_edge_review": "Administrative review needed for Gender, BPL / Ration Card Status, Existing LPG Connection Status.",
+      "llm_edge_review": null,
       "friendly_explanation": null,
       "application_mode": null
     },
     {
       "scheme_id": "PMAY_G_2026",
       "name": "Pradhan Mantri Awaas Yojana - Gramin",
-      "status": "NOT_ELIGIBLE",
+      "status": "ELIGIBLE",
       "annual_benefit_inr": 120000,
       "reasons": [
-        "Scheme strictly requires Kutcha or homeless dwelling; applicant owns a Pucca house.",
-        "Age 40 meets minimum age limit of 18 years.",
-        "Income Rs 150,000 is below the cap of Rs 180,000."
+        "Age 35 meets minimum age limit of 18 years.",
+        "Income Rs 40,000 is below the cap of Rs 180,000.",
+        "No-pucca-house requirement verified."
       ],
       "missing_info": [],
       "required_documents": [
@@ -188,7 +82,7 @@
       ],
       "portal_url": "https://pmayg.nic.in",
       "friction_score": 4,
-      "priority_rank": null,
+      "priority_rank": 2,
       "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin",
       "scheme_name_hi": null,
       "category": null,
@@ -203,16 +97,88 @@
       "application_mode": null
     },
     {
-      "scheme_id": "NSP_POST_MATRIC_SC_2026",
-      "name": "Centrally Sponsored Post-Matric Scholarship Scheme for SC Students",
-      "status": "NOT_ELIGIBLE",
-      "annual_benefit_inr": 48000,
+      "scheme_id": "PM_UJJWALA_2_2026",
+      "name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
+      "status": "ELIGIBLE",
+      "annual_benefit_inr": 3600,
       "reasons": [
-        "Occupation 'Farmer' does not match required: student.",
-        "Age 40 exceeds maximum limit of 35 years.",
-        "Income Rs 150,000 is below the cap of Rs 250,000."
+        "Age 35 meets minimum age limit of 18 years.",
+        "Gender 'female' meets scheme requirement.",
+        "BPL / SECC status requirement satisfied.",
+        "Household has no existing LPG connection."
+      ],
+      "missing_info": [],
+      "required_documents": [
+        "Aadhaar Card of the adult woman applicant",
+        "Aadhaar Cards of all adult family members residing together",
+        "Ration Card / 14-Point Poor Household Declaration Certificate",
+        "Aadhaar-Linked Bank Account Passbook",
+        "Proof of Address / Migrant Self-Declaration Certificate"
+      ],
+      "portal_url": "https://www.pmuy.gov.in",
+      "friction_score": 2,
+      "priority_rank": 3,
+      "scheme_name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
+      "scheme_name_hi": null,
+      "category": null,
+      "benefit_amount_inr": 3600,
+      "benefit_description": null,
+      "benefit_frequency": "Annual",
+      "passed_criteria": [],
+      "failed_criteria": [],
+      "edge_case_flags": [],
+      "llm_edge_review": null,
+      "friendly_explanation": null,
+      "application_mode": null
+    },
+    {
+      "scheme_id": "KCC_2026",
+      "name": "Kisan Credit Card (KCC) Scheme",
+      "status": "NEEDS_INFO",
+      "annual_benefit_inr": 300000,
+      "reasons": [
+        "Age 35 is within eligible range (18 to 75 years).",
+        "Verification required for: Occupation.",
+        "Administrative review note: Administrative review needed for Occupation."
       ],
       "missing_info": [
+        "Occupation"
+      ],
+      "required_documents": [
+        "Aadhaar Card and PAN Card",
+        "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
+        "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
+        "Passport Size Photographs"
+      ],
+      "portal_url": "https://agricoop.nic.in",
+      "friction_score": 2,
+      "priority_rank": 4,
+      "scheme_name": "Kisan Credit Card (KCC) Scheme",
+      "scheme_name_hi": null,
+      "category": null,
+      "benefit_amount_inr": 300000,
+      "benefit_description": null,
+      "benefit_frequency": "Annual",
+      "passed_criteria": [],
+      "failed_criteria": [],
+      "edge_case_flags": [],
+      "llm_edge_review": "Administrative review needed for Occupation.",
+      "friendly_explanation": null,
+      "application_mode": null
+    },
+    {
+      "scheme_id": "NSP_POST_MATRIC_SC_2026",
+      "name": "Centrally Sponsored Post-Matric Scholarship Scheme for SC Students",
+      "status": "NEEDS_INFO",
+      "annual_benefit_inr": 48000,
+      "reasons": [
+        "Age 35 is within eligible range (15 to 35 years).",
+        "Income Rs 40,000 is below the cap of Rs 250,000.",
+        "Verification required for: Occupation, Caste Category, Education Level.",
+        "Administrative review note: Administrative review needed for Occupation, Caste Category, Education Level."
+      ],
+      "missing_info": [
+        "Occupation",
         "Caste Category",
         "Education Level"
       ],
@@ -226,7 +192,7 @@
       ],
       "portal_url": "https://scholarships.gov.in",
       "friction_score": 3,
-      "priority_rank": null,
+      "priority_rank": 5,
       "scheme_name": "Centrally Sponsored Post-Matric Scholarship Scheme for SC Students",
       "scheme_name_hi": null,
       "category": null,
@@ -236,100 +202,88 @@
       "passed_criteria": [],
       "failed_criteria": [],
       "edge_case_flags": [],
-      "llm_edge_review": null,
+      "llm_edge_review": "Administrative review needed for Occupation, Caste Category, Education Level.",
       "friendly_explanation": null,
       "application_mode": null
-    }
-  ],
-  "total_annual_benefit_inr": 306000,
-  "csc_center": {
-    "center_id": "CSC_MH_NSK_01",
-    "center_name": "Digital Seva Kendra Dindori",
-    "district": "Nashik",
-    "state": "Maharashtra",
-    "pin_code": "422202",
-    "address": "Opposite Gram Panchayat Office, Dindori, Dist. Nashik, Maharashtra - 422202",
-    "vle_name": "Sanjay Patil",
-    "contact_phone": "+91 98230 45678",
-    "operating_hours": "09:00 AM - 06:00 PM (Mon-Sat)",
-    "facilities": [
-      "Aadhaar Biometric e-KYC",
-      "7/12 Land Extract Print",
-      "PM-KISAN E-KYC",
-      "Ayushman PVC Card"
-    ],
-    "distance_km": 2.4,
-    "simulated": true
-  },
-  "application_payloads": {
-    "KCC_2026": {
-      "scheme_id": "KCC_2026",
-      "scheme_name": "Kisan Credit Card (KCC) Scheme",
-      "portal_url": "https://agricoop.nic.in",
-      "applicant": {
-        "name": null,
-        "age": 40,
-        "gender": null,
-        "district": "Nashik",
-        "state": "Maharashtra",
-        "pin_code": null,
-        "occupation": "Farmer",
-        "annual_income_inr": 150000,
-        "land_hectares": 0.607
-      },
-      "required_documents": [
-        "Aadhaar Card and PAN Card",
-        "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
-        "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
-        "Passport Size Photographs"
-      ],
-      "documents_checklist": [
-        {
-          "document": "Aadhaar Card and PAN Card",
-          "status": "TO_COLLECT"
-        },
-        {
-          "document": "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
-          "status": "TO_COLLECT"
-        },
-        {
-          "document": "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
-          "status": "TO_COLLECT"
-        },
-        {
-          "document": "Passport Size Photographs",
-          "status": "TO_COLLECT"
-        }
-      ],
-      "submission_mode": "ONLINE_DIRECT_OR_CSC",
-      "status": "DRAFT_READY_FOR_SUBMISSION",
-      "simulated": true,
-      "submission_acknowledgement": {
-        "acknowledgement_id": "SIM-KCC-20261001-2498",
-        "message": "Simulated submission. No real application was filed.",
-        "simulated": true
-      }
     },
-    "PM_KISAN_2026": {
+    {
       "scheme_id": "PM_KISAN_2026",
-      "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
-      "portal_url": "https://pmkisan.gov.in",
-      "applicant": {
-        "name": null,
-        "age": 40,
-        "gender": null,
-        "district": "Nashik",
-        "state": "Maharashtra",
-        "pin_code": null,
-        "occupation": "Farmer",
-        "annual_income_inr": 150000,
-        "land_hectares": 0.607
-      },
+      "name": "Pradhan Mantri Kisan Samman Nidhi",
+      "status": "NEEDS_INFO",
+      "annual_benefit_inr": 6000,
+      "reasons": [
+        "Age 35 meets minimum age limit of 18 years.",
+        "Verification required for: Occupation, Land Ownership Details.",
+        "Administrative review note: Administrative review needed for Occupation, Land Ownership Details."
+      ],
+      "missing_info": [
+        "Occupation",
+        "Land Ownership Details"
+      ],
       "required_documents": [
         "Aadhaar Card",
         "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
         "Bank Account Passbook (Aadhaar Seeded)",
         "Active Mobile Number"
+      ],
+      "portal_url": "https://pmkisan.gov.in",
+      "friction_score": 1,
+      "priority_rank": 6,
+      "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
+      "scheme_name_hi": null,
+      "category": null,
+      "benefit_amount_inr": 6000,
+      "benefit_description": null,
+      "benefit_frequency": "Annual",
+      "passed_criteria": [],
+      "failed_criteria": [],
+      "edge_case_flags": [],
+      "llm_edge_review": "Administrative review needed for Occupation, Land Ownership Details.",
+      "friendly_explanation": null,
+      "application_mode": null
+    }
+  ],
+  "total_annual_benefit_inr": 623600,
+  "csc_center": {
+    "simulated": true,
+    "center_id": "CSC_2001",
+    "center_name": "CSC Digital Seva Kendra - Nashik Central",
+    "district": "Nashik",
+    "state": "Bihar",
+    "pin_code": "422001",
+    "address": "Near Tehsil Office, Main Market, Dist. Nashik, Bihar - 422001",
+    "vle_name": "Sanjay Patil (Village Level Entrepreneur)",
+    "contact_phone": "+91 98230 45678",
+    "distance_km": 2.4,
+    "operating_hours": "09:00 AM - 06:00 PM (Mon-Sat)",
+    "facilities": [
+      "Aadhaar Biometric e-KYC Device",
+      "Land Record (7/12 & Khatauni) Printout",
+      "Income & Caste Certificate Submissions",
+      "Ayushman PVC Card Delivery"
+    ],
+    "message": "Nearest CSC center discovered successfully."
+  },
+  "application_payloads": {
+    "PM_JAY_AYUSHMAN_2026": {
+      "scheme_id": "PM_JAY_AYUSHMAN_2026",
+      "scheme_name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
+      "portal_url": "https://beneficiary.nha.gov.in",
+      "applicant": {
+        "name": "सुनीता",
+        "age": 35,
+        "gender": "female",
+        "district": null,
+        "state": "Bihar",
+        "pin_code": null,
+        "occupation": null,
+        "annual_income_inr": 40000
+      },
+      "required_documents": [
+        "Aadhaar Card",
+        "Ration Card (BPL / Antyodaya / Priority Household) or PM-JAY Family ID",
+        "Active Mobile Number",
+        "Income Certificate from Tahsildar (if requested for state NFSA top-up)"
       ],
       "documents_checklist": [
         {
@@ -337,7 +291,46 @@
           "status": "TO_COLLECT"
         },
         {
-          "document": "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
+          "document": "Ration Card (BPL / Antyodaya / Priority Household) or PM-JAY Family ID",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Active Mobile Number",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Income Certificate from Tahsildar (if requested for state NFSA top-up)",
+          "status": "TO_COLLECT"
+        }
+      ],
+      "submission_mode": "ONLINE_DIRECT_OR_CSC",
+      "status": "DRAFT_READY_FOR_SUBMISSION",
+      "simulated": true
+    },
+    "PMAY_G_2026": {
+      "scheme_id": "PMAY_G_2026",
+      "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin",
+      "portal_url": "https://pmayg.nic.in",
+      "applicant": {
+        "name": "सुनीता",
+        "age": 35,
+        "gender": "female",
+        "district": null,
+        "state": "Bihar",
+        "pin_code": null,
+        "occupation": null,
+        "annual_income_inr": 40000
+      },
+      "required_documents": [
+        "Aadhaar Card",
+        "Bank Account Passbook (Aadhaar Seeded)",
+        "MGNREGA Job Card Number",
+        "Photograph of existing Kutcha/Dilapidated House (Geo-tagged)",
+        "Self-Declaration Affidavit of owning no pucca house anywhere"
+      ],
+      "documents_checklist": [
+        {
+          "document": "Aadhaar Card",
           "status": "TO_COLLECT"
         },
         {
@@ -345,70 +338,120 @@
           "status": "TO_COLLECT"
         },
         {
-          "document": "Active Mobile Number",
+          "document": "MGNREGA Job Card Number",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Photograph of existing Kutcha/Dilapidated House (Geo-tagged)",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Self-Declaration Affidavit of owning no pucca house anywhere",
           "status": "TO_COLLECT"
         }
       ],
       "submission_mode": "ONLINE_DIRECT_OR_CSC",
       "status": "DRAFT_READY_FOR_SUBMISSION",
-      "simulated": true,
-      "submission_acknowledgement": {
-        "acknowledgement_id": "SIM-PMKISAN-20261001-8990",
-        "message": "Simulated submission. No real application was filed.",
-        "simulated": true
-      }
+      "simulated": true
+    },
+    "PM_UJJWALA_2_2026": {
+      "scheme_id": "PM_UJJWALA_2_2026",
+      "scheme_name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
+      "portal_url": "https://www.pmuy.gov.in",
+      "applicant": {
+        "name": "सुनीता",
+        "age": 35,
+        "gender": "female",
+        "district": null,
+        "state": "Bihar",
+        "pin_code": null,
+        "occupation": null,
+        "annual_income_inr": 40000
+      },
+      "required_documents": [
+        "Aadhaar Card of the adult woman applicant",
+        "Aadhaar Cards of all adult family members residing together",
+        "Ration Card / 14-Point Poor Household Declaration Certificate",
+        "Aadhaar-Linked Bank Account Passbook",
+        "Proof of Address / Migrant Self-Declaration Certificate"
+      ],
+      "documents_checklist": [
+        {
+          "document": "Aadhaar Card of the adult woman applicant",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Aadhaar Cards of all adult family members residing together",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Ration Card / 14-Point Poor Household Declaration Certificate",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Aadhaar-Linked Bank Account Passbook",
+          "status": "TO_COLLECT"
+        },
+        {
+          "document": "Proof of Address / Migrant Self-Declaration Certificate",
+          "status": "TO_COLLECT"
+        }
+      ],
+      "submission_mode": "ONLINE_DIRECT_OR_CSC",
+      "status": "DRAFT_READY_FOR_SUBMISSION",
+      "simulated": true
     }
   },
-  "pdf_path": "C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_140934.pdf",
+  "pdf_path": "C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_154422.pdf",
   "events": [
     {
       "kind": "thought",
       "title": "Profile Extraction",
-      "detail": "Understanding citizen profile (en)...",
-      "timestamp": "14:09:28",
+      "detail": "Understanding citizen profile (hi)...",
+      "timestamp": "15:44:13",
       "step": "Profile Extraction",
       "status": "IN_PROGRESS",
-      "message": "Understanding citizen profile (en)...",
+      "message": "Understanding citizen profile (hi)...",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
       "title": "Profile Extracted",
-      "detail": "Parsed Profile: Farmer, 40 yrs, Income: ₹150,000, Land: 0.607 ha, District: Nashik",
-      "timestamp": "14:09:31",
+      "detail": "Parsed Profile: Citizen, 35 yrs, Income: ₹40,000, Land: Landless/Unstated, District: General",
+      "timestamp": "15:44:17",
       "step": "Profile Extracted",
       "status": "COMPLETED",
-      "message": "Parsed Profile: Farmer, 40 yrs, Income: ₹150,000, Land: 0.607 ha, District: Nashik",
+      "message": "Parsed Profile: Citizen, 35 yrs, Income: ₹40,000, Land: Landless/Unstated, District: General",
       "data": {
-        "name": null,
-        "age": 40,
-        "gender": null,
-        "occupation": "Farmer",
-        "state": "Maharashtra",
-        "district": "Nashik",
+        "name": "सुनीता",
+        "age": 35,
+        "gender": "female",
+        "occupation": null,
+        "state": "Bihar",
+        "district": null,
         "pin_code": null,
-        "annual_income_inr": 150000,
-        "land_hectares": 0.607,
+        "annual_income_inr": 40000,
+        "land_hectares": null,
         "caste_category": null,
-        "is_bpl": null,
-        "has_pucca_house": true,
-        "has_lpg_connection": null,
+        "is_bpl": true,
+        "has_pucca_house": false,
+        "has_lpg_connection": false,
         "education_level": null,
-        "language": "en",
+        "language": "hi",
         "pincode": null,
-        "land_acres": 1.5,
+        "land_acres": null,
         "social_category": null,
-        "housing_type": "Pucca",
-        "has_land_ownership": true,
+        "housing_type": "Kutcha",
+        "has_land_ownership": null,
         "is_taxpayer": false,
         "is_govt_employee": false,
         "has_pension_above_10k": false,
         "is_shg_member": false,
         "is_student": false,
         "special_conditions": [],
-        "raw_query": "Hello, I am Ramesh, a 40-year-old farmer from Nashik, Maharashtra. My annual income is 1.5 lakh INR and I own 1.5 acres of agricultural land with a pucca house.",
-        "preferred_language": "English"
+        "raw_query": "मैं सुनीता हूँ, बिहार से। उम्र 35 वर्ष। बीपीएल परिवार, कच्चा घर, और हमारे पास कोई एलपीजी गैस कनेक्शन नहीं है। आय 40,000 रुपये है।",
+        "preferred_language": "Hindi"
       },
       "simulated": false
     },
@@ -416,7 +459,7 @@
       "kind": "thought",
       "title": "Pipeline Adaptation",
       "detail": "Switching to deterministic pipeline",
-      "timestamp": "14:09:33",
+      "timestamp": "15:44:18",
       "step": "Pipeline Adaptation",
       "status": "IN_PROGRESS",
       "message": "Switching to deterministic pipeline",
@@ -427,7 +470,7 @@
       "kind": "thought",
       "title": "Evaluating Eligibility",
       "detail": "Evaluating profile against statutory welfare rules in database.",
-      "timestamp": "14:09:33",
+      "timestamp": "15:44:18",
       "step": "Evaluating Eligibility",
       "status": "IN_PROGRESS",
       "message": "Evaluating profile against statutory welfare rules in database.",
@@ -437,102 +480,34 @@
     {
       "kind": "tool_call",
       "title": "evaluate_eligibility",
-      "detail": "Evaluating profile criteria for Farmer.",
-      "timestamp": "14:09:33",
+      "detail": "Evaluating profile criteria for citizen.",
+      "timestamp": "15:44:18",
       "step": "evaluate_eligibility",
       "status": "IN_PROGRESS",
-      "message": "Evaluating profile criteria for Farmer.",
+      "message": "Evaluating profile criteria for citizen.",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
       "title": "evaluate_eligibility",
-      "detail": "Evaluated 6 schemes. Qualified for 2: Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi",
-      "timestamp": "14:09:34",
+      "detail": "Evaluated 6 schemes. Qualified for 3: Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, Pradhan Mantri Awaas Yojana - Gramin, Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
+      "timestamp": "15:44:21",
       "step": "evaluate_eligibility",
       "status": "IN_PROGRESS",
-      "message": "Evaluated 6 schemes. Qualified for 2: Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi",
+      "message": "Evaluated 6 schemes. Qualified for 3: Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, Pradhan Mantri Awaas Yojana - Gramin, Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
       "data": {
         "matches": [
           {
-            "scheme_id": "KCC_2026",
-            "name": "Kisan Credit Card (KCC) Scheme",
-            "status": "ELIGIBLE",
-            "annual_benefit_inr": 300000,
-            "reasons": [
-              "Occupation 'Farmer' matches scheme requirement.",
-              "Age 40 is within eligible range (18 to 75 years)."
-            ],
-            "missing_info": [],
-            "required_documents": [
-              "Aadhaar Card and PAN Card",
-              "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
-              "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
-              "Passport Size Photographs"
-            ],
-            "portal_url": "https://agricoop.nic.in",
-            "friction_score": 2,
-            "priority_rank": 1,
-            "scheme_name": "Kisan Credit Card (KCC) Scheme",
-            "scheme_name_hi": null,
-            "category": null,
-            "benefit_amount_inr": 300000,
-            "benefit_description": null,
-            "benefit_frequency": "Annual",
-            "passed_criteria": [],
-            "failed_criteria": [],
-            "edge_case_flags": [],
-            "llm_edge_review": null,
-            "friendly_explanation": null,
-            "application_mode": null
-          },
-          {
-            "scheme_id": "PM_KISAN_2026",
-            "name": "Pradhan Mantri Kisan Samman Nidhi",
-            "status": "ELIGIBLE",
-            "annual_benefit_inr": 6000,
-            "reasons": [
-              "Occupation 'Farmer' matches scheme requirement.",
-              "Age 40 meets minimum age limit of 18 years.",
-              "Land 0.61 ha is cultivable landholding."
-            ],
-            "missing_info": [],
-            "required_documents": [
-              "Aadhaar Card",
-              "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
-              "Bank Account Passbook (Aadhaar Seeded)",
-              "Active Mobile Number"
-            ],
-            "portal_url": "https://pmkisan.gov.in",
-            "friction_score": 1,
-            "priority_rank": 2,
-            "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
-            "scheme_name_hi": null,
-            "category": null,
-            "benefit_amount_inr": 6000,
-            "benefit_description": null,
-            "benefit_frequency": "Annual",
-            "passed_criteria": [],
-            "failed_criteria": [],
-            "edge_case_flags": [],
-            "llm_edge_review": null,
-            "friendly_explanation": null,
-            "application_mode": null
-          },
-          {
             "scheme_id": "PM_JAY_AYUSHMAN_2026",
             "name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
-            "status": "NEEDS_INFO",
+            "status": "ELIGIBLE",
             "annual_benefit_inr": 500000,
             "reasons": [
-              "Income Rs 150,000 is below the cap of Rs 250,000.",
-              "Verification required for: BPL / Ration Card Status.",
-              "Administrative review note: Administrative review needed for BPL / Ration Card Status."
+              "Income Rs 40,000 is below the cap of Rs 250,000.",
+              "BPL / SECC status requirement satisfied."
             ],
-            "missing_info": [
-              "BPL / Ration Card Status"
-            ],
+            "missing_info": [],
             "required_documents": [
               "Aadhaar Card",
               "Ration Card (BPL / Antyodaya / Priority Household) or PM-JAY Family ID",
@@ -541,7 +516,7 @@
             ],
             "portal_url": "https://beneficiary.nha.gov.in",
             "friction_score": 2,
-            "priority_rank": 3,
+            "priority_rank": 1,
             "scheme_name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
             "scheme_name_hi": null,
             "category": null,
@@ -551,57 +526,19 @@
             "passed_criteria": [],
             "failed_criteria": [],
             "edge_case_flags": [],
-            "llm_edge_review": "Administrative review needed for BPL / Ration Card Status.",
-            "friendly_explanation": null,
-            "application_mode": null
-          },
-          {
-            "scheme_id": "PM_UJJWALA_2_2026",
-            "name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
-            "status": "NEEDS_INFO",
-            "annual_benefit_inr": 3600,
-            "reasons": [
-              "Age 40 meets minimum age limit of 18 years.",
-              "Verification required for: Gender, BPL / Ration Card Status, Existing LPG Connection Status.",
-              "Administrative review note: Administrative review needed for Gender, BPL / Ration Card Status, Existing LPG Connection Status."
-            ],
-            "missing_info": [
-              "Gender",
-              "BPL / Ration Card Status",
-              "Existing LPG Connection Status"
-            ],
-            "required_documents": [
-              "Aadhaar Card of the adult woman applicant",
-              "Aadhaar Cards of all adult family members residing together",
-              "Ration Card / 14-Point Poor Household Declaration Certificate",
-              "Aadhaar-Linked Bank Account Passbook",
-              "Proof of Address / Migrant Self-Declaration Certificate"
-            ],
-            "portal_url": "https://www.pmuy.gov.in",
-            "friction_score": 2,
-            "priority_rank": 4,
-            "scheme_name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
-            "scheme_name_hi": null,
-            "category": null,
-            "benefit_amount_inr": 3600,
-            "benefit_description": null,
-            "benefit_frequency": "Annual",
-            "passed_criteria": [],
-            "failed_criteria": [],
-            "edge_case_flags": [],
-            "llm_edge_review": "Administrative review needed for Gender, BPL / Ration Card Status, Existing LPG Connection Status.",
+            "llm_edge_review": null,
             "friendly_explanation": null,
             "application_mode": null
           },
           {
             "scheme_id": "PMAY_G_2026",
             "name": "Pradhan Mantri Awaas Yojana - Gramin",
-            "status": "NOT_ELIGIBLE",
+            "status": "ELIGIBLE",
             "annual_benefit_inr": 120000,
             "reasons": [
-              "Scheme strictly requires Kutcha or homeless dwelling; applicant owns a Pucca house.",
-              "Age 40 meets minimum age limit of 18 years.",
-              "Income Rs 150,000 is below the cap of Rs 180,000."
+              "Age 35 meets minimum age limit of 18 years.",
+              "Income Rs 40,000 is below the cap of Rs 180,000.",
+              "No-pucca-house requirement verified."
             ],
             "missing_info": [],
             "required_documents": [
@@ -613,7 +550,7 @@
             ],
             "portal_url": "https://pmayg.nic.in",
             "friction_score": 4,
-            "priority_rank": null,
+            "priority_rank": 2,
             "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin",
             "scheme_name_hi": null,
             "category": null,
@@ -628,16 +565,88 @@
             "application_mode": null
           },
           {
-            "scheme_id": "NSP_POST_MATRIC_SC_2026",
-            "name": "Centrally Sponsored Post-Matric Scholarship Scheme for SC Students",
-            "status": "NOT_ELIGIBLE",
-            "annual_benefit_inr": 48000,
+            "scheme_id": "PM_UJJWALA_2_2026",
+            "name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
+            "status": "ELIGIBLE",
+            "annual_benefit_inr": 3600,
             "reasons": [
-              "Occupation 'Farmer' does not match required: student.",
-              "Age 40 exceeds maximum limit of 35 years.",
-              "Income Rs 150,000 is below the cap of Rs 250,000."
+              "Age 35 meets minimum age limit of 18 years.",
+              "Gender 'female' meets scheme requirement.",
+              "BPL / SECC status requirement satisfied.",
+              "Household has no existing LPG connection."
+            ],
+            "missing_info": [],
+            "required_documents": [
+              "Aadhaar Card of the adult woman applicant",
+              "Aadhaar Cards of all adult family members residing together",
+              "Ration Card / 14-Point Poor Household Declaration Certificate",
+              "Aadhaar-Linked Bank Account Passbook",
+              "Proof of Address / Migrant Self-Declaration Certificate"
+            ],
+            "portal_url": "https://www.pmuy.gov.in",
+            "friction_score": 2,
+            "priority_rank": 3,
+            "scheme_name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
+            "scheme_name_hi": null,
+            "category": null,
+            "benefit_amount_inr": 3600,
+            "benefit_description": null,
+            "benefit_frequency": "Annual",
+            "passed_criteria": [],
+            "failed_criteria": [],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "application_mode": null
+          },
+          {
+            "scheme_id": "KCC_2026",
+            "name": "Kisan Credit Card (KCC) Scheme",
+            "status": "NEEDS_INFO",
+            "annual_benefit_inr": 300000,
+            "reasons": [
+              "Age 35 is within eligible range (18 to 75 years).",
+              "Verification required for: Occupation.",
+              "Administrative review note: Administrative review needed for Occupation."
             ],
             "missing_info": [
+              "Occupation"
+            ],
+            "required_documents": [
+              "Aadhaar Card and PAN Card",
+              "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
+              "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
+              "Passport Size Photographs"
+            ],
+            "portal_url": "https://agricoop.nic.in",
+            "friction_score": 2,
+            "priority_rank": 4,
+            "scheme_name": "Kisan Credit Card (KCC) Scheme",
+            "scheme_name_hi": null,
+            "category": null,
+            "benefit_amount_inr": 300000,
+            "benefit_description": null,
+            "benefit_frequency": "Annual",
+            "passed_criteria": [],
+            "failed_criteria": [],
+            "edge_case_flags": [],
+            "llm_edge_review": "Administrative review needed for Occupation.",
+            "friendly_explanation": null,
+            "application_mode": null
+          },
+          {
+            "scheme_id": "NSP_POST_MATRIC_SC_2026",
+            "name": "Centrally Sponsored Post-Matric Scholarship Scheme for SC Students",
+            "status": "NEEDS_INFO",
+            "annual_benefit_inr": 48000,
+            "reasons": [
+              "Age 35 is within eligible range (15 to 35 years).",
+              "Income Rs 40,000 is below the cap of Rs 250,000.",
+              "Verification required for: Occupation, Caste Category, Education Level.",
+              "Administrative review note: Administrative review needed for Occupation, Caste Category, Education Level."
+            ],
+            "missing_info": [
+              "Occupation",
               "Caste Category",
               "Education Level"
             ],
@@ -651,7 +660,7 @@
             ],
             "portal_url": "https://scholarships.gov.in",
             "friction_score": 3,
-            "priority_rank": null,
+            "priority_rank": 5,
             "scheme_name": "Centrally Sponsored Post-Matric Scholarship Scheme for SC Students",
             "scheme_name_hi": null,
             "category": null,
@@ -661,7 +670,43 @@
             "passed_criteria": [],
             "failed_criteria": [],
             "edge_case_flags": [],
-            "llm_edge_review": null,
+            "llm_edge_review": "Administrative review needed for Occupation, Caste Category, Education Level.",
+            "friendly_explanation": null,
+            "application_mode": null
+          },
+          {
+            "scheme_id": "PM_KISAN_2026",
+            "name": "Pradhan Mantri Kisan Samman Nidhi",
+            "status": "NEEDS_INFO",
+            "annual_benefit_inr": 6000,
+            "reasons": [
+              "Age 35 meets minimum age limit of 18 years.",
+              "Verification required for: Occupation, Land Ownership Details.",
+              "Administrative review note: Administrative review needed for Occupation, Land Ownership Details."
+            ],
+            "missing_info": [
+              "Occupation",
+              "Land Ownership Details"
+            ],
+            "required_documents": [
+              "Aadhaar Card",
+              "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
+              "Bank Account Passbook (Aadhaar Seeded)",
+              "Active Mobile Number"
+            ],
+            "portal_url": "https://pmkisan.gov.in",
+            "friction_score": 1,
+            "priority_rank": 6,
+            "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
+            "scheme_name_hi": null,
+            "category": null,
+            "benefit_amount_inr": 6000,
+            "benefit_description": null,
+            "benefit_frequency": "Annual",
+            "passed_criteria": [],
+            "failed_criteria": [],
+            "edge_case_flags": [],
+            "llm_edge_review": "Administrative review needed for Occupation, Land Ownership Details.",
             "friendly_explanation": null,
             "application_mode": null
           }
@@ -673,7 +718,7 @@
       "kind": "thought",
       "title": "Calculating Benefits",
       "detail": "Aggregating total annual financial assistance from eligible schemes.",
-      "timestamp": "14:09:34",
+      "timestamp": "15:44:21",
       "step": "Calculating Benefits",
       "status": "IN_PROGRESS",
       "message": "Aggregating total annual financial assistance from eligible schemes.",
@@ -684,7 +729,7 @@
       "kind": "tool_call",
       "title": "calc_benefits",
       "detail": "Calculating total benefit for 6 matches.",
-      "timestamp": "14:09:34",
+      "timestamp": "15:44:21",
       "step": "calc_benefits",
       "status": "IN_PROGRESS",
       "message": "Calculating total benefit for 6 matches.",
@@ -694,192 +739,117 @@
     {
       "kind": "tool_result",
       "title": "calc_benefits",
-      "detail": "Total annual benefit unlocked: ₹306,000",
-      "timestamp": "14:09:34",
+      "detail": "Total annual benefit unlocked: ₹623,600",
+      "timestamp": "15:44:21",
       "step": "calc_benefits",
       "status": "IN_PROGRESS",
-      "message": "Total annual benefit unlocked: ₹306,000",
+      "message": "Total annual benefit unlocked: ₹623,600",
       "data": {
-        "total_annual_benefit_inr": 306000
+        "total_annual_benefit_inr": 623600
       },
       "simulated": false
     },
     {
       "kind": "thought",
       "title": "Locating Nearest CSC",
-      "detail": "Locating nearest Digital Seva Kendra for district 'Nashik'.",
-      "timestamp": "14:09:34",
+      "detail": "Locating nearest Digital Seva Kendra for district 'Bihar'.",
+      "timestamp": "15:44:21",
       "step": "Locating Nearest CSC",
       "status": "IN_PROGRESS",
-      "message": "Locating nearest Digital Seva Kendra for district 'Nashik'.",
+      "message": "Locating nearest Digital Seva Kendra for district 'Bihar'.",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_call",
       "title": "find_csc",
-      "detail": "Searching district='Nashik', pin='None'",
-      "timestamp": "14:09:34",
+      "detail": "Searching district='None', pin='None'",
+      "timestamp": "15:44:21",
       "step": "find_csc",
       "status": "IN_PROGRESS",
-      "message": "Searching district='Nashik', pin='None'",
+      "message": "Searching district='None', pin='None'",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
       "title": "find_csc",
-      "detail": "Nearest Center: Digital Seva Kendra Dindori (2.4 km)",
-      "timestamp": "14:09:34",
+      "detail": "Nearest Center: CSC Digital Seva Kendra - Nashik Central (2.4 km)",
+      "timestamp": "15:44:21",
       "step": "find_csc",
       "status": "IN_PROGRESS",
-      "message": "Nearest Center: Digital Seva Kendra Dindori (2.4 km)",
+      "message": "Nearest Center: CSC Digital Seva Kendra - Nashik Central (2.4 km)",
       "data": {
-        "center_id": "CSC_MH_NSK_01",
-        "center_name": "Digital Seva Kendra Dindori",
+        "simulated": true,
+        "center_id": "CSC_2001",
+        "center_name": "CSC Digital Seva Kendra - Nashik Central",
         "district": "Nashik",
-        "state": "Maharashtra",
-        "pin_code": "422202",
-        "address": "Opposite Gram Panchayat Office, Dindori, Dist. Nashik, Maharashtra - 422202",
-        "vle_name": "Sanjay Patil",
+        "state": "Bihar",
+        "pin_code": "422001",
+        "address": "Near Tehsil Office, Main Market, Dist. Nashik, Bihar - 422001",
+        "vle_name": "Sanjay Patil (Village Level Entrepreneur)",
         "contact_phone": "+91 98230 45678",
+        "distance_km": 2.4,
         "operating_hours": "09:00 AM - 06:00 PM (Mon-Sat)",
         "facilities": [
-          "Aadhaar Biometric e-KYC",
-          "7/12 Land Extract Print",
-          "PM-KISAN E-KYC",
-          "Ayushman PVC Card"
+          "Aadhaar Biometric e-KYC Device",
+          "Land Record (7/12 & Khatauni) Printout",
+          "Income & Caste Certificate Submissions",
+          "Ayushman PVC Card Delivery"
         ],
-        "distance_km": 2.4,
-        "simulated": true
+        "message": "Nearest CSC center discovered successfully."
       },
       "simulated": true
     },
     {
       "kind": "thought",
       "title": "Building Application",
-      "detail": "Preparing pre-filled portal submission payload for Kisan Credit Card (KCC) Scheme.",
-      "timestamp": "14:09:34",
+      "detail": "Preparing pre-filled portal submission payload for Ayushman Bharat Pradhan Mantri Jan Arogya Yojana.",
+      "timestamp": "15:44:21",
       "step": "Building Application",
       "status": "IN_PROGRESS",
-      "message": "Preparing pre-filled portal submission payload for Kisan Credit Card (KCC) Scheme.",
+      "message": "Preparing pre-filled portal submission payload for Ayushman Bharat Pradhan Mantri Jan Arogya Yojana.",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_call",
       "title": "build_application_payload",
-      "detail": "Building application for KCC_2026",
-      "timestamp": "14:09:34",
+      "detail": "Building application for PM_JAY_AYUSHMAN_2026",
+      "timestamp": "15:44:21",
       "step": "build_application_payload",
       "status": "IN_PROGRESS",
-      "message": "Building application for KCC_2026",
+      "message": "Building application for PM_JAY_AYUSHMAN_2026",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
       "title": "build_application_payload",
-      "detail": "Pre-filed application ready: ID KCC_2026",
-      "timestamp": "14:09:34",
+      "detail": "Pre-filed application ready: ID PM_JAY_AYUSHMAN_2026",
+      "timestamp": "15:44:22",
       "step": "build_application_payload",
       "status": "IN_PROGRESS",
-      "message": "Pre-filed application ready: ID KCC_2026",
+      "message": "Pre-filed application ready: ID PM_JAY_AYUSHMAN_2026",
       "data": {
-        "scheme_id": "KCC_2026",
-        "scheme_name": "Kisan Credit Card (KCC) Scheme",
-        "portal_url": "https://agricoop.nic.in",
+        "scheme_id": "PM_JAY_AYUSHMAN_2026",
+        "scheme_name": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
+        "portal_url": "https://beneficiary.nha.gov.in",
         "applicant": {
-          "name": null,
-          "age": 40,
-          "gender": null,
-          "district": "Nashik",
-          "state": "Maharashtra",
+          "name": "सुनीता",
+          "age": 35,
+          "gender": "female",
+          "district": null,
+          "state": "Bihar",
           "pin_code": null,
-          "occupation": "Farmer",
-          "annual_income_inr": 150000,
-          "land_hectares": 0.607
-        },
-        "required_documents": [
-          "Aadhaar Card and PAN Card",
-          "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
-          "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
-          "Passport Size Photographs"
-        ],
-        "documents_checklist": [
-          {
-            "document": "Aadhaar Card and PAN Card",
-            "status": "TO_COLLECT"
-          },
-          {
-            "document": "Land Record / 7/12 Extract / Khasra-Khatauni (or registered lease deed for tenant farmers/sharecroppers)",
-            "status": "TO_COLLECT"
-          },
-          {
-            "document": "Crop Sowing Certificate from Village Revenue Officer (Patwari / Talathi)",
-            "status": "TO_COLLECT"
-          },
-          {
-            "document": "Passport Size Photographs",
-            "status": "TO_COLLECT"
-          }
-        ],
-        "submission_mode": "ONLINE_DIRECT_OR_CSC",
-        "status": "DRAFT_READY_FOR_SUBMISSION",
-        "simulated": true
-      },
-      "simulated": true
-    },
-    {
-      "kind": "thought",
-      "title": "Building Application",
-      "detail": "Preparing pre-filled portal submission payload for Pradhan Mantri Kisan Samman Nidhi.",
-      "timestamp": "14:09:34",
-      "step": "Building Application",
-      "status": "IN_PROGRESS",
-      "message": "Preparing pre-filled portal submission payload for Pradhan Mantri Kisan Samman Nidhi.",
-      "data": null,
-      "simulated": false
-    },
-    {
-      "kind": "tool_call",
-      "title": "build_application_payload",
-      "detail": "Building application for PM_KISAN_2026",
-      "timestamp": "14:09:34",
-      "step": "build_application_payload",
-      "status": "IN_PROGRESS",
-      "message": "Building application for PM_KISAN_2026",
-      "data": null,
-      "simulated": false
-    },
-    {
-      "kind": "tool_result",
-      "title": "build_application_payload",
-      "detail": "Pre-filed application ready: ID PM_KISAN_2026",
-      "timestamp": "14:09:34",
-      "step": "build_application_payload",
-      "status": "IN_PROGRESS",
-      "message": "Pre-filed application ready: ID PM_KISAN_2026",
-      "data": {
-        "scheme_id": "PM_KISAN_2026",
-        "scheme_name": "Pradhan Mantri Kisan Samman Nidhi",
-        "portal_url": "https://pmkisan.gov.in",
-        "applicant": {
-          "name": null,
-          "age": 40,
-          "gender": null,
-          "district": "Nashik",
-          "state": "Maharashtra",
-          "pin_code": null,
-          "occupation": "Farmer",
-          "annual_income_inr": 150000,
-          "land_hectares": 0.607
+          "occupation": null,
+          "annual_income_inr": 40000
         },
         "required_documents": [
           "Aadhaar Card",
-          "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
-          "Bank Account Passbook (Aadhaar Seeded)",
-          "Active Mobile Number"
+          "Ration Card (BPL / Antyodaya / Priority Household) or PM-JAY Family ID",
+          "Active Mobile Number",
+          "Income Certificate from Tahsildar (if requested for state NFSA top-up)"
         ],
         "documents_checklist": [
           {
@@ -887,15 +857,15 @@
             "status": "TO_COLLECT"
           },
           {
-            "document": "Landholding Ownership Document / RoR / Khasra-Khatauni / 7/12 Extract",
-            "status": "TO_COLLECT"
-          },
-          {
-            "document": "Bank Account Passbook (Aadhaar Seeded)",
+            "document": "Ration Card (BPL / Antyodaya / Priority Household) or PM-JAY Family ID",
             "status": "TO_COLLECT"
           },
           {
             "document": "Active Mobile Number",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Income Certificate from Tahsildar (if requested for state NFSA top-up)",
             "status": "TO_COLLECT"
           }
         ],
@@ -907,74 +877,158 @@
     },
     {
       "kind": "thought",
-      "title": "Submitting Application",
-      "detail": "Auto-submitting pre-filed application for Kisan Credit Card (KCC) Scheme to government portal API.",
-      "timestamp": "14:09:34",
-      "step": "Submitting Application",
+      "title": "Building Application",
+      "detail": "Preparing pre-filled portal submission payload for Pradhan Mantri Awaas Yojana - Gramin.",
+      "timestamp": "15:44:22",
+      "step": "Building Application",
       "status": "IN_PROGRESS",
-      "message": "Auto-submitting pre-filed application for Kisan Credit Card (KCC) Scheme to government portal API.",
+      "message": "Preparing pre-filled portal submission payload for Pradhan Mantri Awaas Yojana - Gramin.",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_call",
-      "title": "mock_portal_submit",
-      "detail": "Submitting payload for KCC_2026",
-      "timestamp": "14:09:34",
-      "step": "mock_portal_submit",
+      "title": "build_application_payload",
+      "detail": "Building application for PMAY_G_2026",
+      "timestamp": "15:44:22",
+      "step": "build_application_payload",
       "status": "IN_PROGRESS",
-      "message": "Submitting payload for KCC_2026",
+      "message": "Building application for PMAY_G_2026",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
-      "title": "mock_portal_submit",
-      "detail": "Submitted [Simulated] Ack ID: SIM-KCC-20261001-2498",
-      "timestamp": "14:09:34",
-      "step": "mock_portal_submit",
+      "title": "build_application_payload",
+      "detail": "Pre-filed application ready: ID PMAY_G_2026",
+      "timestamp": "15:44:22",
+      "step": "build_application_payload",
       "status": "IN_PROGRESS",
-      "message": "Submitted [Simulated] Ack ID: SIM-KCC-20261001-2498",
+      "message": "Pre-filed application ready: ID PMAY_G_2026",
       "data": {
-        "acknowledgement_id": "SIM-KCC-20261001-2498",
-        "message": "Simulated submission. No real application was filed.",
+        "scheme_id": "PMAY_G_2026",
+        "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin",
+        "portal_url": "https://pmayg.nic.in",
+        "applicant": {
+          "name": "सुनीता",
+          "age": 35,
+          "gender": "female",
+          "district": null,
+          "state": "Bihar",
+          "pin_code": null,
+          "occupation": null,
+          "annual_income_inr": 40000
+        },
+        "required_documents": [
+          "Aadhaar Card",
+          "Bank Account Passbook (Aadhaar Seeded)",
+          "MGNREGA Job Card Number",
+          "Photograph of existing Kutcha/Dilapidated House (Geo-tagged)",
+          "Self-Declaration Affidavit of owning no pucca house anywhere"
+        ],
+        "documents_checklist": [
+          {
+            "document": "Aadhaar Card",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Bank Account Passbook (Aadhaar Seeded)",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "MGNREGA Job Card Number",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Photograph of existing Kutcha/Dilapidated House (Geo-tagged)",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Self-Declaration Affidavit of owning no pucca house anywhere",
+            "status": "TO_COLLECT"
+          }
+        ],
+        "submission_mode": "ONLINE_DIRECT_OR_CSC",
+        "status": "DRAFT_READY_FOR_SUBMISSION",
         "simulated": true
       },
       "simulated": true
     },
     {
       "kind": "thought",
-      "title": "Submitting Application",
-      "detail": "Auto-submitting pre-filed application for Pradhan Mantri Kisan Samman Nidhi to government portal API.",
-      "timestamp": "14:09:34",
-      "step": "Submitting Application",
+      "title": "Building Application",
+      "detail": "Preparing pre-filled portal submission payload for Pradhan Mantri Ujjwala Yojana 2.0 (PMUY).",
+      "timestamp": "15:44:22",
+      "step": "Building Application",
       "status": "IN_PROGRESS",
-      "message": "Auto-submitting pre-filed application for Pradhan Mantri Kisan Samman Nidhi to government portal API.",
+      "message": "Preparing pre-filled portal submission payload for Pradhan Mantri Ujjwala Yojana 2.0 (PMUY).",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_call",
-      "title": "mock_portal_submit",
-      "detail": "Submitting payload for PM_KISAN_2026",
-      "timestamp": "14:09:34",
-      "step": "mock_portal_submit",
+      "title": "build_application_payload",
+      "detail": "Building application for PM_UJJWALA_2_2026",
+      "timestamp": "15:44:22",
+      "step": "build_application_payload",
       "status": "IN_PROGRESS",
-      "message": "Submitting payload for PM_KISAN_2026",
+      "message": "Building application for PM_UJJWALA_2_2026",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
-      "title": "mock_portal_submit",
-      "detail": "Submitted [Simulated] Ack ID: SIM-PMKISAN-20261001-8990",
-      "timestamp": "14:09:34",
-      "step": "mock_portal_submit",
+      "title": "build_application_payload",
+      "detail": "Pre-filed application ready: ID PM_UJJWALA_2_2026",
+      "timestamp": "15:44:22",
+      "step": "build_application_payload",
       "status": "IN_PROGRESS",
-      "message": "Submitted [Simulated] Ack ID: SIM-PMKISAN-20261001-8990",
+      "message": "Pre-filed application ready: ID PM_UJJWALA_2_2026",
       "data": {
-        "acknowledgement_id": "SIM-PMKISAN-20261001-8990",
-        "message": "Simulated submission. No real application was filed.",
+        "scheme_id": "PM_UJJWALA_2_2026",
+        "scheme_name": "Pradhan Mantri Ujjwala Yojana 2.0 (PMUY)",
+        "portal_url": "https://www.pmuy.gov.in",
+        "applicant": {
+          "name": "सुनीता",
+          "age": 35,
+          "gender": "female",
+          "district": null,
+          "state": "Bihar",
+          "pin_code": null,
+          "occupation": null,
+          "annual_income_inr": 40000
+        },
+        "required_documents": [
+          "Aadhaar Card of the adult woman applicant",
+          "Aadhaar Cards of all adult family members residing together",
+          "Ration Card / 14-Point Poor Household Declaration Certificate",
+          "Aadhaar-Linked Bank Account Passbook",
+          "Proof of Address / Migrant Self-Declaration Certificate"
+        ],
+        "documents_checklist": [
+          {
+            "document": "Aadhaar Card of the adult woman applicant",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Aadhaar Cards of all adult family members residing together",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Ration Card / 14-Point Poor Household Declaration Certificate",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Aadhaar-Linked Bank Account Passbook",
+            "status": "TO_COLLECT"
+          },
+          {
+            "document": "Proof of Address / Migrant Self-Declaration Certificate",
+            "status": "TO_COLLECT"
+          }
+        ],
+        "submission_mode": "ONLINE_DIRECT_OR_CSC",
+        "status": "DRAFT_READY_FOR_SUBMISSION",
         "simulated": true
       },
       "simulated": true
@@ -983,7 +1037,7 @@
       "kind": "thought",
       "title": "Generating Action Pack",
       "detail": "Compiling matched schemes, required documents, and CSC contact into PDF.",
-      "timestamp": "14:09:34",
+      "timestamp": "15:44:22",
       "step": "Generating Action Pack",
       "status": "IN_PROGRESS",
       "message": "Compiling matched schemes, required documents, and CSC contact into PDF.",
@@ -993,99 +1047,96 @@
     {
       "kind": "tool_call",
       "title": "make_pdf",
-      "detail": "Creating citizen Action Pack in language 'en'",
-      "timestamp": "14:09:34",
+      "detail": "Creating citizen Action Pack in language 'hi'",
+      "timestamp": "15:44:22",
       "step": "make_pdf",
       "status": "IN_PROGRESS",
-      "message": "Creating citizen Action Pack in language 'en'",
+      "message": "Creating citizen Action Pack in language 'hi'",
       "data": null,
       "simulated": false
     },
     {
       "kind": "tool_result",
       "title": "make_pdf",
-      "detail": "Action Pack PDF ready at: C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_140934.pdf",
-      "timestamp": "14:09:34",
+      "detail": "Action Pack PDF ready at: C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_154422.pdf",
+      "timestamp": "15:44:22",
       "step": "make_pdf",
       "status": "IN_PROGRESS",
-      "message": "Action Pack PDF ready at: C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_140934.pdf",
+      "message": "Action Pack PDF ready at: C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_154422.pdf",
       "data": {
-        "pdf_path": "C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_140934.pdf"
+        "pdf_path": "C:\\Users\\Admin\\Desktop\\DESKTOP 2\\SchemeSetu-Bharat\\SchemeSetu-Bharat\\output\\ActionPack_Citizen_20261001_154422.pdf"
       },
       "simulated": false
     },
     {
       "kind": "final",
       "title": "Discovery Complete",
-      "detail": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
-      "timestamp": "14:09:36",
+      "detail": "नमस्ते! आपकी जानकारी के अनुसार आप Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, Pradhan Mantri Awaas Yojana - Gramin, Pradhan Mantri Ujjwala Yojana 2.0 (PMUY) के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹623,600 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
+      "timestamp": "15:44:23",
       "step": "Discovery Complete",
       "status": "COMPLETED",
-      "message": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
+      "message": "नमस्ते! आपकी जानकारी के अनुसार आप Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, Pradhan Mantri Awaas Yojana - Gramin, Pradhan Mantri Ujjwala Yojana 2.0 (PMUY) के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹623,600 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
       "data": null,
       "simulated": false
     }
   ],
   "used_fallback": true,
-  "explanation": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
+  "explanation": "नमस्ते! आपकी जानकारी के अनुसार आप Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, Pradhan Mantri Awaas Yojana - Gramin, Pradhan Mantri Ujjwala Yojana 2.0 (PMUY) के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹623,600 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
   "user_profile": {
-    "name": null,
-    "age": 40,
-    "gender": null,
-    "occupation": "Farmer",
-    "state": "Maharashtra",
-    "district": "Nashik",
+    "name": "सुनीता",
+    "age": 35,
+    "gender": "female",
+    "occupation": null,
+    "state": "Bihar",
+    "district": null,
     "pin_code": null,
-    "annual_income_inr": 150000,
-    "land_hectares": 0.607,
+    "annual_income_inr": 40000,
+    "land_hectares": null,
     "caste_category": null,
-    "is_bpl": null,
-    "has_pucca_house": true,
-    "has_lpg_connection": null,
+    "is_bpl": true,
+    "has_pucca_house": false,
+    "has_lpg_connection": false,
     "education_level": null,
-    "language": "en",
+    "language": "hi",
     "pincode": null,
-    "land_acres": 1.5,
+    "land_acres": null,
     "social_category": null,
-    "housing_type": "Pucca",
-    "has_land_ownership": true,
+    "housing_type": "Kutcha",
+    "has_land_ownership": null,
     "is_taxpayer": false,
     "is_govt_employee": false,
     "has_pension_above_10k": false,
     "is_shg_member": false,
     "is_student": false,
     "special_conditions": [],
-    "raw_query": "Hello, I am Ramesh, a 40-year-old farmer from Nashik, Maharashtra. My annual income is 1.5 lakh INR and I own 1.5 acres of agricultural land with a pucca house.",
-    "preferred_language": "English"
+    "raw_query": "मैं सुनीता हूँ, बिहार से। उम्र 35 वर्ष। बीपीएल परिवार, कच्चा घर, और हमारे पास कोई एलपीजी गैस कनेक्शन नहीं है। आय 40,000 रुपये है।",
+    "preferred_language": "Hindi"
   },
   "eligible_schemes": [],
   "review_schemes": [],
   "ineligible_schemes": [],
-  "total_potential_benefit_inr": 306000,
-  "summary_text": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
-  "vernacular_summary": "Hello! Based on your details, you qualify for Kisan Credit Card (KCC) Scheme, Pradhan Mantri Kisan Samman Nidhi. You can receive total annual benefits of ₹306,000. To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records.",
+  "total_potential_benefit_inr": 623600,
+  "summary_text": "नमस्ते! आपकी जानकारी के अनुसार आप Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, Pradhan Mantri Awaas Yojana - Gramin, Pradhan Mantri Ujjwala Yojana 2.0 (PMUY) के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹623,600 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
+  "vernacular_summary": "नमस्ते! आपकी जानकारी के अनुसार आप Ayushman Bharat Pradhan Mantri Jan Arogya Yojana, Pradhan Mantri Awaas Yojana - Gramin, Pradhan Mantri Ujjwala Yojana 2.0 (PMUY) के लिए पूरी तरह पात्र हैं। इन योजनाओं से आपको हर साल कुल ₹623,600 का आर्थिक लाभ मिल सकता है। आवेदन का पहला कदम: अपने आधार कार्ड और जमीन के कागजात लेकर नजदीकी ग्राहक सेवा केंद्र (CSC) पर जाएं।",
   "csc_recommendation": {
-    "center_id": "CSC_MH_NSK_01",
-    "center_name": "Digital Seva Kendra Dindori",
+    "simulated": true,
+    "center_id": "CSC_2001",
+    "center_name": "CSC Digital Seva Kendra - Nashik Central",
     "district": "Nashik",
-    "state": "Maharashtra",
-    "pin_code": "422202",
-    "address": "Opposite Gram Panchayat Office, Dindori, Dist. Nashik, Maharashtra - 422202",
-    "vle_name": "Sanjay Patil",
+    "state": "Bihar",
+    "pin_code": "422001",
+    "address": "Near Tehsil Office, Main Market, Dist. Nashik, Bihar - 422001",
+    "vle_name": "Sanjay Patil (Village Level Entrepreneur)",
     "contact_phone": "+91 98230 45678",
+    "distance_km": 2.4,
     "operating_hours": "09:00 AM - 06:00 PM (Mon-Sat)",
     "facilities": [
-      "Aadhaar Biometric e-KYC",
-      "7/12 Land Extract Print",
-      "PM-KISAN E-KYC",
-      "Ayushman PVC Card"
+      "Aadhaar Biometric e-KYC Device",
+      "Land Record (7/12 & Khatauni) Printout",
+      "Income & Caste Certificate Submissions",
+      "Ayushman PVC Card Delivery"
     ],
-    "distance_km": 2.4,
-    "simulated": true
+    "message": "Nearest CSC center discovered successfully."
   },
-  "mock_submission": {
-    "acknowledgement_id": "SIM-PMKISAN-20261001-8990",
-    "message": "Simulated submission. No real application was filed.",
-    "simulated": true
-  }
+  "mock_submission": null
 }

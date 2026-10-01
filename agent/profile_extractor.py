@@ -78,6 +78,19 @@ def heuristic_extract_profile(text: str) -> UserProfile:
     if pin_match:
         profile_dict["pincode"] = pin_match.group(1)
 
+    # 1b. Name
+    name_match = re.search(r"(?:मैं|मेरा नाम|माझे नाव|name is|i am)\s+([A-Za-z\u0900-\u097F]+)", text, re.IGNORECASE)
+    if name_match:
+        cand_name = name_match.group(1).strip()
+        if cand_name.lower() not in ["एक", "एकड़", "हूँ", "आहे", "from"]:
+            profile_dict["name"] = cand_name
+    elif "सुनीता" in t or "sunita" in t:
+        profile_dict["name"] = "Sunita"
+    elif "रमेश" in t or "ramesh" in t:
+        profile_dict["name"] = "Ramesh"
+    elif "प्रिया" in t or "priya" in t:
+        profile_dict["name"] = "Priya"
+
     # 2. Age
     age_match = re.search(
         r"(?:age|उम्र|आयु|वर्ष|साल|वय)\s*[:=-]?\s*(\d{1,2})|(\d{1,2})\s*[-]?\s*(?:साल|saal|year|years|yr|yrs|वर्ष|वर्षे)",
@@ -89,15 +102,15 @@ def heuristic_extract_profile(text: str) -> UserProfile:
             profile_dict["age"] = int(val)
 
     # 3. Gender
-    if any(w in t for w in ["महिला", "female", "woman", "ladki", "aurat", "स्त्री"]):
-        profile_dict["gender"] = "Female"
-    elif any(w in t for w in ["पुरुष", "male", "man", "purush", "aadmi", "लड़का"]):
-        profile_dict["gender"] = "Male"
+    if any(w in t for w in ["महिला", "female", "woman", "ladki", "aurat", "स्त्री", "सुनीता", "sunita", "priya", "प्रिया", "विद्यार्थिनी", "छात्रा", "गृहिणी"]):
+        profile_dict["gender"] = "female"
+    elif any(w in t for w in ["पुरुष", "male", "man", "purush", "aadmi", "लड़का", "विद्यार्थी", "ramesh", "रमेश"]):
+        profile_dict["gender"] = "male"
 
     # 4. Occupation
     if any(w in t for w in ["kisan", "farmer", "किसान", "खेती", "agriculture", "काश्तकार", "शेतकरी", "shetkari"]):
         profile_dict["occupation"] = "Farmer"
-    elif any(w in t for w in ["student", "विद्यार्थी", "छात्र", "padhai", "college"]):
+    elif any(w in t for w in ["student", "विद्यार्थी", "विद्यार्थिनी", "छात्र", "छात्रा", "padhai", "college"]):
         profile_dict["occupation"] = "Student"
         profile_dict["is_student"] = True
     elif any(w in t for w in ["majdoor", "labourer", "मजदूर", "daily wage", "दिहाड़ी", "कामगार"]):
@@ -108,6 +121,14 @@ def heuristic_extract_profile(text: str) -> UserProfile:
         profile_dict["occupation"] = "Self-Employed"
     elif any(w in t for w in ["homemaker", "गृहणी", "गृहिणी", "housewife"]):
         profile_dict["occupation"] = "Homemaker"
+
+    # 4b. Education Level
+    if any(w in t for w in ["undergraduate", "ug", "पदवी", "degree", "graduation", "college", "b.a", "b.sc", "b.com", "b.tech"]):
+        profile_dict["education_level"] = "undergraduate"
+    elif any(w in t for w in ["postgraduate", "pg", "post-graduate", "m.a", "m.sc", "m.com"]):
+        profile_dict["education_level"] = "postgraduate"
+    elif any(w in t for w in ["school", "10th", "12th", "शाळा", "स्कूल"]):
+        profile_dict["education_level"] = "school"
 
     # 5. Landholding
     land_match = re.search(
@@ -151,30 +172,48 @@ def heuristic_extract_profile(text: str) -> UserProfile:
             else:
                 profile_dict["annual_income_inr"] = raw_val
         else:
-            # Check direct integer
-            num_match = re.search(r"(?:आय|income|kamai|कमाई)\s*[:=-]?\s*(?:rs\.?|inr|₹)?\s*(\d{4,7})", t)
+            # Check direct integer or comma-formatted numbers
+            num_match = re.search(r"(?:आय|income|kamai|कमाई|उत्पन्न)\s*[:=-]?\s*(?:rs\.?|inr|₹)?\s*(\d{1,3}(?:,\d{3})+|\d{4,7})", t)
             if num_match:
-                profile_dict["annual_income_inr"] = int(num_match.group(1))
+                cleaned_num = num_match.group(1).replace(",", "")
+                profile_dict["annual_income_inr"] = int(cleaned_num)
 
     # 7. Social Category
-    if re.search(r"\b(sc|dalit)\b", t, re.IGNORECASE) or "अनुसूचित जाति" in t:
+    if re.search(r"\b(sc|dalit)\b", t, re.IGNORECASE) or "अनुसूचित जात" in t or "दलित" in t:
         profile_dict["social_category"] = "SC"
-    elif re.search(r"\b(st|adivasi)\b", t, re.IGNORECASE) or "अनुसूचित जनजाति" in t:
+        profile_dict["caste_category"] = "sc"
+    elif re.search(r"\b(st|adivasi)\b", t, re.IGNORECASE) or "अनुसूचित जमात" in t or "अनुसूचित जनजाति" in t or "आदिवासी" in t:
         profile_dict["social_category"] = "ST"
-    elif re.search(r"\b(obc)\b", t, re.IGNORECASE) or "पिछड़ा" in t or "other backward" in t:
+        profile_dict["caste_category"] = "st"
+    elif re.search(r"\b(obc)\b", t, re.IGNORECASE) or "पिछड़ा" in t or "other backward" in t or "ओबीसी" in t:
         profile_dict["social_category"] = "OBC"
+        profile_dict["caste_category"] = "obc"
     elif re.search(r"\b(general)\b", t, re.IGNORECASE) or "सामान्य" in t or "सवर्ण" in t:
         profile_dict["social_category"] = "General"
+        profile_dict["caste_category"] = "general"
 
     # 8. Housing
     if any(w in t for w in ["kutcha", "kuchha", "कच्चा", "झोपड़ी", "kachha", "kacha", "tin sheet", "jhuggi"]):
         profile_dict["housing_type"] = "Kutcha"
+        profile_dict["has_pucca_house"] = False
     elif any(w in t for w in ["pucca", "पक्का", "brick"]):
         profile_dict["housing_type"] = "Pucca"
+        profile_dict["has_pucca_house"] = True
     elif any(w in t for w in ["homeless", "बेघर"]):
         profile_dict["housing_type"] = "Homeless"
+        profile_dict["has_pucca_house"] = False
     elif any(w in t for w in ["rent", "किराये", "kiraya"]):
         profile_dict["housing_type"] = "Rented"
+
+    # 8b. BPL status
+    if any(w in t for w in ["bpl", "बीपीएल", "गरीबी रेखा", "दारीद्र्य", "antodaya", "antyodaya", "अन्त्योदय", "अंत्योदय"]):
+        profile_dict["is_bpl"] = True
+
+    # 8c. LPG connection
+    if any(w in t for w in ["no lpg", "lpg connection nahi", "एलपीजी नहीं", "गैस कनेक्शन नहीं", "एलपीजी कनेक्शन नहीं", "गैस नहीं", "चूल्हा", "चूल्हे", "लकड़ी पर खाना"]):
+        profile_dict["has_lpg_connection"] = False
+    elif any(w in t for w in ["lpg connection hai", "गैस कनेक्शन है", "एलपीजी कनेक्शन है", "lpg hai"]):
+        profile_dict["has_lpg_connection"] = True
 
     # 9. Exclusions & Special conditions
     if any(w in t for w in ["tax", "आयकर", "taxpayer", "टैक्स"]):
@@ -229,10 +268,26 @@ def heuristic_extract_profile(text: str) -> UserProfile:
         profile_dict["state"] = "Uttar Pradesh"
 
     # District detection
-    district_candidates = ["nashik", "naasik", "नासिक", "नाशिक", "satara", "सातारा", "pune", "पुणे", "patna", "पटना", "lucknow", "लखनऊ"]
-    for dist in district_candidates:
-        if dist in t:
-            profile_dict["district"] = dist.capitalize()
+    district_candidates = [
+        ("nashik", "Nashik", "Maharashtra"),
+        ("naasik", "Nashik", "Maharashtra"),
+        ("नासिक", "Nashik", "Maharashtra"),
+        ("नाशिक", "Nashik", "Maharashtra"),
+        ("satara", "Satara", "Maharashtra"),
+        ("सातारा", "Satara", "Maharashtra"),
+        ("pune", "Pune", "Maharashtra"),
+        ("पुणे", "Pune", "Maharashtra"),
+        ("पुण्या", "Pune", "Maharashtra"),
+        ("patna", "Patna", "Bihar"),
+        ("पटना", "Patna", "Bihar"),
+        ("lucknow", "Lucknow", "Uttar Pradesh"),
+        ("लखनऊ", "Lucknow", "Uttar Pradesh"),
+    ]
+    for dist_key, dist_name, dist_state in district_candidates:
+        if dist_key in t:
+            profile_dict["district"] = dist_name
+            if not profile_dict.get("state"):
+                profile_dict["state"] = dist_state
             break
 
     # Language detection

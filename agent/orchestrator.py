@@ -24,7 +24,9 @@ from agent.models import (
 )
 from agent.profile_extractor import extract_user_profile
 from agent.rules_engine import evaluate_all_schemes, load_schemes_data
-from agent.simulated_tools import locate_nearest_csc, mock_portal_submission
+from agent.simulated_tools import mock_portal_submission
+from utils.locator import find_csc
+from utils.pdf_generator import generate_action_pack
 
 
 class SchemeSetuAgent:
@@ -38,6 +40,7 @@ class SchemeSetuAgent:
         query_or_profile: Union[str, UserProfile],
         pincode: Optional[str] = None,
         district: Optional[str] = None,
+        language: Optional[str] = None,
         on_event: Optional[AgentEventCallback] = None,
     ) -> AgentResponse:
         """Execute complete closed-loop agent workflow and return AgentResponse with telemetry events."""
@@ -71,6 +74,44 @@ class SchemeSetuAgent:
             profile.pincode = pincode
         if district and not profile.district:
             profile.district = district
+
+        # Determine language selection ('hi', 'mr', 'en')
+        lang = "hi"
+        if language:
+            l = str(language).lower().strip()
+            if l in ("mr", "marathi"):
+                lang = "mr"
+            elif l in ("en", "english"):
+                lang = "en"
+            else:
+                lang = "hi"
+        elif getattr(profile, "preferred_language", None):
+            pref = str(profile.preferred_language).lower().strip()
+            if "marathi" in pref or pref == "mr":
+                lang = "mr"
+            elif "english" in pref or pref == "en":
+                lang = "en"
+            else:
+                lang = "hi"
+        elif getattr(profile, "language", None):
+            l = str(profile.language).lower().strip()
+            if l in ("mr", "marathi"):
+                lang = "mr"
+            elif l in ("en", "english"):
+                lang = "en"
+            else:
+                lang = "hi"
+
+        # Sync profile language fields
+        if lang == "mr":
+            profile.preferred_language = "Marathi"
+            profile.language = "mr"
+        elif lang == "en":
+            profile.preferred_language = "English"
+            profile.language = "en"
+        else:
+            profile.preferred_language = "Hindi"
+            profile.language = "hi"
 
         emit(
             AgentEvent(
@@ -165,7 +206,7 @@ class SchemeSetuAgent:
         )
 
         # ---------------------------------------------------------
-        # STAGE 5: ACTION TOOLS (Simulated CSC Locator)
+        # STAGE 5: ACTION TOOLS (CSC Locator via Member B's find_csc)
         # ---------------------------------------------------------
         emit(
             AgentEvent(
@@ -175,16 +216,61 @@ class SchemeSetuAgent:
                 simulated=True,
             )
         )
-        csc_info = locate_nearest_csc(pincode=profile.pincode, district=profile.district)
+        csc_info = find_csc(
+            district=profile.district,
+            pin_code=profile.pincode or profile.pin_code,
+            state=profile.state,
+        )
         emit(
             AgentEvent(
                 step="CSC_LOCATOR",
                 status="COMPLETED",
-                message=f"Located nearest CSC desk: {csc_info['center_name']} ({csc_info['distance_km']} km away).",
+                message=f"Located nearest CSC desk: {csc_info.get('center_name', 'CSC Central')} ({csc_info.get('distance_km', 2.4)} km away).",
                 data=csc_info,
                 simulated=True,
             )
         )
+
+        # ---------------------------------------------------------
+        # STAGE 5b: ACTION TOOLS (Action Pack PDF Generator via Member B)
+        # ---------------------------------------------------------
+        emit(
+            AgentEvent(
+                step="MAKE_PDF",
+                status="STARTING",
+                message=f"Compiling citizen Action Pack PDF in language '{lang}'...",
+            )
+        )
+        pdf_payload = {
+            "profile": profile,
+            "user_profile": profile,
+            "eligible_schemes": eligible,
+            "matches": eligible,
+            "total_annual_benefit_inr": total_benefit,
+            "total_potential_benefit_inr": total_benefit,
+            "csc_center": csc_info,
+            "csc_recommendation": csc_info,
+        }
+        try:
+            pdf_path = generate_action_pack(pdf_payload, language=lang)
+            emit(
+                AgentEvent(
+                    step="MAKE_PDF",
+                    status="COMPLETED",
+                    message=f"Citizen Action Pack PDF generated successfully at: {pdf_path}",
+                    data={"pdf_path": pdf_path, "language": lang},
+                )
+            )
+        except Exception as e:
+            pdf_path = None
+            emit(
+                AgentEvent(
+                    step="MAKE_PDF",
+                    status="WARNING",
+                    message=f"Citizen Action Pack PDF generation failed: {e}",
+                    data={"error": str(e)},
+                )
+            )
 
         # ---------------------------------------------------------
         # STAGE 6: DELIVER (Citizen Explanation & Action Roadmap)
@@ -220,13 +306,19 @@ class SchemeSetuAgent:
 
         return AgentResponse(
             user_profile=profile,
+            profile=profile,
             eligible_schemes=eligible,
             review_schemes=review,
             ineligible_schemes=ineligible,
+            matches=eligible + review + ineligible,
             total_potential_benefit_inr=total_benefit,
+            total_annual_benefit_inr=total_benefit,
             summary_text=explanation_text,
             vernacular_summary=explanation_text,
+            explanation=explanation_text,
             csc_recommendation=csc_info,
+            csc_center=csc_info,
+            pdf_path=pdf_path,
             events=events,
         )
 
@@ -263,9 +355,26 @@ class SchemeSetuAgent:
 
 def run_agent(
     query_or_profile: Union[str, UserProfile],
+    pincode: Optional[str] = None,
+    district: Optional[str] = None,
+    language: Optional[str] = None,
     on_event: Optional[AgentEventCallback] = None,
+    **kwargs: Any,
 ) -> AgentResponse:
     """Convenience module-level runner function."""
+    if callable(language) and on_event is None:
+        on_event = language
+        language = None
+    elif callable(pincode) and on_event is None:
+        on_event = pincode
+        pincode = None
+
     agent = SchemeSetuAgent()
-    return agent.run(query_or_profile, on_event=on_event)
+    return agent.run(
+        query_or_profile,
+        pincode=pincode,
+        district=district,
+        language=language,
+        on_event=on_event,
+    )
 

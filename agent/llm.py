@@ -269,22 +269,41 @@ def explain_results(result_summary: Dict[str, Any], language: str = "hi") -> str
         s if isinstance(s, str) else (s.get("name") or s.get("scheme_id", "") or str(s))
         for s in eligible_schemes[:3]
     ]
+
+    # Handle nonsense or incomplete/greeting inputs with polite clarification
+    if not eligible_schemes:
+        if language.lower() in ("mr", "marathi"):
+            return (
+                "नमस्कार! आपल्यासाठी योग्य शासकीय योजना शोधण्यासाठी कृपया आपले वय, व्यवसाय (उदा. शेतकरी, विद्यार्थी, कामगार), "
+                "आणि कुटुंबाचे वार्षिक उत्पन्न याबद्दल अधिक माहिती सांगा."
+            )
+        elif language.lower() in ("en", "english"):
+            return (
+                "Hello! Please tell me a bit more about your age, occupation (such as farmer, student, or daily wage worker), "
+                "and family annual income so I can discover the best government welfare schemes for you."
+            )
+        else:
+            return (
+                "नमस्ते! आपके लिए सही सरकारी योजनाएं खोजने के लिए कृपया अपनी उम्र, पेशा (जैसे किसान, छात्र, या मजदूर), "
+                "और परिवार की वार्षिक आय के बारे में थोड़ी और जानकारी बताएं।"
+            )
+
     if language.lower() in ("mr", "marathi"):
-        schemes_str = ", ".join(scheme_names) if scheme_names else "शासकीय योजना"
+        schemes_str = ", ".join(scheme_names)
         return (
             f"नमस्कार! आपल्या माहितीनुसार आपण {schemes_str} या योजनांसाठी पात्र आहात. "
             f"याद्वारे आपल्याला दरवर्षी एकूण ₹{total_benefit:,} चा लाभ मिळू शकतो. "
             f"अर्ज करण्यासाठी आपले आधार कार्ड आणि जमिनीचा दाखला घेऊन जवळच्या सीएससी केंद्रावर (CSC Center) भेट द्या."
         )
     elif language.lower() in ("en", "english"):
-        schemes_str = ", ".join(scheme_names) if scheme_names else "government welfare schemes"
+        schemes_str = ", ".join(scheme_names)
         return (
             f"Hello! Based on your details, you qualify for {schemes_str}. "
             f"You can receive total annual benefits of ₹{total_benefit:,}. "
             f"To get started, please visit your nearest Common Service Centre (CSC) with your Aadhaar card and land records."
         )
     else:
-        schemes_str = ", ".join(scheme_names) if scheme_names else "सरकारी योजनाएं"
+        schemes_str = ", ".join(scheme_names)
         return (
             f"नमस्ते! आपकी जानकारी के अनुसार आप {schemes_str} के लिए पूरी तरह पात्र हैं। "
             f"इन योजनाओं से आपको हर साल कुल ₹{total_benefit:,} का आर्थिक लाभ मिल सकता है। "

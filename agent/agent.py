@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 from google.genai import types
 
 from agent import llm, rules, tools
+from agent.guardrails import validate_result
 from agent.models import AgentEvent, AgentResult, CitizenProfile, SchemeMatch, UserProfile
 from agent.prompts import SYSTEM_PROMPTS
 
@@ -370,7 +371,7 @@ def run_agent(
     explanation = llm.explain_results(summary_for_explanation, language=language)
     emit("final", "Discovery Complete", explanation, status="COMPLETED")
 
-    # Step 5: Build and return complete AgentResult
+    # Step 5: Build initial AgentResult
     match_models = [SchemeMatch.model_validate(m) for m in matches_dict_list]
     result = AgentResult(
         profile=profile,
@@ -384,6 +385,51 @@ def run_agent(
         explanation=explanation,
         mock_submission=last_mock_submission,
     )
+
+    # Step 6: Guardrail validation
+    problems = validate_result(result)
+    if problems:
+        logger.error(f"Guardrail validation failed with {len(problems)} problem(s): {problems}")
+        emit(
+            "error",
+            "Guardrail Validation Failure",
+            f"Integrity check failed: {'; '.join(problems)}. Rerunning deterministic fallback.",
+            status="ERROR",
+            data={"problems": problems},
+        )
+        if not used_fallback:
+            # Fall back to deterministic pipeline once
+            used_fallback = True
+            elig_res = tools.evaluate_eligibility(prof_dict)
+            matches_dict_list = elig_res.get("matches", [])
+            ben_res = tools.calc_benefits(matches_dict_list)
+            total_benefit = ben_res.get("total_annual_benefit_inr", 0)
+            csc_data = tools.find_csc(district=profile.district, pin_code=profile.pin_code, state=profile.state)
+            pdf_res = tools.make_pdf(
+                {
+                    "profile": prof_dict,
+                    "matches": matches_dict_list,
+                    "total_annual_benefit_inr": total_benefit,
+                    "csc_center": csc_data,
+                },
+                language=language,
+            )
+            pdf_path = pdf_res.get("pdf_path")
+            explanation = llm.explain_results(summary_for_explanation, language=language)
+
+            match_models = [SchemeMatch.model_validate(m) for m in matches_dict_list]
+            result = AgentResult(
+                profile=profile,
+                matches=match_models,
+                total_annual_benefit_inr=total_benefit,
+                csc_center=csc_data,
+                application_payloads=application_payloads,
+                pdf_path=pdf_path,
+                events=events,
+                used_fallback=used_fallback,
+                explanation=explanation,
+                mock_submission=last_mock_submission,
+            )
 
     # Save last successful result for demo safety cache
     try:
