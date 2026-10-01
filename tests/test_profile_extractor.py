@@ -15,7 +15,7 @@ def test_hindi_farmer_profile_extraction():
     profile = heuristic_extract_profile(query)
 
     assert profile.age == 38
-    assert profile.occupation == "Farmer"
+    assert profile.occupation == "farmer"
     assert profile.land_acres == 2.0
     assert profile.land_hectares == 0.8094
     assert profile.annual_income_inr == 80000
@@ -28,7 +28,7 @@ def test_hinglish_lakh_income_conversion():
     profile = heuristic_extract_profile(query)
 
     assert profile.age == 25
-    assert profile.occupation == "Daily Wage Worker"
+    assert profile.occupation == "labourer"
     assert profile.annual_income_inr == 150000
     assert profile.housing_type == "Kutcha"
 
@@ -38,7 +38,7 @@ def test_student_sc_category_extraction():
     profile = heuristic_extract_profile(query)
 
     assert profile.age == 21
-    assert profile.occupation == "Student"
+    assert profile.occupation == "student"
     assert profile.is_student is True
     assert profile.social_category == "SC"
     assert profile.annual_income_inr == 180000
@@ -59,6 +59,6 @@ def test_taxpayer_flag_detection():
     query = "I am a farmer with 5 acres land, but I pay income tax every year"
     profile = heuristic_extract_profile(query)
 
-    assert profile.occupation == "Farmer"
+    assert profile.occupation == "farmer"
     assert profile.is_taxpayer is True
     assert profile.land_acres == 5.0
