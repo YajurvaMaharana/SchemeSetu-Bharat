@@ -1,0 +1,250 @@
+"""Citizen Profile Extractor from vernacular and English natural language.
+
+MANDATORY RULES:
+- The LLM may only extract a profile from text.
+- Money = integer INR.
+- Land = hectares (1 acre = 0.4047 ha).
+- Includes deterministic heuristic fallback for offline testing, stub mode, or API failures.
+"""
+
+import json
+import re
+from typing import Any, Dict, Optional
+
+from agent.gemini_client import call_gemini
+from agent.models import ACRES_TO_HECTARES, UserProfile
+
+
+EXTRACTION_SYSTEM_PROMPT = """You are an expert citizen intake agent for SchemeSetu Bharat.
+Your task is to extract structured citizen demographic and socio-economic attributes from citizen text (which may be in Hindi, English, Hinglish, Marathi, etc.).
+
+Output ONLY valid JSON matching this schema:
+{
+  "name": string or null,
+  "age": integer or null,
+  "gender": "Male" | "Female" | "Other" | null,
+  "state": string or null,
+  "district": string or null,
+  "pincode": string (6 digits) or null,
+  "occupation": string or null (e.g. "Farmer", "Daily Wage Worker", "Student", "Artisan", "Self-Employed"),
+  "annual_income_inr": integer INR or null,
+  "land_hectares": float or null,
+  "land_acres": float or null,
+  "has_land_ownership": boolean or null,
+  "social_category": "General" | "OBC" | "SC" | "ST" | null,
+  "housing_type": "Pucca" | "Kutcha" | "Homeless" | "Rented" | null,
+  "is_taxpayer": boolean,
+  "is_govt_employee": boolean,
+  "has_pension_above_10k": boolean,
+  "is_shg_member": boolean,
+  "is_student": boolean,
+  "special_conditions": [list of strings],
+  "preferred_language": "Hindi" | "English" | "Marathi"
+}
+
+CONVERSION RULES:
+- 1 acre = 0.4047 hectares. If given in acres (e.g. "2 एकड़"), set land_acres=2.0 and land_hectares=0.8094.
+- Money must be an integer in Indian Rupees (INR). E.g. "1.5 lakh" -> 150000, "50 हजार" -> 50000, "5000 per month" -> 60000.
+- If landless ("भूमिहीन"), set land_hectares=0.0 and has_land_ownership=false.
+- If joint ownership is mentioned ("संयुक्त खतौनी" / "joint land"), include "joint land ownership" in special_conditions.
+- If tenant farmer ("बटाईदार" / "tenant"), include "tenant farmer" in special_conditions.
+- Never hallucinate data not mentioned in the query.
+"""
+
+
+def heuristic_extract_profile(text: str) -> UserProfile:
+    """Deterministic regex and keyword-based extractor for vernacular queries.
+    
+    Guarantees reliable demo execution even without external API connectivity.
+    """
+    profile_dict: Dict[str, Any] = {
+        "raw_query": text,
+        "special_conditions": [],
+        "is_taxpayer": False,
+        "is_govt_employee": False,
+        "has_pension_above_10k": False,
+        "is_shg_member": False,
+        "is_student": False,
+    }
+
+    t = text.lower()
+
+    # 1. Pincode
+    pin_match = re.search(r"\b([1-9][0-9]{5})\b", text)
+    if pin_match:
+        profile_dict["pincode"] = pin_match.group(1)
+
+    # 2. Age
+    age_match = re.search(
+        r"(?:age|उम्र|आयु|वर्ष|साल)\s*[:=-]?\s*(\d{1,2})|(\d{1,2})\s*(?:साल|saal|year|years|वर्ष)",
+        t,
+    )
+    if age_match:
+        val = age_match.group(1) or age_match.group(2)
+        if val:
+            profile_dict["age"] = int(val)
+
+    # 3. Gender
+    if any(w in t for w in ["महिला", "female", "woman", "ladki", "aurat", "स्त्री"]):
+        profile_dict["gender"] = "Female"
+    elif any(w in t for w in ["पुरुष", "male", "man", "purush", "aadmi", "लड़का"]):
+        profile_dict["gender"] = "Male"
+
+    # 4. Occupation
+    if any(w in t for w in ["kisan", "farmer", "किसान", "खेती", "agriculture", "काश्तकार"]):
+        profile_dict["occupation"] = "Farmer"
+    elif any(w in t for w in ["student", "विद्यार्थी", "छात्र", "padhai", "college"]):
+        profile_dict["occupation"] = "Student"
+        profile_dict["is_student"] = True
+    elif any(w in t for w in ["majdoor", "labourer", "मजदूर", "daily wage", "दिहाड़ी"]):
+        profile_dict["occupation"] = "Daily Wage Worker"
+    elif any(w in t for w in ["artisan", "karigar", "कारीगर", "weaver", "bunker", "tailor", "दर्जी"]):
+        profile_dict["occupation"] = "Artisan"
+    elif any(w in t for w in ["shop", "business", "दुकान", "व्यापार", "self employed", "स्वरोजगार"]):
+        profile_dict["occupation"] = "Self-Employed"
+
+    # 5. Landholding
+    land_match = re.search(
+        r"(\d+(?:\.\d+)?)\s*(?:एकड़|acre|acres|एकड)",
+        t,
+    )
+    if land_match:
+        acres = float(land_match.group(1))
+        profile_dict["land_acres"] = acres
+        profile_dict["land_hectares"] = round(acres * ACRES_TO_HECTARES, 4)
+        profile_dict["has_land_ownership"] = True
+    else:
+        ha_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:hectare|hectares|हेक्टेयर|ha)\b", t)
+        if ha_match:
+            ha = float(ha_match.group(1))
+            profile_dict["land_hectares"] = ha
+            profile_dict["land_acres"] = round(ha / ACRES_TO_HECTARES, 2)
+            profile_dict["has_land_ownership"] = True
+        elif any(w in t for w in ["भूमिहीन", "landless", "no land", "जमीन नहीं"]):
+            profile_dict["land_hectares"] = 0.0
+            profile_dict["has_land_ownership"] = False
+
+    # 6. Income
+    # Check lakh / lac
+    lakh_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:lakh|lac|लाख)", t)
+    if lakh_match:
+        val = float(lakh_match.group(1))
+        profile_dict["annual_income_inr"] = int(round(val * 100000))
+    elif "डेढ़ लाख" in t or "dedh lakh" in t:
+        profile_dict["annual_income_inr"] = 150000
+    elif "ढाई लाख" in t:
+        profile_dict["annual_income_inr"] = 250000
+    else:
+        # Check thousand / हजार
+        thous_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:हजार|hazar|k\b|thousand)", t)
+        if thous_match:
+            val = float(thous_match.group(1))
+            raw_val = int(round(val * 1000))
+            if any(w in t for w in ["month", "महीना", "monthly", "प्रति माह"]):
+                profile_dict["annual_income_inr"] = raw_val * 12
+            else:
+                profile_dict["annual_income_inr"] = raw_val
+        else:
+            # Check direct integer
+            num_match = re.search(r"(?:आय|income|kamai|कमाई)\s*[:=-]?\s*(?:rs\.?|inr|₹)?\s*(\d{4,7})", t)
+            if num_match:
+                profile_dict["annual_income_inr"] = int(num_match.group(1))
+
+    # 7. Social Category
+    if re.search(r"\b(sc|dalit)\b", t, re.IGNORECASE) or "अनुसूचित जाति" in t:
+        profile_dict["social_category"] = "SC"
+    elif re.search(r"\b(st|adivasi)\b", t, re.IGNORECASE) or "अनुसूचित जनजाति" in t:
+        profile_dict["social_category"] = "ST"
+    elif re.search(r"\b(obc)\b", t, re.IGNORECASE) or "पिछड़ा" in t or "other backward" in t:
+        profile_dict["social_category"] = "OBC"
+    elif re.search(r"\b(general)\b", t, re.IGNORECASE) or "सामान्य" in t or "सवर्ण" in t:
+        profile_dict["social_category"] = "General"
+
+    # 8. Housing
+    if any(w in t for w in ["kutcha", "kuchha", "कच्चा", "झोपड़ी", "kachha", "kacha", "tin sheet", "jhuggi"]):
+        profile_dict["housing_type"] = "Kutcha"
+    elif any(w in t for w in ["pucca", "पक्का", "brick"]):
+        profile_dict["housing_type"] = "Pucca"
+    elif any(w in t for w in ["homeless", "बेघर"]):
+        profile_dict["housing_type"] = "Homeless"
+    elif any(w in t for w in ["rent", "किराये", "kiraya"]):
+        profile_dict["housing_type"] = "Rented"
+
+    # 9. Exclusions & Special conditions
+    if any(w in t for w in ["tax", "आयकर", "taxpayer", "टैक्स"]):
+        if not any(neg in t for neg in ["no tax", "tax nahi", "टैक्स नहीं", "tax free"]):
+            profile_dict["is_taxpayer"] = True
+
+    if any(w in t for w in ["sarkari", "govt", "सरकारी नौकरी", "government"]):
+        if not any(neg in t for neg in ["not govt", "no govt", "सरकारी नहीं"]):
+            profile_dict["is_govt_employee"] = True
+
+    if any(w in t for w in ["pension", "पेंशन"]):
+        if any(w in t for w in [">10000", "10000 se zyada", "15000", "12000"]):
+            profile_dict["has_pension_above_10k"] = True
+
+    if any(w in t for w in ["shg", "स्वयं सहायता", "samuh", "bachat gat"]):
+        profile_dict["is_shg_member"] = True
+
+    if any(w in t for w in ["joint", "संयुक्त", "khatauni", "bhaiyo ke sath", "hissedari"]):
+        profile_dict["special_conditions"].append("joint land ownership")
+
+    if any(w in t for w in ["bataidar", "बटाईदार", "tenant", "kirayedari kheti"]):
+        profile_dict["special_conditions"].append("tenant farmer")
+
+    # 10. State detection (English and Hindi names)
+    state_map = {
+        "bihar": "Bihar", "बिहार": "Bihar",
+        "uttar pradesh": "Uttar Pradesh", "उत्तर प्रदेश": "Uttar Pradesh", "up": "Uttar Pradesh",
+        "maharashtra": "Maharashtra", "महाराष्ट्र": "Maharashtra",
+        "madhya pradesh": "Madhya Pradesh", "मध्य प्रदेश": "Madhya Pradesh", "mp": "Madhya Pradesh",
+        "rajasthan": "Rajasthan", "राजस्थान": "Rajasthan",
+        "punjab": "Punjab", "पंजाब": "Punjab",
+        "haryana": "Haryana", "हरियाणा": "Haryana",
+        "west bengal": "West Bengal", "पश्चिम बंगाल": "West Bengal",
+        "gujarat": "Gujarat", "गुजरात": "Gujarat",
+        "odisha": "Odisha", "ओडिशा": "Odisha", "उड़ीसा": "Odisha",
+        "jharkhand": "Jharkhand", "झारखंड": "Jharkhand",
+        "karnataka": "Karnataka", "कर्नाटक": "Karnataka",
+        "tamil nadu": "Tamil Nadu", "तमिलनाडु": "Tamil Nadu",
+        "kerala": "Kerala", "केरल": "Kerala",
+        "telangana": "Telangana", "तेलंगाना": "Telangana",
+        "andhra pradesh": "Andhra Pradesh", "आंध्र प्रदेश": "Andhra Pradesh",
+        "assam": "Assam", "असम": "Assam",
+        "chhattisgarh": "Chhattisgarh", "छत्तीसगढ़": "Chhattisgarh",
+        "uttarakhand": "Uttarakhand", "उत्तराखंड": "Uttarakhand",
+        "himachal pradesh": "Himachal Pradesh", "हिमाचल प्रदेश": "Himachal Pradesh",
+    }
+    for key, standard_name in state_map.items():
+        if key in t:
+            profile_dict["state"] = standard_name
+            break
+
+    # Language detection
+    has_hindi_chars = bool(re.search(r"[\u0900-\u097F]", text))
+    profile_dict["preferred_language"] = "Hindi" if has_hindi_chars else "English"
+
+    return UserProfile(**profile_dict)
+
+
+def extract_user_profile(user_text: str) -> UserProfile:
+    """Extract UserProfile from citizen text using Gemini SDK with deterministic fallback."""
+    llm_output = call_gemini(
+        prompt=f"Citizen query: {user_text}",
+        system_instruction=EXTRACTION_SYSTEM_PROMPT,
+        json_mode=True,
+    )
+
+    if llm_output:
+        try:
+            # Strip potential code block formatting
+            cleaned = re.sub(r"^```(?:json)?\s*", "", llm_output.strip())
+            cleaned = re.sub(r"\s*```$", "", cleaned)
+            parsed = json.loads(cleaned)
+            parsed["raw_query"] = user_text
+            return UserProfile(**parsed)
+        except Exception:
+            pass
+
+    # Heuristic fallback
+    return heuristic_extract_profile(user_text)
