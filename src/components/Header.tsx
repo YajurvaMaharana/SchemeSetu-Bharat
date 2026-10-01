@@ -95,18 +95,18 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xl font-extrabold tracking-tight text-[#1B2A6B]">
-                    SchemeSetu
+                  <span className="text-xl font-black tracking-tight text-[#1B2A6B]">
+                    YojanaSathi
                   </span>
-                  <span className="text-xl font-extrabold tracking-tight text-[#F28C28]">
-                    Bharat
+                  <span className="text-xl font-black tracking-tight text-[#F28C28]">
+                    AI
                   </span>
-                  <span className="ml-1.5 px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#1E7B34]/10 text-[#1E7B34] border border-[#1E7B34]/20 uppercase tracking-wider">
-                    Autonomous
+                  <span className="ml-1.5 px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-[#1E7B34]/10 text-[#1E7B34] border border-[#1E7B34]/20 uppercase tracking-wider">
+                    ApnaAdhikar
                   </span>
                 </div>
-                <p className="text-[11px] font-medium text-slate-500 tracking-wide">
-                  Apni Yojana, Apna Haq • अपनी योजना, अपना हक
+                <p className="text-[11px] font-semibold text-slate-500 tracking-wide">
+                  ApnaAdhikar ("Your Right") • अपनी योजना, अपना हक
                 </p>
               </div>
             </div>

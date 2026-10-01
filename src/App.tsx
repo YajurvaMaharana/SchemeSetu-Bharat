@@ -21,6 +21,11 @@ import { CscAppointmentModal } from './components/CscAppointmentModal';
 import { FamilyBenefitDashboard } from './components/FamilyBenefitDashboard';
 import { VernacularVoiceCopilotModal } from './components/VernacularVoiceCopilotModal';
 import { DocumentInspectionStudioModal } from './components/DocumentInspectionStudioModal';
+import { StatusTrackerEscalationModal } from './components/StatusTrackerEscalationModal';
+import { WhatIfCalculatorModal } from './components/WhatIfCalculatorModal';
+import { GamifiedEducationModal } from './components/GamifiedEducationModal';
+import { PeerCommunityVoiceModal } from './components/PeerCommunityVoiceModal';
+import { PillarsHubBar } from './components/PillarsHubBar';
 import { AgentEvent, AgentResponse, UserProfile, Scheme, CscCenter, CscAppointment } from './types/agent';
 import { AuthState, AuthUser } from './types/auth';
 import { SupportedLanguage, TRANSLATIONS } from './data/translations';
@@ -102,6 +107,10 @@ export const App: React.FC = () => {
   const [activeDiscoveryMode, setActiveDiscoveryMode] = useState<'individual' | 'family'>('individual');
   const [isVoiceCopilotOpen, setIsVoiceCopilotOpen] = useState<boolean>(false);
   const [isInspectionStudioOpen, setIsInspectionStudioOpen] = useState<boolean>(false);
+  const [isStatusTrackerOpen, setIsStatusTrackerOpen] = useState<boolean>(false);
+  const [isWhatIfCalculatorOpen, setIsWhatIfCalculatorOpen] = useState<boolean>(false);
+  const [isEducationModalOpen, setIsEducationModalOpen] = useState<boolean>(false);
+  const [isPeerCommunityOpen, setIsPeerCommunityOpen] = useState<boolean>(false);
 
   const t = TRANSLATIONS[selectedLanguage] || TRANSLATIONS.en;
 
@@ -636,6 +645,30 @@ export const App: React.FC = () => {
             </button>
           </div>
 
+          {/* Core 10 Pillars Hub Bar */}
+          <PillarsHubBar
+            onOpenProactive={() => setIsProactiveModalOpen(true)}
+            onOpenPortalRPA={() => {
+              setPortalFilingScheme(agentResult?.eligible_schemes?.[0] || null);
+              setIsPortalFilingModalOpen(true);
+            }}
+            onScrollToCSC={() => {
+              const cscEl = document.getElementById('csc-card-section');
+              if (cscEl) {
+                cscEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              } else {
+                scrollToCitizenInput();
+              }
+            }}
+            onOpenFamilyOptimizer={() => setActiveDiscoveryMode('family')}
+            onOpenVoiceCopilot={() => setIsVoiceCopilotOpen(true)}
+            onOpenSmartVault={() => setIsInspectionStudioOpen(true)}
+            onOpenStatusTracker={() => setIsStatusTrackerOpen(true)}
+            onOpenEducation={() => setIsEducationModalOpen(true)}
+            onOpenPeerCommunity={() => setIsPeerCommunityOpen(true)}
+            onOpenWhatIfCalculator={() => setIsWhatIfCalculatorOpen(true)}
+          />
+
           {/* Conditional Mode Render: Family 5-Year Combinatorial Dashboard OR Individual Citizen Flow */}
           {activeDiscoveryMode === 'family' ? (
             <FamilyBenefitDashboard
@@ -862,6 +895,42 @@ export const App: React.FC = () => {
           if (cscEl) {
             cscEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
+        }}
+        language={selectedLanguage}
+      />
+
+      {/* Pillar 7: Status Tracker & Automated RTI / Collector Escalation Bot */}
+      <StatusTrackerEscalationModal
+        isOpen={isStatusTrackerOpen}
+        onClose={() => setIsStatusTrackerOpen(false)}
+        userProfile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
+        language={selectedLanguage}
+      />
+
+      {/* Pillar 8: Gamified Scheme Education & Badges */}
+      <GamifiedEducationModal
+        isOpen={isEducationModalOpen}
+        onClose={() => setIsEducationModalOpen(false)}
+        language={selectedLanguage}
+      />
+
+      {/* Pillar 9: Peer-to-Peer Vernacular Voice Community Forum */}
+      <PeerCommunityVoiceModal
+        isOpen={isPeerCommunityOpen}
+        onClose={() => setIsPeerCommunityOpen(false)}
+        userProfile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
+        language={selectedLanguage}
+      />
+
+      {/* Pillar 10: Predictive What-If ROI Strategic Simulator */}
+      <WhatIfCalculatorModal
+        isOpen={isWhatIfCalculatorOpen}
+        onClose={() => setIsWhatIfCalculatorOpen(false)}
+        userProfile={agentResult?.user_profile || (authState.user?.profile as UserProfile) || null}
+        onApplyForScheme={(schemeId) => {
+          const scheme = agentResult?.eligible_schemes?.find((s) => s.scheme_id === schemeId) || agentResult?.eligible_schemes?.[0];
+          setPortalFilingScheme(scheme || null);
+          setIsPortalFilingModalOpen(true);
         }}
         language={selectedLanguage}
       />
