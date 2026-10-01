@@ -125,9 +125,9 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Enforce permanent dark mode
+  // Ensure light mode is clean
   useEffect(() => {
-    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('dark');
   }, []);
 
   const navigateTo = (route: string) => {
@@ -463,13 +463,13 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen dark bg-slate-900 text-slate-100 flex flex-col font-sans transition-colors duration-200 relative">
-      {/* Subtle Page Background Texture (Faint grid overlay at 3% opacity) */}
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col font-sans relative">
+      {/* Subtle Page Background Texture (Faint grid overlay on white) */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-[0.03] z-0"
+        className="fixed inset-0 pointer-events-none opacity-[0.04] z-0"
         style={{
           backgroundImage:
-            'radial-gradient(#64748b 1px, transparent 1px), linear-gradient(to right, #94a3b8 1px, transparent 1px), linear-gradient(to bottom, #94a3b8 1px, transparent 1px)',
+            'radial-gradient(#002d61 1px, transparent 1px), linear-gradient(to right, #cbd5e1 1px, transparent 1px), linear-gradient(to bottom, #cbd5e1 1px, transparent 1px)',
           backgroundSize: '32px 32px, 64px 64px, 64px 64px',
         }}
       />

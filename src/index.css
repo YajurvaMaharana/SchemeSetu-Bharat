@@ -2,13 +2,14 @@
 
 @layer base {
   html {
-    background-color: #0f172a;
-    color-scheme: dark;
+    background-color: #ffffff;
+    color: #1e293b;
+    color-scheme: light;
   }
   body {
     font-family: 'Manrope', system-ui, -apple-system, sans-serif;
-    background-color: #0f172a;
-    color: #f1f5f9;
+    background-color: #ffffff;
+    color: #1e293b;
   }
   code, pre, .font-mono {
     font-family: 'JetBrains Mono', monospace;
@@ -26,14 +27,14 @@
   height: 6px;
 }
 .telemetry-scroll::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(241, 245, 249, 0.8);
 }
 .telemetry-scroll::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.4);
+  background: rgba(148, 163, 184, 0.6);
   border-radius: 3px;
 }
 .telemetry-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.6);
+  background: rgba(100, 116, 139, 0.8);
 }
 
 @keyframes pulse-subtle {
