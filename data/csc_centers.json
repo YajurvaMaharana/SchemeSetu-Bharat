@@ -1,0 +1,44 @@
+[
+  {
+    "center_id": "CSC_MH_NSK_01",
+    "center_name": "Digital Seva Kendra Dindori",
+    "district": "Nashik",
+    "state": "Maharashtra",
+    "pin_code": "422202",
+    "address": "Opposite Gram Panchayat Office, Dindori, Dist. Nashik, Maharashtra - 422202",
+    "vle_name": "Sanjay Patil",
+    "contact_phone": "+91 98230 45678",
+    "operating_hours": "09:00 AM - 06:00 PM (Mon-Sat)",
+    "facilities": ["Aadhaar Biometric e-KYC", "7/12 Land Extract Print", "PM-KISAN E-KYC", "Ayushman PVC Card"],
+    "distance_km": 2.4,
+    "simulated": true
+  },
+  {
+    "center_id": "CSC_MH_PUN_01",
+    "center_name": "CSC e-Governance Kendra Haveli",
+    "district": "Pune",
+    "state": "Maharashtra",
+    "pin_code": "411028",
+    "address": "Shop 4, Hadapsar Gadital, Haveli, Pune, Maharashtra - 411028",
+    "vle_name": "Anil Deshmukh",
+    "contact_phone": "+91 94220 89123",
+    "operating_hours": "09:30 AM - 06:30 PM (Mon-Sat)",
+    "facilities": ["NSP Scholarship Biometric", "Caste Certificate Application", "Income Certificate Desk"],
+    "distance_km": 1.8,
+    "simulated": true
+  },
+  {
+    "center_id": "CSC_BR_PAT_01",
+    "center_name": "Digital Seva Kendra Danapur",
+    "district": "Patna",
+    "state": "Bihar",
+    "pin_code": "801503",
+    "address": "Near Bus Stand, Danapur Cantt, Patna, Bihar - 801503",
+    "vle_name": "Rakesh Kumar",
+    "contact_phone": "+91 91223 34455",
+    "operating_hours": "09:00 AM - 05:30 PM (Mon-Sat)",
+    "facilities": ["PM Ujjwala Verification", "Ration Card Seeding", "DBT Bank Account Opening"],
+    "distance_km": 3.1,
+    "simulated": true
+  }
+]

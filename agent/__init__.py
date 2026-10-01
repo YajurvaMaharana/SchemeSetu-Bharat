@@ -24,15 +24,26 @@ from agent.rules_engine import (
 )
 from agent.simulated_tools import locate_nearest_csc, mock_portal_submission
 
+from agent.agent import run_agent
+from agent.models import (
+    CitizenProfile,
+    SchemeMatch,
+    AgentResult,
+)
+
 __all__ = [
     "SchemeSetuAgent",
+    "run_agent",
     "AgentEvent",
     "AgentEventCallback",
     "UserProfile",
+    "CitizenProfile",
     "Scheme",
     "EligibilityStatus",
     "SchemeEligibilityResult",
+    "SchemeMatch",
     "AgentResponse",
+    "AgentResult",
     "SocialCategory",
     "HousingType",
     "ACRES_TO_HECTARES",

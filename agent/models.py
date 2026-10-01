@@ -1,26 +1,36 @@
 """Pydantic v2 data models for SchemeSetu Bharat.
 
-Adheres to:
-- Money = integer INR
-- Land = hectares (1 acre = 0.4047 ha)
-- Type hints and Pydantic v2 validation
+Adheres strictly to the specification:
+- CitizenProfile: name, age (int), gender (male/female/other), occupation (farmer, agricultural_worker, student, labourer,
+  homemaker, other), state, district, pin_code, annual_income_inr (int), land_hectares (float),
+  caste_category (general/obc/sc/st), is_bpl (bool), has_pucca_house (bool), has_lpg_connection (bool),
+  education_level (school/undergraduate/postgraduate/other), language (default "hi").
+  Every field except language is Optional, default None.
+- SchemeMatch: scheme_id, name, status (ELIGIBLE | LIKELY | NEEDS_INFO | NOT_ELIGIBLE),
+  annual_benefit_inr (int), reasons (list[str]), missing_info (list[str]),
+  required_documents (list[str]), portal_url (str), friction_score (int 1-5, 1 = easiest),
+  priority_rank (int | None).
+- AgentEvent: kind (thought | tool_call | tool_result | final | error), title (str), detail (str),
+  timestamp (str HH:MM:SS, auto-filled with a default_factory).
+- AgentResult: profile (CitizenProfile), matches (list[SchemeMatch]), total_annual_benefit_inr (int),
+  csc_center (dict | None), application_payloads (dict[str, dict]), pdf_path (str | None),
+  events (list[AgentEvent]), used_fallback (bool, default False), explanation (str, default "").
 """
 
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field, model_validator
-
-from agent.events import AgentEvent
 
 ACRES_TO_HECTARES: float = 0.4047
 
 
 class SocialCategory(str, Enum):
-    GENERAL = "General"
-    OBC = "OBC"
-    SC = "SC"
-    ST = "ST"
-    ALL = "All"
+    GENERAL = "general"
+    OBC = "obc"
+    SC = "sc"
+    ST = "st"
+    ALL = "all"
 
 
 class HousingType(str, Enum):
@@ -32,161 +42,353 @@ class HousingType(str, Enum):
 
 class EligibilityStatus(str, Enum):
     ELIGIBLE = "ELIGIBLE"
+    LIKELY = "LIKELY"
+    NEEDS_INFO = "NEEDS_INFO"
     NOT_ELIGIBLE = "NOT_ELIGIBLE"
     NEEDS_REVIEW = "NEEDS_REVIEW"
 
 
-class UserProfile(BaseModel):
-    """Normalized citizen profile extracted from text or direct input."""
+class CitizenProfile(BaseModel):
+    """Citizen demographic and socio-economic profile."""
 
-    name: Optional[str] = Field(default=None, description="Citizen's full name if provided")
-    age: Optional[int] = Field(default=None, description="Age in completed years")
-    gender: Optional[str] = Field(default=None, description="Gender: Male, Female, Other, or None")
-    state: Optional[str] = Field(default=None, description="State of residence (e.g., Bihar, Uttar Pradesh, Maharashtra)")
-    district: Optional[str] = Field(default=None, description="District name")
-    pincode: Optional[str] = Field(default=None, description="6-digit postal pincode")
-    occupation: Optional[str] = Field(
-        default=None,
-        description="Primary occupation (e.g., Farmer, Daily Wage Worker, Student, Artisan, Self-Employed)",
-    )
-    annual_income_inr: Optional[int] = Field(
-        default=None,
-        description="Total annual family income in integer INR",
-    )
-    land_hectares: Optional[float] = Field(
-        default=None,
-        description="Agricultural landholding in hectares (1 acre = 0.4047 ha)",
-    )
-    land_acres: Optional[float] = Field(
-        default=None,
-        description="Agricultural landholding specified in acres",
-    )
-    has_land_ownership: Optional[bool] = Field(
-        default=None,
-        description="Whether the citizen or family holds legal title to cultivable land",
-    )
-    social_category: Optional[str] = Field(
-        default="General",
-        description="Social category: General, OBC, SC, ST",
-    )
-    housing_type: Optional[str] = Field(
-        default="Pucca",
-        description="Type of dwelling: Pucca, Kutcha, Homeless, Rented",
-    )
-    is_taxpayer: Optional[bool] = Field(
-        default=False,
-        description="Whether applicant or spouse filed income tax in previous assessment year",
-    )
-    is_govt_employee: Optional[bool] = Field(
-        default=False,
-        description="Whether applicant or family member is serving/retired government officer",
-    )
-    has_pension_above_10k: Optional[bool] = Field(
-        default=False,
-        description="Whether applicant receives monthly pension exceeding ₹10,000",
-    )
-    is_shg_member: Optional[bool] = Field(
-        default=False,
-        description="Whether female applicant is part of a Self Help Group (SHG)",
-    )
-    is_student: Optional[bool] = Field(
-        default=False,
-        description="Whether applicant is currently an enrolled student",
-    )
-    special_conditions: List[str] = Field(
-        default_factory=list,
-        description="Edge condition flags like joint land ownership, tenant farmer, widow, disability",
-    )
-    raw_query: Optional[str] = Field(
-        default=None,
-        description="Original query text from the citizen",
-    )
-    preferred_language: str = Field(
-        default="Hindi",
-        description="Preferred language for output (e.g., Hindi, English, Marathi)",
-    )
+    name: Optional[str] = None
+    age: Optional[int] = None
+    gender: Optional[str] = None
+    occupation: Optional[str] = None
+    state: Optional[str] = None
+    district: Optional[str] = None
+    pin_code: Optional[str] = None
+    annual_income_inr: Optional[int] = None
+    land_hectares: Optional[float] = None
+    caste_category: Optional[str] = None
+    is_bpl: Optional[bool] = None
+    has_pucca_house: Optional[bool] = None
+    has_lpg_connection: Optional[bool] = None
+    education_level: Optional[str] = None
+    language: str = "hi"
+
+    # Compatibility attributes for agent engines
+    pincode: Optional[str] = None
+    land_acres: Optional[float] = None
+    social_category: Optional[str] = None
+    housing_type: Optional[str] = None
+    has_land_ownership: Optional[bool] = None
+    is_taxpayer: Optional[bool] = False
+    is_govt_employee: Optional[bool] = False
+    has_pension_above_10k: Optional[bool] = False
+    is_shg_member: Optional[bool] = False
+    is_student: Optional[bool] = False
+    special_conditions: List[str] = Field(default_factory=list)
+    raw_query: Optional[str] = None
+    preferred_language: Optional[str] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_inputs(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            # Normalize occupation
+            occ = data.get("occupation")
+            if occ and isinstance(occ, str):
+                occ_str = occ.strip()
+                occ_lower = occ_str.lower()
+                if "farmer" in occ_lower or "kisan" in occ_lower or "krishi" in occ_lower:
+                    data["occupation"] = "Farmer" if occ_str[0].isupper() else "farmer"
+                elif "student" in occ_lower or "chhatra" in occ_lower or "vidyarthi" in occ_lower:
+                    data["occupation"] = "Student" if occ_str[0].isupper() else "student"
+                elif "daily wage" in occ_lower:
+                    data["occupation"] = "Daily Wage Worker"
+                elif "labour" in occ_lower or "wage" in occ_lower or "majdoor" in occ_lower or "worker" in occ_lower:
+                    data["occupation"] = "labourer" if occ_str.lower() == "labourer" else occ_str
+                elif "home" in occ_lower:
+                    data["occupation"] = "homemaker" if occ_str.lower() == "homemaker" else occ_str
+                else:
+                    data["occupation"] = occ_str
+
+            # Normalize gender
+            g = data.get("gender")
+            if g and isinstance(g, str):
+                g_lower = g.lower().strip()
+                if g_lower in ["male", "female", "other"]:
+                    data["gender"] = g_lower
+                else:
+                    data["gender"] = None
+
+            # Normalize caste_category and social_category
+            caste = data.get("caste_category") or data.get("social_category")
+            if caste and isinstance(caste, str):
+                c_lower = caste.lower().strip()
+                if c_lower in ["general", "obc", "sc", "st"]:
+                    data["caste_category"] = c_lower
+                    data["social_category"] = c_lower.upper() if c_lower in ["obc", "sc", "st"] else c_lower.capitalize()
+                else:
+                    data["caste_category"] = None
+                    data["social_category"] = caste
+
+            # Normalize education_level
+            edu = data.get("education_level")
+            if edu and isinstance(edu, str):
+                edu_lower = edu.lower().strip()
+                if edu_lower in ["school", "undergraduate", "postgraduate", "other"]:
+                    data["education_level"] = edu_lower
+                else:
+                    data["education_level"] = "other"
+
+            # Normalize pin_code
+            if "pincode" in data and "pin_code" not in data:
+                data["pin_code"] = data["pincode"]
+
+            # Normalize pucca house
+            if "housing_type" in data and "has_pucca_house" not in data:
+                ht = str(data["housing_type"]).lower()
+                data["has_pucca_house"] = (ht == "pucca")
+
+        return data
 
     @model_validator(mode="after")
-    def convert_acres_to_hectares(self) -> "UserProfile":
-        """Convert acres to hectares if land_acres is provided and land_hectares is unset."""
+    def sync_and_normalize(self) -> "CitizenProfile":
+        # Sync pin_code and pincode
+        if self.pin_code and not self.pincode:
+            self.pincode = self.pin_code
+        elif self.pincode and not self.pin_code:
+            self.pin_code = self.pincode
+
+        # Sync caste_category and social_category
+        if self.caste_category and not self.social_category:
+            self.social_category = self.caste_category.upper()
+        elif self.social_category and not self.caste_category:
+            self.caste_category = self.social_category.lower()  # type: ignore
+
+        # Sync housing
+        if self.has_pucca_house is not None and not self.housing_type:
+            self.housing_type = "Pucca" if self.has_pucca_house else "Kutcha"
+        elif self.housing_type and self.has_pucca_house is None:
+            self.has_pucca_house = self.housing_type.lower() == "pucca"
+
+        # Sync land acres <-> hectares
         if self.land_acres is not None and self.land_hectares is None:
             self.land_hectares = round(self.land_acres * ACRES_TO_HECTARES, 4)
         elif self.land_hectares is not None and self.land_acres is None:
             self.land_acres = round(self.land_hectares / ACRES_TO_HECTARES, 2)
-        # Ensure income is an integer INR
+
         if self.annual_income_inr is not None:
             self.annual_income_inr = int(round(self.annual_income_inr))
+
+        if not self.preferred_language:
+            self.preferred_language = "Hindi" if self.language == "hi" else "English"
+
         return self
 
 
-class CriterionEvaluation(BaseModel):
-    """Detailed evaluation of a single eligibility criterion."""
-
-    criterion_name: str
-    passed: bool
-    reason: str
-    is_edge_case: bool = False
+UserProfile = CitizenProfile
 
 
-class SchemeEligibilityResult(BaseModel):
-    """Evaluation result for one welfare scheme."""
+class SchemeMatch(BaseModel):
+    """Evaluation match for a single welfare scheme."""
 
     scheme_id: str
-    scheme_name: str
+    name: str = ""
+    status: Literal["ELIGIBLE", "LIKELY", "NEEDS_INFO", "NOT_ELIGIBLE", "NEEDS_REVIEW"]
+    annual_benefit_inr: int = 0
+    reasons: List[str] = Field(default_factory=list)
+    missing_info: List[str] = Field(default_factory=list)
+    required_documents: List[str] = Field(default_factory=list)
+    portal_url: str = ""
+    friction_score: int = Field(default=1, ge=1, le=5)
+    priority_rank: Optional[int] = None
+
+    # Compatibility attributes
+    scheme_name: Optional[str] = None
     scheme_name_hi: Optional[str] = None
-    category: str
-    status: EligibilityStatus
-    benefit_amount_inr: int
-    benefit_description: str
-    benefit_frequency: str
+    category: Optional[str] = None
+    benefit_amount_inr: Optional[int] = None
+    benefit_description: Optional[str] = None
+    benefit_frequency: Optional[str] = "Annual"
     passed_criteria: List[str] = Field(default_factory=list)
     failed_criteria: List[str] = Field(default_factory=list)
     edge_case_flags: List[str] = Field(default_factory=list)
-    llm_edge_review: Optional[str] = Field(
-        default=None,
-        description="LLM review of flagged edge cases. Invariant: Cannot flip NOT_ELIGIBLE to ELIGIBLE",
-    )
-    friendly_explanation: Optional[str] = Field(
-        default=None,
-        description="Plain-language explanation for the citizen",
-    )
-    required_documents: List[str] = Field(default_factory=list)
-    portal_url: Optional[str] = None
+    llm_edge_review: Optional[str] = None
+    friendly_explanation: Optional[str] = None
     application_mode: Optional[str] = None
-    friction_score: int = Field(default=1, ge=1, le=5, description="Application friction score from 1 (easiest) to 5 (hardest)")
 
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_scheme_match(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "name" not in data and "scheme_name" in data:
+                data["name"] = data["scheme_name"]
+            elif "scheme_name" not in data and "name" in data:
+                data["scheme_name"] = data["name"]
+
+            if "annual_benefit_inr" not in data and "benefit_amount_inr" in data:
+                data["annual_benefit_inr"] = data["benefit_amount_inr"]
+            elif "benefit_amount_inr" not in data and "annual_benefit_inr" in data:
+                data["benefit_amount_inr"] = data["annual_benefit_inr"]
+
+            status = data.get("status")
+            if hasattr(status, "value"):
+                data["status"] = status.value
+        return data
+
+    @model_validator(mode="after")
+    def sync_scheme_match(self) -> "SchemeMatch":
+        if not self.scheme_name:
+            self.scheme_name = self.name
+        if self.benefit_amount_inr is None:
+            self.benefit_amount_inr = self.annual_benefit_inr
+        return self
+
+
+SchemeEligibilityResult = SchemeMatch
+
+
+class AgentEvent(BaseModel):
+    """Telemetry event emitted during agent reasoning and tool usage."""
+
+    kind: Literal["thought", "tool_call", "tool_result", "final", "error"] = "thought"
+    title: str = ""
+    detail: str = ""
+    timestamp: str = Field(default_factory=lambda: datetime.now().strftime("%H:%M:%S"))
+
+    # Compatibility attributes
+    step: Optional[str] = None
+    status: Optional[str] = None
+    message: Optional[str] = None
+    data: Optional[Dict[str, Any]] = None
+    simulated: bool = False
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_event(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "title" not in data and "step" in data:
+                data["title"] = data["step"]
+            if "detail" not in data and "message" in data:
+                data["detail"] = data["message"]
+            if "kind" not in data:
+                step = str(data.get("step", "")).upper()
+                if "LOCATOR" in step or "SUBMISSION" in step:
+                    data["kind"] = "tool_call"
+                elif "DELIVER" in step:
+                    data["kind"] = "final"
+                else:
+                    data["kind"] = "thought"
+        return data
+
+    @model_validator(mode="after")
+    def sync_event(self) -> "AgentEvent":
+        if self.step and not self.title:
+            self.title = self.step
+        if self.message and not self.detail:
+            self.detail = self.message
+        return self
+
+
+class AgentResult(BaseModel):
+    """Unified result produced by the SchemeSetu agent."""
+
+    profile: CitizenProfile
+    matches: List[SchemeMatch]
+    total_annual_benefit_inr: int
+    csc_center: Optional[Dict[str, Any]] = None
+    application_payloads: Dict[str, Dict[str, Any]] = Field(default_factory=dict)
+    pdf_path: Optional[str] = None
+    events: List[Any] = Field(default_factory=list)
+    used_fallback: bool = False
+    explanation: str = ""
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_result(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "profile" not in data and "user_profile" in data:
+                data["profile"] = data["user_profile"]
+            if "matches" not in data:
+                el = data.get("eligible_schemes", [])
+                rv = data.get("review_schemes", [])
+                inel = data.get("ineligible_schemes", [])
+                data["matches"] = list(el) + list(rv) + list(inel)
+            if "total_annual_benefit_inr" not in data and "total_potential_benefit_inr" in data:
+                data["total_annual_benefit_inr"] = data["total_potential_benefit_inr"]
+            if "csc_center" not in data and "csc_recommendation" in data:
+                data["csc_center"] = data["csc_recommendation"]
+            if "explanation" not in data:
+                data["explanation"] = data.get("summary_text") or data.get("vernacular_summary", "")
+        return data
+
+    # Compatibility attributes
+    user_profile: Optional[CitizenProfile] = None
+    eligible_schemes: List[SchemeMatch] = Field(default_factory=list)
+    review_schemes: List[SchemeMatch] = Field(default_factory=list)
+    ineligible_schemes: List[SchemeMatch] = Field(default_factory=list)
+    total_potential_benefit_inr: Optional[int] = None
+    summary_text: Optional[str] = None
+    vernacular_summary: Optional[str] = None
+    csc_recommendation: Optional[Dict[str, Any]] = None
+    mock_submission: Optional[Dict[str, Any]] = None
+
+    @model_validator(mode="after")
+    def sync_result(self) -> "AgentResult":
+        if not self.user_profile:
+            self.user_profile = self.profile
+        if self.total_potential_benefit_inr is None:
+            self.total_potential_benefit_inr = self.total_annual_benefit_inr
+        if not self.summary_text:
+            self.summary_text = self.explanation
+        if not self.vernacular_summary:
+            self.vernacular_summary = self.explanation
+        if not self.csc_recommendation:
+            self.csc_recommendation = self.csc_center
+        return self
+
+
+AgentResponse = AgentResult
 
 
 class Scheme(BaseModel):
     """Raw scheme record from data/schemes_data.json."""
 
-    id: str
-    name: str
+    id: str = ""
+    scheme_id: Optional[str] = None
+    name: str = ""
+    short_name: Optional[str] = None
     name_hi: Optional[str] = None
-    ministry: str
-    category: str
-    target_audience: List[str]
-    benefit_type: str
-    benefit_amount_inr: int
-    benefit_description: str
-    benefit_frequency: str
-    eligibility_criteria: Dict[str, Any]
+    ministry: str = ""
+    category: str = "General"
+    target_audience: List[str] = Field(default_factory=list)
+    benefit_type: str = "Welfare"
+    benefit_amount_inr: int = 0
+    annual_benefit_inr: Optional[int] = None
+    benefit_description: str = ""
+    benefit_frequency: str = "Annual"
+    eligibility_criteria: Dict[str, Any] = Field(default_factory=dict)
+    eligibility: Optional[Dict[str, Any]] = None
     edge_cases: List[str] = Field(default_factory=list)
     required_documents: List[str] = Field(default_factory=list)
+    application_steps: List[str] = Field(default_factory=list)
     application_mode: Optional[str] = None
     portal_url: Optional[str] = None
+    direct_portal_url: Optional[str] = None
+    action_type: Optional[str] = None
+    friction_score: Optional[int] = 1
+    processing_time: Optional[str] = None
+    source_url: Optional[str] = None
+    last_verified: Optional[str] = None
+    notes: Optional[str] = None
 
-
-class AgentResponse(BaseModel):
-    """Final unified response returned by SchemeSetu agent."""
-
-    user_profile: UserProfile
-    eligible_schemes: List[SchemeEligibilityResult] = Field(default_factory=list)
-    review_schemes: List[SchemeEligibilityResult] = Field(default_factory=list)
-    ineligible_schemes: List[SchemeEligibilityResult] = Field(default_factory=list)
-    total_potential_benefit_inr: int = 0
-    summary_text: str = ""
-    vernacular_summary: Optional[str] = None
-    csc_recommendation: Optional[Dict[str, Any]] = None
-    mock_submission: Optional[Dict[str, Any]] = None
-    events: List[AgentEvent] = Field(default_factory=list)
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_scheme(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "id" not in data and "scheme_id" in data:
+                data["id"] = data["scheme_id"]
+            if "scheme_id" not in data and "id" in data:
+                data["scheme_id"] = data["id"]
+            if "benefit_amount_inr" not in data and "annual_benefit_inr" in data:
+                data["benefit_amount_inr"] = data["annual_benefit_inr"]
+            if "annual_benefit_inr" not in data and "benefit_amount_inr" in data:
+                data["annual_benefit_inr"] = data["benefit_amount_inr"]
+            if "eligibility_criteria" not in data and "eligibility" in data:
+                data["eligibility_criteria"] = data["eligibility"]
+            if "portal_url" not in data and "direct_portal_url" in data:
+                data["portal_url"] = data["direct_portal_url"]
+        return data

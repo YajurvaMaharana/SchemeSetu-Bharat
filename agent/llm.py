@@ -270,7 +270,10 @@ def explain_results(result_summary: Dict[str, Any], language: str = "hi") -> str
     # High-quality fallback explanation
     eligible_schemes = result_summary.get("eligible_schemes", [])
     total_benefit = result_summary.get("total_annual_benefit_inr", 0)
-    scheme_names = [s.get("name") or s.get("scheme_id", "") for s in eligible_schemes[:3]]
+    scheme_names = [
+        s if isinstance(s, str) else (s.get("name") or s.get("scheme_id", "") or str(s))
+        for s in eligible_schemes[:3]
+    ]
     schemes_str = ", ".join(scheme_names) if scheme_names else "सरकारी योजनाएं"
 
     if language.lower() in ("mr", "marathi"):
