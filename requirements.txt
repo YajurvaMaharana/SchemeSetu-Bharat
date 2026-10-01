@@ -1,0 +1,10 @@
+streamlit>=1.40
+google-genai
+pydantic>=2
+python-dotenv
+fpdf2
+uharfbuzz
+gTTS
+streamlit-mic-recorder
+qrcode[pil]
+pytest
