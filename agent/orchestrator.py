@@ -259,3 +259,13 @@ class SchemeSetuAgent:
             on_event(done_event)
 
         return result
+
+
+def run_agent(
+    query_or_profile: Union[str, UserProfile],
+    on_event: Optional[AgentEventCallback] = None,
+) -> AgentResponse:
+    """Convenience module-level runner function."""
+    agent = SchemeSetuAgent()
+    return agent.run(query_or_profile, on_event=on_event)
+

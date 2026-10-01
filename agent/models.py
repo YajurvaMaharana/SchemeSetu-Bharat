@@ -153,6 +153,8 @@ class SchemeEligibilityResult(BaseModel):
     required_documents: List[str] = Field(default_factory=list)
     portal_url: Optional[str] = None
     application_mode: Optional[str] = None
+    friction_score: int = Field(default=1, ge=1, le=5, description="Application friction score from 1 (easiest) to 5 (hardest)")
+
 
 
 class Scheme(BaseModel):

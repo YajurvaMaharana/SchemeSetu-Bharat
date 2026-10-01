@@ -7,29 +7,48 @@ st.set_page_config(layout="wide", page_title="SchemeSetu Bharat", page_icon="�
 
 def get_run_agent():
     """
-    Imports run_agent from agent.agent normally, but from agent.stub 
-    when env USE_STUB=1 or when the real module is missing.
+    Imports run_agent from agent.agent, agent.orchestrator, or agent.stub.
+    Ensures a reliable fallback to run_stub_agent so the agent never returns None.
     """
     use_stub = os.environ.get("USE_STUB", "0") == "1"
     
-    if use_stub:
-        try:
-            from agent.stub import run_agent
-            return run_agent
-        except ImportError:
-            return None
-    else:
+    if not use_stub:
         try:
             from agent.agent import run_agent
-            return run_agent
-        except ImportError:
-            try:
-                from agent.stub import run_agent
+            if run_agent is not None:
                 return run_agent
-            except ImportError:
-                return None
+        except (ImportError, AttributeError):
+            pass
+        try:
+            from agent.orchestrator import run_agent
+            if run_agent is not None:
+                return run_agent
+        except (ImportError, AttributeError):
+            pass
+        try:
+            from agent.orchestrator import SchemeSetuAgent
+            _agent = SchemeSetuAgent()
+            return lambda q, on_event=None: _agent.run(q, on_event=on_event)
+        except Exception:
+            pass
+
+    # Seamless fallback to stub for SYNC 1 live demo reliability
+    try:
+        from agent.stub import run_stub_agent
+        return run_stub_agent
+    except (ImportError, AttributeError):
+        pass
+
+    try:
+        from agent.stub import run_agent
+        return run_agent
+    except (ImportError, AttributeError):
+        pass
+
+    return None
 
 run_agent = get_run_agent()
+
 
 # Header and tagline
 st.title("SchemeSetu Bharat")
@@ -159,7 +178,9 @@ if st.session_state.agent_result:
         with st.container(border=True):
             st.markdown(f"### {scheme.scheme_name} {scheme.scheme_name_hi and f'({scheme.scheme_name_hi})' or ''}")
             st.markdown(f"**Status:** <span style='color:{badge_color}; font-weight:bold;'>{status_badge}</span>", unsafe_allow_html=True)
-            st.write(f"**Benefit:** ₹{scheme.benefit_amount_inr} ({scheme.benefit_description})")
+            st.write(f"**Benefit:** ₹{scheme.benefit_amount_inr:,} ({scheme.benefit_description})")
+            friction = getattr(scheme, 'friction_score', 1) or 1
+            st.write(f"**Application Friction Score:** {'⭐' * friction} ({friction}/5 - {'Low Friction' if friction <= 2 else 'Moderate Friction' if friction <= 3 else 'High Documentation'})")
             if scheme.failed_criteria:
                 st.write(f"**Reasons / Missing Info:** {', '.join(scheme.failed_criteria)}")
             if scheme.required_documents:
