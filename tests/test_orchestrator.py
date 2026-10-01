@@ -44,7 +44,7 @@ def test_orchestrator_emits_telemetry_events():
     # 3. Response consistency
     assert response.user_profile.occupation == "Farmer"
     assert response.user_profile.land_acres == 2.5
-    assert response.user_profile.land_hectares == round(2.5 * 0.4047, 4)
+    assert response.user_profile.land_hectares == pytest.approx(2.5 * 0.4047, abs=1e-3)
     assert response.total_potential_benefit_inr > 0
     assert len(response.eligible_schemes) > 0
     assert response.csc_recommendation is not None

@@ -1,0 +1,504 @@
+{
+    "user_profile": {
+        "name": null,
+        "age": null,
+        "gender": null,
+        "state": null,
+        "district": null,
+        "pincode": null,
+        "occupation": null,
+        "annual_income_inr": 150000,
+        "land_hectares": 0.607,
+        "land_acres": 1.5,
+        "has_land_ownership": true,
+        "social_category": "General",
+        "housing_type": "Pucca",
+        "is_taxpayer": false,
+        "is_govt_employee": true,
+        "has_pension_above_10k": false,
+        "is_shg_member": false,
+        "is_student": false,
+        "special_conditions": [],
+        "raw_query": "Main Nashik se Ramesh hoon, 1.5 acre zameen hai, aamdani Rs 1.5 lakh hai. Mujhe sarkari madad chahiye.",
+        "preferred_language": "English"
+    },
+    "eligible_schemes": [
+        {
+            "scheme_id": "kcc",
+            "scheme_name": "KCC (Kisan Credit Card)",
+            "scheme_name_hi": "किसान क्रेडिट कार्ड योजना",
+            "category": "Agriculture",
+            "status": "ELIGIBLE",
+            "benefit_amount_inr": 300000,
+            "benefit_description": "Credit limit up to ₹3,00,000 with subvention interest rate of 4% per annum for timely repayments, covering crop production and animal husbandry.",
+            "benefit_frequency": "Revolving Credit",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification.",
+                "Occupation criterion met (Agricultural landholder)."
+            ],
+            "failed_criteria": [],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card and PAN Card",
+                "Land Title Deed / Record of Rights (Khasra) or JLG Lease Agreement",
+                "Cropping Pattern Certificate from Village Revenue Officer (Patwari)",
+                "Passport Size Photographs"
+            ],
+            "portal_url": "https://agricoop.nic.in/kcc",
+            "application_mode": "Bank Branch / CSC / PM-KISAN Portal Linkage",
+            "friction_score": 1
+        },
+        {
+            "scheme_id": "pmjjby",
+            "scheme_name": "PMJJBY (Pradhan Mantri Jeevan Jyoti Bima Yojana)",
+            "scheme_name_hi": "प्रधानमंत्री जीवन ज्योति बीमा योजना",
+            "category": "Social Security",
+            "status": "ELIGIBLE",
+            "benefit_amount_inr": 200000,
+            "benefit_description": "₹2,00,000 life insurance cover payable to nominee on death of the insured due to any cause, for annual premium of ₹436.",
+            "benefit_frequency": "Annual",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification."
+            ],
+            "failed_criteria": [],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card",
+                "Savings Bank Account with Auto-Debit Mandate",
+                "Nominee KYC Details"
+            ],
+            "portal_url": "https://jansuraksha.gov.in",
+            "application_mode": "Bank Branch / Net Banking / CSC",
+            "friction_score": 1
+        },
+        {
+            "scheme_id": "pmsby",
+            "scheme_name": "PMSBY (Pradhan Mantri Suraksha Bima Yojana)",
+            "scheme_name_hi": "प्रधानमंत्री सुरक्षा बीमा योजना",
+            "category": "Social Security",
+            "status": "ELIGIBLE",
+            "benefit_amount_inr": 200000,
+            "benefit_description": "₹2,00,000 for accidental death or total permanent disability (₹1,00,000 for partial disability) for nominal annual premium of ₹20.",
+            "benefit_frequency": "Annual",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification."
+            ],
+            "failed_criteria": [],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card",
+                "Savings Bank Account Passbook",
+                "Nominee Details"
+            ],
+            "portal_url": "https://jansuraksha.gov.in",
+            "application_mode": "Bank Branch / Net Banking / CSC",
+            "friction_score": 1
+        },
+        {
+            "scheme_id": "mudra_shishu",
+            "scheme_name": "PM Mudra Yojana (Shishu Loan)",
+            "scheme_name_hi": "प्रधानमंत्री मुद्रा योजना (शिशु ऋण)",
+            "category": "Financial Inclusion",
+            "status": "ELIGIBLE",
+            "benefit_amount_inr": 50000,
+            "benefit_description": "Collateral-free business loan up to ₹50,000 for starting or expanding micro-enterprises, shops, tailoring, or artisanal trades at regulated interest.",
+            "benefit_frequency": "One-Time",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification."
+            ],
+            "failed_criteria": [],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card and PAN Card",
+                "Proof of Business Address / Trade Idea",
+                "Bank Statement (Last 6 Months)",
+                "Passport Size Photos"
+            ],
+            "portal_url": "https://www.mudra.org.in",
+            "application_mode": "Commercial / Grameen Bank / Udyamimitra Portal",
+            "friction_score": 1
+        },
+        {
+            "scheme_id": "pm_kmy",
+            "scheme_name": "PM-KMY (Pradhan Mantri Kisan Maandhan Yojana)",
+            "scheme_name_hi": "प्रधानमंत्री किसान मानधन योजना",
+            "category": "Social Security",
+            "status": "ELIGIBLE",
+            "benefit_amount_inr": 36000,
+            "benefit_description": "Guaranteed minimum monthly pension of ₹3,000 (₹36,000 annually) upon attaining 60 years of age.",
+            "benefit_frequency": "Annual",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification.",
+                "Occupation criterion met (Agricultural landholder).",
+                "Land ownership requirement verified or declared.",
+                "Landholding (0.61 ha) is within permissible limit of 2.0 ha."
+            ],
+            "failed_criteria": [],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card",
+                "Savings Bank Account Passbook / IFSC",
+                "Khasra/Khatauni Land Record proving holding <= 2 hectares"
+            ],
+            "portal_url": "https://maandhan.in",
+            "application_mode": "CSC Kiosk / Maandhan Portal",
+            "friction_score": 1
+        }
+    ],
+    "review_schemes": [
+        {
+            "scheme_id": "lakhpati_didi",
+            "scheme_name": "Lakhpati Didi (NRLM - DAY)",
+            "scheme_name_hi": "लखपति दीदी योजना (दीनदयाल अंत्योदय - एनआरएलएम)",
+            "category": "Women Empowerment",
+            "status": "NEEDS_REVIEW",
+            "benefit_amount_inr": 100000,
+            "benefit_description": "Support to achieve sustainable annual household income of ₹1,00,000 or more through SHG community investment fund, technical training, and market access.",
+            "benefit_frequency": "One-Time",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification.",
+                "Annual income (₹150,000) complies with ceiling of ₹150,000."
+            ],
+            "failed_criteria": [],
+            "edge_case_flags": [
+                "Scheme specifically targets Female; gender unconfirmed in profile."
+            ],
+            "llm_edge_review": "दस्तावेज़ सत्यापन (Verification Required): संबंधित पात्रता श्रेणी के लिए स्व-घोषणा पत्र एवं अधिकृत पहचान पत्र अनिवार्य है।",
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card",
+                "SHG Membership Passbook / Resolution",
+                "Bank Account Details",
+                "Livelihood Activity Proposal"
+            ],
+            "portal_url": "https://nrlm.gov.in",
+            "application_mode": "Gram Panchayat / Self Help Group VO / BDO",
+            "friction_score": 1
+        }
+    ],
+    "ineligible_schemes": [
+        {
+            "scheme_id": "ayushman_bharat",
+            "scheme_name": "Ayushman Bharat (PM-JAY)",
+            "scheme_name_hi": "आयुष्मान भारत - प्रधानमंत्री जन आरोग्य योजना (पीएम-जय)",
+            "category": "Healthcare",
+            "status": "NOT_ELIGIBLE",
+            "benefit_amount_inr": 500000,
+            "benefit_description": "₹5,00,000 per family per year for secondary and tertiary cashless hospitalization across empaneled hospitals.",
+            "benefit_frequency": "Annual",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification.",
+                "Annual income (₹150,000) complies with ceiling of ₹250,000."
+            ],
+            "failed_criteria": [
+                "Government Employee exclusion: Serving or retired govt personnel barred.",
+                "Scheme strictly requires Kutcha house or homelessness; applicant owns Pucca structure."
+            ],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card",
+                "Ration Card (BPL / Antyodaya / Priority Household)",
+                "Income Certificate from Tahsildar / SDO",
+                "Active Mobile Number"
+            ],
+            "portal_url": "https://beneficiary.nha.gov.in",
+            "application_mode": "CSC Center / Empaneled Hospital Desk",
+            "friction_score": 1
+        },
+        {
+            "scheme_id": "pmay_g",
+            "scheme_name": "PMAY-G (Pradhan Mantri Awaas Yojana - Gramin)",
+            "scheme_name_hi": "प्रधानमंत्री आवास योजना - ग्रामीण",
+            "category": "Housing",
+            "status": "NOT_ELIGIBLE",
+            "benefit_amount_inr": 120000,
+            "benefit_description": "Financial grant of ₹1,20,000 (plains) / ₹1,30,000 (hilly/northeastern states) in direct installments for pucca house construction, plus 90 days MGNREGA wages.",
+            "benefit_frequency": "One-Time",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification.",
+                "Annual income (₹150,000) complies with ceiling of ₹180,000."
+            ],
+            "failed_criteria": [
+                "Government Employee exclusion: Serving or retired govt personnel barred.",
+                "Scheme strictly requires Kutcha house or homelessness; applicant owns Pucca structure."
+            ],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card",
+                "Bank Account Passbook",
+                "MGNREGA Job Card (for 90 days wage integration)",
+                "Photograph of existing kutcha house structure",
+                "Affidavit of no pucca house anywhere"
+            ],
+            "portal_url": "https://pmayg.nic.in",
+            "application_mode": "Gram Panchayat / Block Development Office / AwaasSoft",
+            "friction_score": 1
+        },
+        {
+            "scheme_id": "nsp_post_matric",
+            "scheme_name": "Post-Matric Scholarship for SC/ST/OBC Students",
+            "scheme_name_hi": "अनुसूचित जाति/जनजाति/पिछड़ा वर्ग पोस्ट-मैट्रिक छात्रवृत्ति",
+            "category": "Education",
+            "status": "NOT_ELIGIBLE",
+            "benefit_amount_inr": 48000,
+            "benefit_description": "Compulsory non-refundable fees reimbursement plus maintenance allowance up to ₹48,000 per academic year.",
+            "benefit_frequency": "Annual",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification.",
+                "Annual income (₹150,000) complies with ceiling of ₹250,000."
+            ],
+            "failed_criteria": [
+                "Government Employee exclusion: Serving or retired govt personnel barred.",
+                "Category (General) does not meet scheme requirements (SC, ST, OBC)."
+            ],
+            "edge_case_flags": [
+                "Scheme targets Student; occupation self-declaration needed."
+            ],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card",
+                "Caste / Category Certificate (SC/ST/OBC Non-Creamy Layer)",
+                "Income Certificate from Competent Authority",
+                "Previous Class 10/12 Marksheet",
+                "Fee Receipt & Bonafide Certificate from College"
+            ],
+            "portal_url": "https://scholarships.gov.in",
+            "application_mode": "National Scholarship Portal (NSP)",
+            "friction_score": 1
+        },
+        {
+            "scheme_id": "pm_kisan",
+            "scheme_name": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
+            "scheme_name_hi": "प्रधानमंत्री किसान सम्मान निधि (पीएम-किसान)",
+            "category": "Agriculture",
+            "status": "NOT_ELIGIBLE",
+            "benefit_amount_inr": 6000,
+            "benefit_description": "₹6,000 per year delivered in 3 equal four-monthly installments directly to Aadhaar-seeded bank accounts.",
+            "benefit_frequency": "Annual",
+            "passed_criteria": [
+                "Age requirement assumed subject to Aadhaar verification.",
+                "Occupation criterion met (Agricultural landholder).",
+                "Land ownership requirement verified or declared."
+            ],
+            "failed_criteria": [
+                "Government Employee exclusion: Serving or retired govt personnel barred."
+            ],
+            "edge_case_flags": [],
+            "llm_edge_review": null,
+            "friendly_explanation": null,
+            "required_documents": [
+                "Aadhaar Card",
+                "Land Record / Khasra-Khatauni / RoR Copy",
+                "Bank Account Passbook (Aadhaar Seeded)",
+                "Self-Declaration Affidavit"
+            ],
+            "portal_url": "https://pmkisan.gov.in",
+            "application_mode": "Online Portal / CSC Kiosk",
+            "friction_score": 1
+        }
+    ],
+    "total_potential_benefit_inr": 786000,
+    "summary_text": "🙏 नमस्ते! आपकी पात्रता के विश्लेषण के अनुसार:\n• कुल संभावित सरकारी लाभ: ₹786,000 तक\n• तुरंत पात्र योजनाएं (5): किसान क्रेडिट कार्ड योजना, प्रधानमंत्री जीवन ज्योति बीमा योजना, प्रधानमंत्री सुरक्षा बीमा योजना, प्रधानमंत्री मुद्रा योजना (शिशु ऋण), प्रधानमंत्री किसान मानधन योजना\n• सत्यापन के अधीन योजनाएं (1): लखपति दीदी योजना (दीनदयाल अंत्योदय - एनआरएलएम)\n  (इन योजनाओं के लिए तहसील या सीएससी केंद्र पर अतिरिक्त दस्तावेज़ जैसे खतौनी/आय प्रमाण पत्र की आवश्यकता होगी।)\n\n📋 आवश्यक मुख्य दस्तावेज़:\n  ✓ Aadhaar Card\n  ✓ Aadhaar Card and PAN Card\n  ✓ Land Title Deed / Record of Rights (Khasra) or JLG Lease Agreement\n  ✓ Proof of Business Address / Trade Idea\n  ✓ SHG Membership Passbook / Resolution\n\n👉 अगला कदम: नजदीकी कॉमन सर्विस सेंटर (CSC) पर जाएं या ऑनलाइन पोर्टल के माध्यम से आवेदन करें।",
+    "vernacular_summary": "🙏 नमस्ते! आपकी पात्रता के विश्लेषण के अनुसार:\n• कुल संभावित सरकारी लाभ: ₹786,000 तक\n• तुरंत पात्र योजनाएं (5): किसान क्रेडिट कार्ड योजना, प्रधानमंत्री जीवन ज्योति बीमा योजना, प्रधानमंत्री सुरक्षा बीमा योजना, प्रधानमंत्री मुद्रा योजना (शिशु ऋण), प्रधानमंत्री किसान मानधन योजना\n• सत्यापन के अधीन योजनाएं (1): लखपति दीदी योजना (दीनदयाल अंत्योदय - एनआरएलएम)\n  (इन योजनाओं के लिए तहसील या सीएससी केंद्र पर अतिरिक्त दस्तावेज़ जैसे खतौनी/आय प्रमाण पत्र की आवश्यकता होगी।)\n\n📋 आवश्यक मुख्य दस्तावेज़:\n  ✓ Aadhaar Card\n  ✓ Aadhaar Card and PAN Card\n  ✓ Land Title Deed / Record of Rights (Khasra) or JLG Lease Agreement\n  ✓ Proof of Business Address / Trade Idea\n  ✓ SHG Membership Passbook / Resolution\n\n👉 अगला कदम: नजदीकी कॉमन सर्विस सेंटर (CSC) पर जाएं या ऑनलाइन पोर्टल के माध्यम से आवेदन करें।",
+    "csc_recommendation": {
+        "simulated": true,
+        "center_name": "CSC Digital Seva Kendra - Center #001",
+        "vle_name": "Rajesh Kumar Verma (Village Level Entrepreneur)",
+        "contact_phone": "+91 98721 04512",
+        "email": "csc.vle.800001@digitalindia.gov.in",
+        "address": "Near Gram Panchayat Bhavan, Main Road, Block Center, Dist. Patna, PIN - 800001",
+        "distance_km": 3.4,
+        "operating_hours": "09:00 AM - 06:00 PM (Monday - Saturday)",
+        "facilities": [
+            "Aadhaar Biometric e-KYC Device",
+            "Khasra/Khatauni Land Record Printout",
+            "Income/Caste Certificate Application Filing",
+            "Ayushman Card PVC Printing"
+        ],
+        "message": "Simulated CSC Locator lookup completed."
+    },
+    "mock_submission": null,
+    "events": [
+        {
+            "step": "PROFILE_EXTRACTION",
+            "status": "STARTING",
+            "message": "Analyzing citizen query and extracting demographic attributes...",
+            "data": null,
+            "simulated": false,
+            "timestamp": "2026-10-01T09:29:55.686915+00:00"
+        },
+        {
+            "step": "PROFILE_EXTRACTION",
+            "status": "COMPLETED",
+            "message": "Profile extracted: Age=N/A, Occupation=General, Land=0.607 ha (1.5 acres), Income=₹150,000",
+            "data": {
+                "name": null,
+                "age": null,
+                "gender": null,
+                "state": null,
+                "district": null,
+                "pincode": null,
+                "occupation": null,
+                "annual_income_inr": 150000,
+                "land_hectares": 0.607,
+                "land_acres": 1.5,
+                "has_land_ownership": true,
+                "social_category": "General",
+                "housing_type": "Pucca",
+                "is_taxpayer": false,
+                "is_govt_employee": true,
+                "has_pension_above_10k": false,
+                "is_shg_member": false,
+                "is_student": false,
+                "special_conditions": [],
+                "raw_query": "Main Nashik se Ramesh hoon, 1.5 acre zameen hai, aamdani Rs 1.5 lakh hai. Mujhe sarkari madad chahiye.",
+                "preferred_language": "English"
+            },
+            "simulated": false,
+            "timestamp": "2026-10-01T09:29:57.843702+00:00"
+        },
+        {
+            "step": "DETERMINISTIC_RULES",
+            "status": "STARTING",
+            "message": "Evaluating statutory eligibility rules against knowledge base...",
+            "data": null,
+            "simulated": false,
+            "timestamp": "2026-10-01T09:29:57.843713+00:00"
+        },
+        {
+            "step": "DETERMINISTIC_RULES",
+            "status": "COMPLETED",
+            "message": "Deterministic verification complete: 5 eligible, 1 require review, 4 not eligible.",
+            "data": {
+                "eligible_ids": [
+                    "kcc",
+                    "pmjjby",
+                    "pmsby",
+                    "mudra_shishu",
+                    "pm_kmy"
+                ],
+                "review_ids": [
+                    "lakhpati_didi"
+                ],
+                "ineligible_ids": [
+                    "ayushman_bharat",
+                    "pmay_g",
+                    "nsp_post_matric",
+                    "pm_kisan"
+                ],
+                "counts": {
+                    "eligible": 5,
+                    "review": 1,
+                    "ineligible": 4
+                }
+            },
+            "simulated": false,
+            "timestamp": "2026-10-01T09:29:57.843870+00:00"
+        },
+        {
+            "step": "EDGE_CASE_REVIEW",
+            "status": "STARTING",
+            "message": "Reviewing 1 schemes flagged with edge conditions...",
+            "data": null,
+            "simulated": false,
+            "timestamp": "2026-10-01T09:29:57.843875+00:00"
+        },
+        {
+            "step": "EDGE_CASE_REVIEW",
+            "status": "COMPLETED",
+            "message": "Edge case reviews formulated with statutory document resolution paths.",
+            "data": {
+                "reviewed_schemes": [
+                    "lakhpati_didi"
+                ]
+            },
+            "simulated": false,
+            "timestamp": "2026-10-01T09:30:00.088959+00:00"
+        },
+        {
+            "step": "SCHEME_RANKING",
+            "status": "COMPLETED",
+            "message": "Schemes ranked by benefit: ₹786,000 in potential welfare capital unlocked.",
+            "data": {
+                "total_benefit_inr": 786000,
+                "top_scheme": "KCC (Kisan Credit Card)"
+            },
+            "simulated": false,
+            "timestamp": "2026-10-01T09:30:00.088979+00:00"
+        },
+        {
+            "step": "CSC_LOCATOR",
+            "status": "STARTING",
+            "message": "Querying geolocation directory for nearest Common Service Centre...",
+            "data": null,
+            "simulated": true,
+            "timestamp": "2026-10-01T09:30:00.088984+00:00"
+        },
+        {
+            "step": "CSC_LOCATOR",
+            "status": "COMPLETED",
+            "message": "Located nearest CSC desk: CSC Digital Seva Kendra - Center #001 (3.4 km away).",
+            "data": {
+                "simulated": true,
+                "center_name": "CSC Digital Seva Kendra - Center #001",
+                "vle_name": "Rajesh Kumar Verma (Village Level Entrepreneur)",
+                "contact_phone": "+91 98721 04512",
+                "email": "csc.vle.800001@digitalindia.gov.in",
+                "address": "Near Gram Panchayat Bhavan, Main Road, Block Center, Dist. Patna, PIN - 800001",
+                "distance_km": 3.4,
+                "operating_hours": "09:00 AM - 06:00 PM (Monday - Saturday)",
+                "facilities": [
+                    "Aadhaar Biometric e-KYC Device",
+                    "Khasra/Khatauni Land Record Printout",
+                    "Income/Caste Certificate Application Filing",
+                    "Ayushman Card PVC Printing"
+                ],
+                "message": "Simulated CSC Locator lookup completed."
+            },
+            "simulated": true,
+            "timestamp": "2026-10-01T09:30:00.089001+00:00"
+        },
+        {
+            "step": "EXPLANATION_GENERATION",
+            "status": "STARTING",
+            "message": "Generating personalized action plan and vernacular explanations...",
+            "data": null,
+            "simulated": false,
+            "timestamp": "2026-10-01T09:30:00.089008+00:00"
+        },
+        {
+            "step": "EXPLANATION_GENERATION",
+            "status": "COMPLETED",
+            "message": "Action plan and document checklist compiled.",
+            "data": null,
+            "simulated": false,
+            "timestamp": "2026-10-01T09:30:05.829721+00:00"
+        },
+        {
+            "step": "DELIVER",
+            "status": "COMPLETED",
+            "message": "Execution successful: 5 eligible welfare schemes delivered.",
+            "data": {
+                "total_benefit_inr": 786000,
+                "eligible_count": 5
+            },
+            "simulated": false,
+            "timestamp": "2026-10-01T09:30:05.829749+00:00"
+        }
+    ]
+}
